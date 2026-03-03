@@ -3,40 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>ACC 诊所 · 患者自助服务</title>
+<title>北京泽五堂中医诊所 · 患者自助服务</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
 
 <style>
 :root {
-  --teal:      #2a7c7c;
-  --teal-l:    #3a9e9e;
-  --teal-d:    #1a5555;
-  --gold:      #c9a84c;
-  --cream:     #f7f9f8;
-  --ink:       #1c2b2b;
-  --ink-m:     #3d5050;
-  --ink-s:     #7a9494;
-  --border:    #dde8e8;
-  --red:       #c0392b;
-  --green:     #27ae60;
-  --white:     #ffffff;
-  --shadow:    0 2px 16px rgba(26,85,85,0.08);
+  --teal:   #2a7c7c;
+  --teal-l: #3a9e9e;
+  --teal-d: #1a5555;
+  --gold:   #c9a84c;
+  --cream:  #f7f9f8;
+  --ink:    #1c2b2b;
+  --ink-m:  #3d5050;
+  --ink-s:  #7a9494;
+  --border: #dde8e8;
+  --red:    #c0392b;
+  --green:  #27ae60;
+  --white:  #ffffff;
+  --shadow: 0 2px 16px rgba(26,85,85,0.08);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{font-size:16px}
 body{
   font-family:'DM Sans',-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;
-  background:var(--cream);
-  min-height:100vh;
-  color:var(--ink);
-  padding-bottom:40px;
+  background:var(--cream);min-height:100vh;color:var(--ink);padding-bottom:40px;
 }
 
-/* ── Header ── */
+/* ── App Bar ── */
 .app-bar{
-  background:var(--teal-d);
-  padding:14px 20px;
+  background:var(--teal-d);padding:14px 20px;
   display:flex;align-items:center;gap:12px;
   position:sticky;top:0;z-index:100;
 }
@@ -49,268 +45,227 @@ body{
 .bar-title{font-size:15px;font-weight:700;color:#fff;line-height:1.2}
 .bar-sub{font-size:11px;color:rgba(255,255,255,0.55);margin-top:1px}
 
-/* ── Page Layout ── */
+/* ── Layout ── */
 .page{padding:20px 16px;max-width:460px;margin:0 auto}
 .screen{display:none}
 .screen.active{display:block;animation:up .28s ease}
 @keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-/* ── Back Button ── */
+/* ── Back ── */
 .back{
   display:inline-flex;align-items:center;gap:5px;
   background:none;border:none;color:var(--teal);
-  font:700 14px/1 'DM Sans',sans-serif;
-  cursor:pointer;padding:0;margin-bottom:20px;
+  font:700 14px/1 'DM Sans',sans-serif;cursor:pointer;
+  padding:0;margin-bottom:20px;
 }
 .back:hover{color:var(--teal-l)}
 
-/* ── Section Title ── */
-.stitle{font-size:22px;font-weight:700;color:var(--ink);margin-bottom:20px;line-height:1.3}
+/* ── Titles ── */
+.stitle{font-size:22px;font-weight:700;color:var(--ink);margin-bottom:6px;line-height:1.3}
+.ssub{font-size:14px;color:var(--ink-s);margin-bottom:22px;line-height:1.5}
 
-/* ── Card ── */
-.card{
-  background:var(--white);border-radius:16px;
-  padding:20px 18px;margin-bottom:14px;
-  box-shadow:var(--shadow);
-}
-.card-label{
-  font-size:11px;font-weight:700;color:var(--ink-s);
-  text-transform:uppercase;letter-spacing:0.8px;
-  margin-bottom:14px;padding-bottom:10px;
-  border-bottom:1.5px solid var(--border);
-}
+/* ── Cards ── */
+.card{background:var(--white);border-radius:16px;padding:20px 18px;margin-bottom:14px;box-shadow:var(--shadow);}
+.card-label{font-size:11px;font-weight:700;color:var(--ink-s);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:14px;padding-bottom:10px;border-bottom:1.5px solid var(--border);}
 
 /* ── Forms ── */
 .fg{margin-bottom:16px}
-.fg label{
-  display:block;font-size:11px;font-weight:700;
-  color:var(--ink-m);text-transform:uppercase;letter-spacing:.7px;margin-bottom:7px;
-}
+.fg label{display:block;font-size:11px;font-weight:700;color:var(--ink-m);text-transform:uppercase;letter-spacing:.7px;margin-bottom:7px;}
 .fg input,.fg select,.fg textarea{
   width:100%;padding:12px 14px;font:15px/1.4 'DM Sans',sans-serif;
   border:2px solid var(--border);border-radius:10px;
   background:var(--white);color:var(--ink);
   transition:border .2s,box-shadow .2s;appearance:none;
 }
-.fg input:focus,.fg select:focus,.fg textarea:focus{
-  outline:none;border-color:var(--teal);
-  box-shadow:0 0 0 3px rgba(42,124,124,0.1);
-}
+.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(42,124,124,0.1);}
 .fg input.err{border-color:var(--red)}
 .fg small{display:block;font-size:12px;color:var(--ink-s);margin-top:5px}
 
 /* ── Buttons ── */
+.btn-row{display:flex;flex-direction:column;gap:10px;margin-top:6px}
 .btn{
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  width:100%;padding:14px 20px;
-  border:none;border-radius:12px;
-  font:700 16px/1 'DM Sans',sans-serif;
-  cursor:pointer;transition:all .2s;
+  width:100%;padding:15px;border:none;border-radius:12px;
+  font:700 16px/1 'DM Sans',sans-serif;cursor:pointer;
+  transition:all .18s;display:flex;align-items:center;justify-content:center;gap:8px;
 }
-.btn:active{transform:scale(.98)}
-.btn:disabled{opacity:.4;cursor:not-allowed}
 .btn-p{background:var(--teal);color:#fff}
 .btn-p:hover{background:var(--teal-l)}
+.btn-p:active{transform:scale(.98)}
 .btn-o{background:transparent;color:var(--teal);border:2px solid var(--teal)}
-.btn-o:hover{background:#f0fafa}
-.btn-q{background:#f0f4f4;color:var(--ink-m)}
-.btn-row{display:flex;flex-direction:column;gap:10px;margin-top:22px}
+.btn-o:hover{background:#e8f5f5}
+.btn-q{background:#f0f4f4;color:var(--ink-m);font-size:14px;padding:12px}
+.btn-q:hover{background:#e0eaea}
 
-/* ── Welcome ── */
-.hero{text-align:center;padding:28px 0 22px}
-.hero-icon{
-  width:80px;height:80px;
-  background:linear-gradient(135deg,var(--teal),var(--teal-d));
-  border-radius:24px;font-size:38px;
-  display:flex;align-items:center;justify-content:center;
-  margin:0 auto 18px;
-  box-shadow:0 8px 28px rgba(26,85,85,0.25);
-}
-.hero h2{font-family:'Noto Serif SC',serif;font-size:26px;color:var(--ink);margin-bottom:8px}
-.hero p{font-size:14px;color:var(--ink-s);line-height:1.6}
-
-.w-cards{display:flex;flex-direction:column;gap:12px;margin-top:8px}
+/* ── Welcome cards ── */
+.hero{text-align:center;padding:32px 0 24px}
+.hero-icon{font-size:52px;margin-bottom:14px}
+.hero h2{font-size:26px;font-weight:700;margin-bottom:8px}
+.hero p{font-size:15px;color:var(--ink-m);line-height:1.6}
+.w-cards{display:flex;flex-direction:column;gap:12px}
 .w-card{
-  background:var(--white);border:2px solid var(--border);border-radius:16px;
-  padding:18px 16px;cursor:pointer;
+  background:var(--white);border-radius:16px;padding:18px 16px;
   display:flex;align-items:center;gap:14px;
-  transition:all .2s;box-shadow:var(--shadow);
+  box-shadow:var(--shadow);cursor:pointer;
+  border:2px solid transparent;transition:all .2s;
 }
-.w-card:hover,.w-card:active{border-color:var(--teal);transform:translateY(-2px);box-shadow:0 6px 20px rgba(42,124,124,0.15)}
-.wci{
-  width:50px;height:50px;border-radius:14px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:22px;flex-shrink:0;
-}
-.wct h3{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.w-card:hover{border-color:var(--teal);transform:translateY(-1px)}
+.wci{width:48px;height:48px;border-radius:14px;font-size:22px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.wct{flex:1}
+.wct h3{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:3px}
 .wct p{font-size:13px;color:var(--ink-s);line-height:1.4}
-.w-card .arr{margin-left:auto;color:var(--ink-s);font-size:20px;flex-shrink:0}
+.arr{font-size:20px;color:var(--ink-s);flex-shrink:0}
 
-/* ── Patient Home ── */
-.p-greet{text-align:center;padding:16px 0 20px}
+/* ── ACC choice cards ── */
+.choice-cards{display:flex;flex-direction:column;gap:14px;margin-top:8px}
+.choice-card{
+  background:var(--white);border-radius:16px;padding:22px 20px;
+  display:flex;align-items:center;gap:16px;
+  box-shadow:var(--shadow);cursor:pointer;
+  border:2px solid transparent;transition:all .2s;
+}
+.choice-card:hover{border-color:var(--teal);transform:translateY(-2px);box-shadow:0 6px 24px rgba(26,85,85,0.13);}
+.choice-icon{font-size:32px;flex-shrink:0}
+.choice-text h3{font-size:17px;font-weight:700;color:var(--ink);margin-bottom:5px}
+.choice-text p{font-size:13px;color:var(--ink-s);line-height:1.5}
+
+/* ── Patient home ── */
+.p-greet{text-align:center;padding:28px 0 22px}
 .p-av{
-  width:62px;height:62px;
-  background:linear-gradient(135deg,var(--teal),var(--teal-d));
-  border-radius:18px;font-size:26px;
+  width:72px;height:72px;border-radius:50%;
+  background:linear-gradient(135deg,var(--teal-d),var(--teal));
+  color:#fff;font-size:28px;margin:0 auto 14px;
   display:flex;align-items:center;justify-content:center;
-  margin:0 auto 14px;
 }
-.p-greet h2{font-size:21px;font-weight:700;color:var(--ink)}
-.p-greet p{font-size:13px;color:var(--ink-s);margin-top:3px}
-
+.p-greet h2{font-size:22px;font-weight:700;margin-bottom:5px}
+.p-greet p{font-size:14px;color:var(--ink-s)}
 .ac{
-  background:var(--white);border:2px solid var(--border);border-radius:14px;
-  padding:16px 16px;cursor:pointer;
-  display:flex;align-items:center;gap:12px;
-  transition:all .2s;margin-bottom:11px;
+  background:var(--white);border-radius:14px;padding:16px 15px;
+  display:flex;align-items:center;gap:13px;
+  box-shadow:var(--shadow);cursor:pointer;margin-bottom:11px;
+  border:2px solid transparent;transition:all .2s;
 }
-.ac:hover,.ac:active{border-color:var(--teal);box-shadow:0 4px 16px rgba(42,124,124,0.12)}
-.aci{
-  width:42px;height:42px;border-radius:11px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;flex-shrink:0;
-}
-.act h3{font-size:15px;font-weight:700;color:var(--ink)}
-.act p{font-size:12px;color:var(--ink-s);margin-top:2px}
-.badge{
-  margin-left:auto;background:var(--red);color:#fff;
-  font-size:11px;font-weight:700;padding:2px 9px;
-  border-radius:20px;flex-shrink:0;
-}
-.ac .arr{margin-left:auto;color:var(--ink-s);font-size:18px;flex-shrink:0}
+.ac:hover{border-color:var(--teal)}
+.aci{width:46px;height:46px;border-radius:12px;font-size:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.act{flex:1}
+.act h3{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.act p{font-size:12px;color:var(--ink-s)}
+.badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;flex-shrink:0}
 
-/* ── Signature ── */
-.sig-note{
-  background:#f0fafa;border-radius:10px;
-  padding:12px 14px;margin-bottom:14px;
-  font-size:14px;color:var(--ink-m);
-  display:flex;align-items:center;gap:10px;
+/* ── Session timer ── */
+.session-timer{
+  display:none;background:#e8f5f5;border:1.5px solid var(--teal);
+  border-radius:10px;padding:9px 14px;margin-bottom:12px;
+  font-size:12px;color:var(--teal-d);font-weight:600;
+  display:flex;align-items:center;gap:7px;
 }
+.session-timer.hidden{display:none!important}
+
+/* ── SMS screen ── */
+.phone-wrap{text-align:center;padding:12px 0 4px}
+.phone-wrap .big-icon{font-size:48px;margin-bottom:16px}
+.code-inputs{display:flex;gap:10px;justify-content:center;margin:20px 0}
+.code-inputs input{
+  width:46px;height:56px;border:2px solid var(--border);border-radius:10px;
+  text-align:center;font:700 22px 'DM Sans',sans-serif;color:var(--ink);
+  background:var(--white);transition:border .2s;
+}
+.code-inputs input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(42,124,124,0.1);}
+.resend-row{text-align:center;margin-top:6px}
+.resend-btn{background:none;border:none;color:var(--teal);font:600 14px 'DM Sans',sans-serif;cursor:pointer;padding:6px}
+.resend-btn:disabled{color:var(--ink-s);cursor:default}
+.countdown{font-size:13px;color:var(--ink-s);margin-top:4px}
+
+/* ── Sign confirm screen ── */
+.sign-confirm-box{
+  background:var(--white);border-radius:16px;padding:28px 22px;
+  box-shadow:var(--shadow);text-align:center;margin-bottom:16px;
+}
+.sign-confirm-box .big-num{
+  font-size:56px;font-weight:700;color:var(--teal);
+  line-height:1;margin:12px 0 8px;
+}
+.sign-confirm-box .session-label{
+  font-size:13px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.8px;color:var(--ink-s);margin-bottom:4px;
+}
+.sign-confirm-box .session-name{
+  font-size:20px;font-weight:700;color:var(--ink);margin-bottom:16px;
+}
+.sign-confirm-box .confirm-note{
+  font-size:13px;color:var(--ink-s);line-height:1.6;
+  background:#f5fbfb;border-radius:10px;padding:12px 14px;
+  text-align:left;
+}
+
+/* ── Signature screen ── */
 #sigCanvas{
-  display:block;background:var(--white);
-  border:2.5px solid var(--teal);border-radius:12px;
-  cursor:crosshair;touch-action:none;
-  width:100%;height:200px;margin-bottom:10px;
+  display:block;width:100%;height:200px;
+  background:var(--white);border-radius:12px;
+  border:2px solid var(--border);cursor:crosshair;
+  box-shadow:var(--shadow);touch-action:none;
 }
-.sig-tools{display:flex;gap:8px;margin-bottom:18px}
+.sig-note{
+  background:#fff9e8;border:1.5px solid var(--gold);
+  border-radius:10px;padding:11px 14px;margin-bottom:14px;
+  display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--ink-m);
+}
+.sig-tools{display:flex;gap:10px;margin-top:10px;margin-bottom:14px}
 .stool{
-  flex:1;padding:10px;border:2px solid var(--border);border-radius:8px;
-  background:var(--white);font:600 13px 'DM Sans',sans-serif;
-  color:var(--ink-m);cursor:pointer;transition:all .2s;text-align:center;
+  flex:1;padding:10px;border:2px solid var(--border);border-radius:9px;
+  background:var(--white);font:600 13px 'DM Sans',sans-serif;color:var(--ink-m);cursor:pointer;
+  transition:all .15s;
 }
 .stool:hover{border-color:var(--teal);color:var(--teal)}
 
-/* ── Booking Calendar ── */
+/* ── Calendar ── */
 .cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .cal-nav h3{font-size:18px;font-weight:700;color:var(--ink)}
-.cnb{
-  width:34px;height:34px;border:2px solid var(--border);border-radius:9px;
-  background:var(--white);cursor:pointer;
-  display:flex;align-items:center;justify-content:center;font-size:15px;
-  transition:border .2s;
-}
+.cnb{width:34px;height:34px;border:2px solid var(--border);border-radius:9px;background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:border .2s;}
 .cnb:hover{border-color:var(--teal)}
-
 .cal-heads{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:4px}
 .ch{text-align:center;font-size:11px;font-weight:700;color:var(--ink-s);padding:3px 0}
 .cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
-.cd{
-  text-align:center;padding:9px 3px;border-radius:8px;
-  font-size:14px;transition:all .15s;
-}
+.cd{text-align:center;padding:9px 3px;border-radius:8px;font-size:14px;transition:all .15s;}
 .cd.avail{cursor:pointer;background:#e8f5f5;color:var(--teal);font-weight:700}
 .cd.avail:hover{background:var(--teal);color:#fff}
 .cd.sel{background:var(--teal);color:#fff;font-weight:700}
 .cd.past,.cd.block,.cd.other{color:#ccc;cursor:default}
-
 .slots-hd{font-size:14px;font-weight:700;color:var(--ink-m);margin-bottom:10px}
 .slots{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
-.slot{
-  padding:9px 4px;text-align:center;
-  border:2px solid var(--border);border-radius:8px;
-  background:var(--white);font:600 13px 'DM Sans',sans-serif;
-  color:var(--ink);cursor:pointer;transition:all .15s;
-}
+.slot{padding:9px 4px;text-align:center;border:2px solid var(--border);border-radius:8px;background:var(--white);font:600 13px 'DM Sans',sans-serif;color:var(--ink);cursor:pointer;transition:all .15s;}
 .slot:hover{border-color:var(--teal);color:var(--teal)}
 .slot.taken{background:#f5f5f5;color:#bbb;cursor:not-allowed;border-color:transparent;font-size:11px}
 .slot.sel{background:var(--teal);color:#fff;border-color:var(--teal)}
 
 /* ── Appointments ── */
-.ap{
-  background:#f5fbfb;border-radius:10px;padding:12px 14px;
-  display:flex;align-items:center;gap:12px;margin-bottom:10px;
-}
-.ap-d{
-  background:var(--teal);color:#fff;border-radius:8px;
-  padding:7px 9px;text-align:center;min-width:46px;flex-shrink:0;
-}
+.ap{background:#f5fbfb;border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.ap-d{background:var(--teal);color:#fff;border-radius:8px;padding:7px 9px;text-align:center;min-width:46px;flex-shrink:0;}
 .ap-d .dd{font-size:20px;font-weight:700;line-height:1}
 .ap-d .mm{font-size:10px;font-weight:600;opacity:.8;margin-top:2px}
 .ap-i h4{font-size:15px;font-weight:700;color:var(--ink)}
 .ap-i p{font-size:12px;color:var(--ink-s);margin-top:2px}
-.ap-s{
-  margin-left:auto;font-size:11px;font-weight:700;
-  padding:3px 9px;border-radius:20px;flex-shrink:0;
-}
+.ap-s{margin-left:auto;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;flex-shrink:0;}
 .ap-s.p{background:#fff3cd;color:#856404}
 .ap-s.c{background:#d4edda;color:#155724}
 
-/* ── Error box ── */
-.ebox{
-  background:#fdf0ef;border:1.5px solid #f5c6c6;border-radius:10px;
-  padding:12px 14px;font-size:14px;color:var(--red);
-  display:none;align-items:flex-start;gap:8px;margin-bottom:14px;
-}
-
-/* ── Success ── */
+/* ── Misc ── */
+.ebox{background:#fdf0ef;border:1.5px solid #f5c6c6;border-radius:10px;padding:12px 14px;font-size:14px;color:var(--red);display:none;align-items:flex-start;gap:8px;margin-bottom:14px;}
 .succ{text-align:center;padding:44px 16px}
-.succ .s-icon{
-  width:68px;height:68px;border-radius:50%;
-  background:#edfaf3;font-size:34px;
-  display:flex;align-items:center;justify-content:center;
-  margin:0 auto 22px;
-}
+.succ .s-icon{width:68px;height:68px;border-radius:50%;background:#edfaf3;font-size:34px;display:flex;align-items:center;justify-content:center;margin:0 auto 22px;}
 .succ h2{font-size:24px;font-weight:700;color:var(--green);margin-bottom:10px}
 .succ p{font-size:15px;color:var(--ink-m);line-height:1.6}
-.ibox{
-  background:#f5fbfb;border:1.5px solid var(--border);border-radius:12px;
-  padding:14px;margin:18px 0;text-align:left;
-}
-.ibr{
-  display:flex;justify-content:space-between;
-  font-size:14px;padding:7px 0;
-  border-bottom:1px solid var(--border);
-}
+.ibox{background:#f5fbfb;border:1.5px solid var(--border);border-radius:12px;padding:14px;margin:18px 0;text-align:left;}
+.ibr{display:flex;justify-content:space-between;font-size:14px;padding:7px 0;border-bottom:1px solid var(--border);}
 .ibr:last-child{border-bottom:none}
 .ibr .l{color:var(--ink-s)}
 .ibr .v{font-weight:700;color:var(--ink)}
-
-/* ── Spinner ── */
 .spin-wrap{display:flex;flex-direction:column;align-items:center;padding:48px 0;gap:14px}
-.spin{
-  width:32px;height:32px;border-radius:50%;
-  border:3px solid var(--border);border-top-color:var(--teal);
-  animation:sp .8s linear infinite;
-}
+.spin{width:32px;height:32px;border-radius:50%;border:3px solid var(--border);border-top-color:var(--teal);animation:sp .8s linear infinite;}
 @keyframes sp{to{transform:rotate(360deg)}}
 .spin-wrap p{font-size:14px;color:var(--ink-s)}
-
-/* ── Toast ── */
-.toast{
-  position:fixed;bottom:30px;left:50%;
-  transform:translateX(-50%) translateY(80px);
-  background:var(--teal-d);color:#fff;
-  padding:11px 22px;border-radius:50px;
-  font-size:14px;font-weight:600;z-index:9999;
-  transition:transform .28s ease;white-space:nowrap;pointer-events:none;
-}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--teal-d);color:#fff;padding:11px 22px;border-radius:50px;font-size:14px;font-weight:600;z-index:9999;transition:transform .28s ease;white-space:nowrap;pointer-events:none;}
 .toast.on{transform:translateX(-50%) translateY(0)}
-
-/* ── Blocking overlay ── */
-.blocker{
-  position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:500;
-  display:none;align-items:center;justify-content:center;
-}
+.blocker{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:500;display:none;align-items:center;justify-content:center;}
 .blocker.on{display:flex}
 .blocker-inner{background:#fff;border-radius:16px;padding:28px 24px;text-align:center;width:260px}
 .blocker-inner p{font-size:15px;color:var(--ink-m);margin-top:12px}
@@ -318,40 +273,39 @@ body{
 </head>
 <body>
 
-<!-- ────────────────── APP BAR ────────────────── -->
 <header class="app-bar">
-  <div class="bar-icon">⛑️</div>
+  <div class="bar-icon">🏥</div>
   <div>
-    <div class="bar-title" id="bar-clinic-name">ACC 诊所患者服务</div>
-    <div class="bar-sub">Patient Self-Service · 自助服务</div>
+    <div class="bar-title">北京泽五堂中医诊所</div>
+    <div class="bar-sub">Patient Self-Service · 患者自助服务</div>
   </div>
 </header>
 
 <div class="page">
 
   <!-- ═══════════════════════════════════════
-       SCREEN 1 · WELCOME
+       S-WELCOME · 首页
   ═══════════════════════════════════════ -->
   <div class="screen active" id="s-welcome">
     <div class="hero">
-      <div class="hero-icon">⛑️</div>
+      <div class="hero-icon">🏥</div>
       <h2>欢迎 · Welcome</h2>
       <p>请选择您今天需要的服务<br>Please choose a service below</p>
     </div>
     <div class="w-cards">
-      <div class="w-card" onclick="go('s-new')">
+      <div class="w-card" onclick="go('s-new-choice')">
         <div class="wci" style="background:#e8f5f5">📋</div>
         <div class="wct">
           <h3>首次就诊 · New Patient</h3>
-          <p>填写您的个人信息和ACC号码</p>
+          <p>填写您的个人信息进行登记</p>
         </div>
         <span class="arr">›</span>
       </div>
-      <div class="w-card" onclick="go('s-ident')">
+      <div class="w-card" onclick="startReturning()">
         <div class="wci" style="background:#e8f5f5">👤</div>
         <div class="wct">
-          <h3>已是患者 · Returning</h3>
-          <p>签字确认治疗 / 查看预约</p>
+          <h3>复诊 · Follow-up visit</h3>
+          <p>签字 sign / 查看预约 view booking</p>
         </div>
         <span class="arr">›</span>
       </div>
@@ -367,81 +321,183 @@ body{
   </div>
 
   <!-- ═══════════════════════════════════════
-       SCREEN 2 · NEW PATIENT
+       S-NEW-CHOICE · 首次就诊 — 是否有ACC
   ═══════════════════════════════════════ -->
-  <div class="screen" id="s-new">
+  <div class="screen" id="s-new-choice">
     <button class="back" onclick="go('s-welcome')">‹ 返回</button>
     <div class="stitle">首次就诊登记</div>
+    <div class="ssub">请选择您的情况<br>Please select your situation</div>
+    <div class="choice-cards">
+      <div class="choice-card" onclick="startNewWithACC()">
+        <div class="choice-icon">✅</div>
+        <div class="choice-text">
+          <h3>我有 ACC 保单</h3>
+          <p>我已获得 ACC 批准，有 ACC 号码<br><span style="color:var(--teal);font-weight:600">I have an ACC claim number</span></p>
+        </div>
+        <span class="arr">›</span>
+      </div>
+      <div class="choice-card" onclick="startNewNoACC()">
+        <div class="choice-icon">📋</div>
+        <div class="choice-text">
+          <h3>我没有 ACC 保单</h3>
+          <p>自费就诊，填写个人信息即可<br><span style="color:var(--teal);font-weight:600">Self-pay, no ACC claim</span></p>
+        </div>
+        <span class="arr">›</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       S-NEW-PERSONAL · 首次就诊 — 个人信息
+  ═══════════════════════════════════════ -->
+  <div class="screen" id="s-new-personal">
+    <button class="back" id="personal-back-btn" onclick="go('s-new-choice')">‹ 返回</button>
+    <div class="stitle">个人信息</div>
+    <div class="ssub" id="personal-sub">请填写您的基本信息</div>
 
     <div class="card">
-      <div class="card-label">ACC 信息</div>
+      <div class="card-label">基本信息 Personal Details</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="fg" style="margin-bottom:0">
+          <label>姓 Family Name *</label>
+          <input id="np-fam" type="text" placeholder="Smith">
+        </div>
+        <div class="fg" style="margin-bottom:0">
+          <label>名 First Name *</label>
+          <input id="np-fir" type="text" placeholder="John">
+        </div>
+      </div>
+      <div class="fg" style="margin-top:14px">
+        <label>性别 Gender *</label>
+        <select id="np-gender">
+          <option value="">— 请选择 —</option>
+          <option value="male">男 Male</option>
+          <option value="female">女 Female</option>
+          <option value="other">其他 Other</option>
+          <option value="prefer_not">不愿透露</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>出生日期 Date of Birth * (DD/MM/YYYY)</label>
+        <input id="np-dob" type="text" placeholder="DD/MM/YYYY" maxlength="10" oninput="fmtDate(this)">
+      </div>
+      <div class="fg">
+        <label>联系电话 Phone *</label>
+        <input id="np-ph" type="tel" placeholder="021 xxx xxxx">
+        <small>新西兰手机号，将用于接收验证码 · NZ mobile for SMS verification</small>
+      </div>
+      <div class="fg">
+        <label>地址 Address *</label>
+        <textarea id="np-addr" rows="2" placeholder="街道地址 / Street address, Auckland"></textarea>
+      </div>
+      <div class="fg">
+        <label>邮箱 Email（选填）</label>
+        <input id="np-email" type="email" placeholder="you@example.com">
+      </div>
+    </div>
+
+    <div class="ebox" id="np-err"><span>⚠️</span><span id="np-err-t"></span></div>
+    <div class="btn-row">
+      <button class="btn btn-p" onclick="personalNext()">下一步 · Next ›</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       S-NEW-ACC · 首次就诊 — ACC 信息
+  ═══════════════════════════════════════ -->
+  <div class="screen" id="s-new-acc">
+    <button class="back" onclick="go('s-new-personal')">‹ 返回</button>
+    <div class="stitle">ACC 信息</div>
+    <div class="ssub">请填写您的 ACC 保单信息</div>
+
+    <div class="card">
+      <div class="card-label">ACC 保单信息</div>
       <div class="fg">
         <label>ACC45 号码 *</label>
-        <input id="n-acc" type="text" placeholder="例: JL09236"
+        <input id="na-acc" type="text" placeholder="例: JL09236 或 09236JL"
           maxlength="7" oninput="this.value=this.value.toUpperCase()">
-        <small>格式：2个大写字母 + 5位数字，例 JL09236</small>
+        <small>支持两种格式：2字母+5数字（JL09236）或 5数字+2字母（09236JL）</small>
       </div>
       <div class="fg">
-        <label>受伤日期 * (DD/MM/YYYY)</label>
-        <input id="n-doa" type="text" placeholder="DD/MM/YYYY"
-          maxlength="10" oninput="fmtDate(this)">
+        <label>受伤日期 Date of Accident * (DD/MM/YYYY)</label>
+        <input id="na-doa" type="text" placeholder="DD/MM/YYYY" maxlength="10" oninput="fmtDate(this)">
       </div>
       <div class="fg">
-        <label>受伤原因 *</label>
-        <input id="n-reason" type="text" placeholder="例: 跌倒、运动受伤、交通事故...">
+        <label>受伤原因 Reason for Injury *</label>
+        <input id="na-reason" type="text" placeholder="例: 跌倒、运动受伤、交通事故...">
+      </div>
+      <div class="fg">
+        <label>Read Code（如不知道可留空）</label>
+        <input id="na-read" type="text" placeholder="例: S39">
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-label">个人信息</div>
-      <div class="fg">
-        <label>姓 Family Name *</label>
-        <input id="n-fam" type="text" placeholder="Family Name">
-      </div>
-      <div class="fg">
-        <label>名 First Name *</label>
-        <input id="n-fir" type="text" placeholder="First Name">
-      </div>
-      <div class="fg">
-        <label>出生日期 * (DD/MM/YYYY)</label>
-        <input id="n-dob" type="text" placeholder="DD/MM/YYYY"
-          maxlength="10" oninput="fmtDate(this)">
-      </div>
-      <div class="fg">
-        <label>联系电话 Phone</label>
-        <input id="n-ph" type="tel" placeholder="021 xxx xxxx">
-      </div>
-    </div>
-
-    <div class="ebox" id="n-err"><span>⚠️</span><span id="n-err-t"></span></div>
+    <div class="ebox" id="na-err"><span>⚠️</span><span id="na-err-t"></span></div>
     <div class="btn-row">
-      <button class="btn btn-p" id="n-sub-btn" onclick="submitNew()">提交登记 · Submit</button>
+      <button class="btn btn-p" id="na-sub-btn" onclick="submitNew()">提交登记 · Submit</button>
     </div>
   </div>
 
   <!-- ═══════════════════════════════════════
-       SCREEN 3 · IDENTIFY (Returning)
+       S-PHONE · 复诊登录 — 手机号
   ═══════════════════════════════════════ -->
-  <div class="screen" id="s-ident">
+  <div class="screen" id="s-phone">
     <button class="back" onclick="go('s-welcome')">‹ 返回</button>
-    <div class="stitle">患者登录</div>
+    <div class="phone-wrap">
+      <div class="big-icon">📱</div>
+    </div>
+    <div class="stitle">复诊登录</div>
+    <div class="ssub">输入您登记的手机号，我们将发送6位验证码</div>
     <div class="card">
       <div class="fg">
-        <label>ACC45 号码</label>
-        <input id="i-acc" type="text" placeholder="例: JL09236"
-          maxlength="7" oninput="this.value=this.value.toUpperCase()"
-          onkeydown="if(event.key==='Enter')identPt()">
-        <small>请输入您的 ACC45 号码以继续</small>
+        <label>手机号码 Mobile Number</label>
+        <input id="ph-input" type="tel" placeholder="021 xxx xxxx"
+          onkeydown="if(event.key==='Enter')sendSMS()">
+        <small>请输入登记时使用的新西兰手机号</small>
+        <div id="rate-hint" style="display:none;margin-top:8px;padding:8px 12px;background:#fff9e8;border:1.5px solid var(--gold);border-radius:8px;font-size:12px;color:#7a4f00;line-height:1.6"></div>
       </div>
-      <div class="ebox" id="i-err"><span>⚠️</span><span id="i-err-t"></span></div>
+      <div class="ebox" id="ph-err"><span>⚠️</span><span id="ph-err-t"></span></div>
     </div>
+    <!-- reCAPTCHA container (invisible) -->
+    <div id="recaptcha-container"></div>
     <div class="btn-row">
-      <button class="btn btn-p" onclick="identPt()">进入 · Enter</button>
+      <button class="btn btn-p" id="send-sms-btn" onclick="sendSMS()">发送验证码 · Send Code</button>
     </div>
   </div>
 
   <!-- ═══════════════════════════════════════
-       SCREEN 4 · PATIENT HOME
+       S-SMS · 复诊登录 — 验证码
+  ═══════════════════════════════════════ -->
+  <div class="screen" id="s-sms">
+    <button class="back" onclick="go('s-phone')">‹ 返回</button>
+    <div class="phone-wrap">
+      <div class="big-icon">💬</div>
+    </div>
+    <div class="stitle">输入验证码</div>
+    <div class="ssub" id="sms-sub">验证码已发送至 <strong id="sms-phone-disp"></strong></div>
+
+    <div class="card">
+      <div class="code-inputs" id="code-inputs">
+        <input type="tel" maxlength="1" oninput="codeInput(this,0)" onkeydown="codeBk(this,0,event)">
+        <input type="tel" maxlength="1" oninput="codeInput(this,1)" onkeydown="codeBk(this,1,event)">
+        <input type="tel" maxlength="1" oninput="codeInput(this,2)" onkeydown="codeBk(this,2,event)">
+        <input type="tel" maxlength="1" oninput="codeInput(this,3)" onkeydown="codeBk(this,3,event)">
+        <input type="tel" maxlength="1" oninput="codeInput(this,4)" onkeydown="codeBk(this,4,event)">
+        <input type="tel" maxlength="1" oninput="codeInput(this,5)" onkeydown="codeBk(this,5,event)">
+      </div>
+      <div class="ebox" id="sms-err"><span>⚠️</span><span id="sms-err-t"></span></div>
+      <div class="resend-row">
+        <button class="resend-btn" id="resend-btn" onclick="resendCode()" disabled>重新发送</button>
+        <div class="countdown" id="countdown-txt">60 秒后可重新发送</div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-p" id="verify-btn" onclick="verifyCode()">验证 · Verify</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       S-HOME · 患者主页
   ═══════════════════════════════════════ -->
   <div class="screen" id="s-home">
     <div class="p-greet">
@@ -450,11 +506,16 @@ body{
       <p id="h-sub">欢迎回来</p>
     </div>
 
+    <!-- 会话剩余时间提示 -->
+    <div class="session-timer" id="session-timer">
+      🔓 <span id="session-remaining">10:00</span> 内再次扫码无需重新验证
+    </div>
+
     <div class="ac" onclick="doSign()" id="ac-sign">
       <div class="aci" style="background:#fdf0ef">✍️</div>
       <div class="act">
         <h3>今日签字</h3>
-        <p>为今天的治疗签字确认</p>
+        <p id="sign-desc">为今天的治疗签字确认</p>
       </div>
       <span class="badge" id="sign-badge" style="display:none">待签</span>
       <span class="arr">›</span>
@@ -479,15 +540,44 @@ body{
     </div>
 
     <div style="margin-top:16px">
-      <button class="btn btn-q" onclick="logout()">退出 · Sign Out</button>
+      <button class="btn btn-q" onclick="goBack()">← 返回上一步</button>
     </div>
   </div>
 
   <!-- ═══════════════════════════════════════
-       SCREEN 5 · SIGN
+       S-SIGN-CONFIRM · 签字前确认界面
+  ═══════════════════════════════════════ -->
+  <div class="screen" id="s-sign-confirm">
+    <button class="back" onclick="go('s-home')">‹ 返回</button>
+    <div class="stitle">签字确认</div>
+    <div class="ssub">请确认以下信息后继续签字</div>
+
+    <div class="sign-confirm-box">
+      <div class="session-label">本次治疗</div>
+      <div class="big-num" id="confirm-session-num">—</div>
+      <div class="session-name" id="confirm-session-name">第 — 次治疗</div>
+      <div class="confirm-note" id="confirm-note">
+        正在加载您的治疗记录...
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ibr"><span class="l">患者姓名</span><span class="v" id="confirm-pt-name">—</span></div>
+      <div class="ibr"><span class="l">ACC号码</span><span class="v" id="confirm-acc">—</span></div>
+      <div class="ibr"><span class="l">签字日期</span><span class="v" id="confirm-date">—</span></div>
+    </div>
+
+    <div class="ebox" id="confirm-err"><span>⚠️</span><span id="confirm-err-t"></span></div>
+    <div class="btn-row">
+      <button class="btn btn-p" onclick="proceedToSign()">确认，进行签字 · Proceed to Sign</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       S-SIGN · 签名界面
   ═══════════════════════════════════════ -->
   <div class="screen" id="s-sign">
-    <button class="back" onclick="go('s-home')">‹ 返回</button>
+    <button class="back" onclick="go('s-sign-confirm')">‹ 返回</button>
     <div class="stitle">今日治疗签字</div>
     <div class="sig-note">
       <span style="font-size:18px">📌</span>
@@ -505,7 +595,7 @@ body{
   </div>
 
   <!-- ═══════════════════════════════════════
-       SCREEN 6 · BOOK (logged-in patient)
+       S-BOOK · 预约（已登录）
   ═══════════════════════════════════════ -->
   <div class="screen" id="s-book">
     <button class="back" onclick="go('s-home')">‹ 返回</button>
@@ -533,7 +623,7 @@ body{
   </div>
 
   <!-- ═══════════════════════════════════════
-       SCREEN 7 · BOOK STANDALONE (no login)
+       S-BOOK-SA · 预约（无需登录）
   ═══════════════════════════════════════ -->
   <div class="screen" id="s-book-sa">
     <button class="back" onclick="go('s-welcome')">‹ 返回</button>
@@ -542,7 +632,7 @@ body{
       <div class="card-label">您的信息</div>
       <div class="fg">
         <label>ACC45 号码 *</label>
-        <input id="sa-acc" type="text" placeholder="例: JL09236"
+        <input id="sa-acc" type="text" placeholder="例: JL09236 或 09236JL"
           maxlength="7" oninput="this.value=this.value.toUpperCase()">
       </div>
       <div class="fg">
@@ -573,18 +663,16 @@ body{
   </div>
 
   <!-- ═══════════════════════════════════════
-       SCREEN 8 · MY APPOINTMENTS
+       S-APPTS · 我的预约
   ═══════════════════════════════════════ -->
   <div class="screen" id="s-appts">
     <button class="back" onclick="go('s-home')">‹ 返回</button>
     <div class="stitle">我的预约记录</div>
-    <div id="appt-list">
-      <div class="spin-wrap"><div class="spin"></div><p>加载中...</p></div>
-    </div>
+    <div id="appt-list"><div class="spin-wrap"><div class="spin"></div><p>加载中...</p></div></div>
   </div>
 
   <!-- ═══════════════════════════════════════
-       SCREEN 9 · SUCCESS
+       S-OK · 成功页
   ═══════════════════════════════════════ -->
   <div class="screen" id="s-ok">
     <div class="succ">
@@ -594,9 +682,7 @@ body{
       <div class="ibox" id="ok-detail" style="display:none"></div>
       <div class="btn-row" style="margin-top:30px">
         <button class="btn btn-p" onclick="go('s-welcome')">返回首页 · Back Home</button>
-        <button class="btn btn-o" id="ok-home-btn" style="display:none" onclick="go('s-home')">
-          返回我的账户
-        </button>
+        <button class="btn btn-o" id="ok-home-btn" style="display:none" onclick="go('s-home')">返回我的账户</button>
       </div>
     </div>
   </div>
@@ -611,19 +697,14 @@ body{
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     FIREBASE SDK
-══════════════════════════════════════════════ -->
+<!-- Firebase SDKs (Firestore + Auth for Phone) -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
 <script>
 /* ╔══════════════════════════════════════════════════════════╗
-   ║  ⚙️  CONFIGURATION  — 请将此处替换为你的真实配置          ║
-   ║  How to get these values:                                ║
-   ║  1. Go to https://console.firebase.google.com            ║
-   ║  2. Create a project → Add web app                       ║
-   ║  3. Copy the firebaseConfig object here                  ║
+   ║  CONFIGURATION                                           ║
    ╚══════════════════════════════════════════════════════════╝ */
 const FB_CFG = {
   apiKey:            "AIzaSyCyhx_TzDpvjT2v7DzhlZEc2bjZEomZ8ZI",
@@ -634,55 +715,145 @@ const FB_CFG = {
   appId:             "1:618994948679:web:08ad2805a3691b1ad82f62"
 };
 
-// 诊所显示名称（可随意修改）
-const CLINIC_NAME = "ACC 针灸诊所";
-
-/* ╔══════════════════════════════════════════════════════════╗
-   ║  默认排班规则（若Firebase中未设置，则使用此规则）            ║
-   ║  你可以在 Firebase Firestore 的 settings/schedule 文档   ║
-   ║  中随时修改，无需改代码                                    ║
-   ╚══════════════════════════════════════════════════════════╝ */
 const DEFAULT_SCHEDULE = {
-  // dayOfWeek: 0=日,1=一,2=二(Tue),3=三,4=四,5=五(Fri),6=六
   weeklySlots: [
-    { dayOfWeek: 2, startHour: 9, endHour: 17 },  // 每周二
-    { dayOfWeek: 5, startHour: 9, endHour: 17 }   // 每周五
+    { dayOfWeek: 2, startHour: 9, endHour: 17 },
+    { dayOfWeek: 5, startHour: 9, endHour: 17 }
   ],
-  blockedRanges: [
-    // 示例: { from: "2025-03-07", to: "2025-03-17", note: "诊所假期" }
-  ],
-  slotMinutes: 30,   // 每时段30分钟
-  maxDaysAhead: 60   // 最多提前60天预约
+  blockedRanges: [],
+  slotMinutes: 30,
+  maxDaysAhead: 60
 };
 
-/* ══════════════════════ INIT ══════════════════════ */
-let db = null;
-let DEMO_MODE = false;
+const SESSION_MS   = 10 * 60 * 1000;  // 10分钟
+const MAX_SESSIONS = 12;               // 最多12次治疗（与acc.html一致）
 
+/* ══════════════════════ INIT ══════════════════════ */
+let db = null, auth = null, DEMO_MODE = false;
 try {
   firebase.initializeApp(FB_CFG);
-  db = firebase.firestore();
+  db   = firebase.firestore();
+  auth = firebase.auth();
 } catch(e) {
   DEMO_MODE = true;
-  console.warn("⚠️ Firebase未配置，运行演示模式:", e.message);
+  console.warn("Firebase未配置，演示模式:", e.message);
 }
 
-document.getElementById('bar-clinic-name').textContent = CLINIC_NAME + ' · 患者服务';
+/* ══════════════════════════════════════════
+   SESSION MANAGEMENT (10分钟免重新验证)
+══════════════════════════════════════════ */
+const Session = {
+  save(user) {
+    try {
+      sessionStorage.setItem('zwt_session', JSON.stringify({
+        user,
+        expiry: Date.now() + SESSION_MS
+      }));
+    } catch(e){}
+  },
+  load() {
+    try {
+      const raw = sessionStorage.getItem('zwt_session');
+      if (!raw) return null;
+      const d = JSON.parse(raw);
+      if (!d.expiry || d.expiry < Date.now()) { this.clear(); return null; }
+      return d.user;
+    } catch(e) { return null; }
+  },
+  clear() {
+    try { sessionStorage.removeItem('zwt_session'); } catch(e){}
+  },
+  remaining() {
+    try {
+      const raw = sessionStorage.getItem('zwt_session');
+      if (!raw) return 0;
+      const d = JSON.parse(raw);
+      return Math.max(0, Math.floor((d.expiry - Date.now()) / 1000));
+    } catch(e) { return 0; }
+  }
+};
+
+/* ══════════════════════════════════════════
+   RATE LIMITER — 每个手机号每天最多登录 3 次
+   使用 localStorage 存储，按自然日重置
+   key: zwt_rl_{phone_hash}
+   value: { date: "YYYY-MM-DD", count: N }
+══════════════════════════════════════════ */
+const MAX_DAILY_LOGINS = 3;
+
+const RateLimit = {
+  _key(phone) {
+    // 用末6位作为 key，避免存整个手机号
+    const tail = (phone || '').replace(/\D/g, '').slice(-6);
+    return `zwt_rl_${tail}`;
+  },
+  _today() {
+    return new Date().toISOString().slice(0, 10);  // "YYYY-MM-DD"
+  },
+  // 返回今日已用次数
+  getCount(phone) {
+    try {
+      const raw = localStorage.getItem(this._key(phone));
+      if (!raw) return 0;
+      const d = JSON.parse(raw);
+      if (d.date !== this._today()) return 0;  // 新的一天，重置
+      return d.count || 0;
+    } catch(e) { return 0; }
+  },
+  // 检查是否还可以登录
+  canLogin(phone) {
+    return this.getCount(phone) < MAX_DAILY_LOGINS;
+  },
+  // 每次成功发送验证码后调用（记一次尝试）
+  increment(phone) {
+    try {
+      const count = this.getCount(phone) + 1;
+      localStorage.setItem(this._key(phone), JSON.stringify({
+        date: this._today(),
+        count
+      }));
+    } catch(e) {}
+  },
+  // 剩余次数
+  remaining(phone) {
+    return Math.max(0, MAX_DAILY_LOGINS - this.getCount(phone));
+  }
+};
+
+let _sessionTimerInterval = null;
+
+function startSessionTimer() {
+  clearInterval(_sessionTimerInterval);
+  const timerEl     = document.getElementById('session-timer');
+  const remainingEl = document.getElementById('session-remaining');
+  if (timerEl) timerEl.classList.remove('hidden');
+
+  _sessionTimerInterval = setInterval(() => {
+    const sec = Session.remaining();
+    if (sec <= 0) {
+      clearInterval(_sessionTimerInterval);
+      if (timerEl) timerEl.classList.add('hidden');
+      return;
+    }
+    const m = String(Math.floor(sec / 60)).padStart(2,'0');
+    const s = String(sec % 60).padStart(2,'0');
+    if (remainingEl) remainingEl.textContent = `${m}:${s}`;
+  }, 1000);
+}
 
 /* ══════════════════════ GLOBAL STATE ══════════════════════ */
 const G = {
-  patient: null,
-  schedule: null,
-  bookedSlots: {},       // { "YYYY-MM-DD": ["09:00","09:30",...] }
-  calMonth: {            // current displayed month per calendar instance
-    main: new Date(),
-    sa:   new Date()
-  },
-  selected: {            // selected date+time per booking instance
-    main: { date: null, time: null },
-    sa:   { date: null, time: null }
-  },
-  sigHistory: []
+  patient:    null,
+  hasACC:     true,
+  schedule:   null,
+  bookedSlots:{},
+  calMonth:   { main: new Date(), sa: new Date() },
+  selected:   { main:{ date:null, time:null }, sa:{ date:null, time:null } },
+  sigHistory: [],
+  nextSession: 1,       // 下一次需要签字的治疗编号
+  _confirmResult: null, // Firebase phone auth confirmation
+  _phoneE164: '',
+  _countdownTimer: null
 };
 
 const MO_ZH = ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
@@ -690,330 +861,675 @@ const MO_EN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov'
 
 /* ══════════════════════ UTILITIES ══════════════════════ */
 function go(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id)?.classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({top:0,behavior:'smooth'});
+  if (id==='s-sign')    initSig();
+  if (id==='s-book')    initCal('main');
+  if (id==='s-book-sa') initCal('sa');
+  if (id==='s-appts')   loadAppts();
+  if (id==='s-phone')   updateRateHint();
+}
 
-  // Screen-specific init
-  if (id === 's-sign')    initSig();
-  if (id === 's-book')    initCal('main');
-  if (id === 's-book-sa') initCal('sa');
-  if (id === 's-appts')   loadAppts();
+function updateRateHint() {
+  // Show usage hint if the user has already used 1+ attempts today
+  // We don't know the phone yet, so we check after they type
+  const input = document.getElementById('ph-input');
+  if(input) {
+    // Attach oninput handler if not already done
+    if(!input._rlBound) {
+      input._rlBound = true;
+      input.addEventListener('input', () => {
+        const raw = input.value || '';
+        const nz  = normalizeNZPhone(raw);
+        if(!nz.ok) { hideRateHint(); return; }
+        showRateHint(nz.e164);
+      });
+    }
+  }
+}
+
+function showRateHint(phone) {
+  const hint = document.getElementById('rate-hint');
+  if(!hint || DEMO_MODE) return;
+  const used = RateLimit.getCount(phone);
+  const left = RateLimit.remaining(phone);
+  if(used === 0) { hint.style.display='none'; return; }
+  if(left === 0) {
+    hint.style.display='block';
+    hint.style.background='#fdf0ef';
+    hint.style.borderColor='var(--red)';
+    hint.style.color='var(--red)';
+    hint.textContent='今日登录次数已用完（3/3），无法再发送验证码。请联系微信客服。';
+  } else {
+    hint.style.display='block';
+    hint.style.background='#fff9e8';
+    hint.style.borderColor='var(--gold)';
+    hint.style.color='#7a4f00';
+    hint.textContent=`今日已登录 ${used} 次，剩余 ${left} 次（每日上限 ${MAX_DAILY_LOGINS} 次）`;
+  }
+}
+
+function hideRateHint() {
+  const hint = document.getElementById('rate-hint');
+  if(hint) hint.style.display='none';
 }
 
 function toast(msg, ms=2800) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('on');
-  setTimeout(() => el.classList.remove('on'), ms);
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.classList.add('on');
+  setTimeout(()=>el.classList.remove('on'), ms);
 }
 
-function block(on) {
-  document.getElementById('blocker').classList.toggle('on', on);
-}
+function block(on) { document.getElementById('blocker').classList.toggle('on', on); }
 
 function fmtDate(inp) {
-  let v = inp.value.replace(/\D/g,'');
-  if (v.length > 2) v = v.slice(0,2)+'/'+v.slice(2);
-  if (v.length > 5) v = v.slice(0,5)+'/'+v.slice(5);
-  if (v.length > 10) v = v.slice(0,10);
-  inp.value = v;
+  let v=inp.value.replace(/\D/g,'');
+  if(v.length>2) v=v.slice(0,2)+'/'+v.slice(2);
+  if(v.length>5) v=v.slice(0,5)+'/'+v.slice(5);
+  if(v.length>10) v=v.slice(0,10);
+  inp.value=v;
 }
 
-function validACC(s) { return /^[A-Z]{2}\d{5}$/.test(s.toUpperCase()); }
+function validACC(s) {
+  const u = (s||'').toUpperCase().trim();
+  return /^[A-Z]{2}\d{5}$/.test(u) || /^\d{5}[A-Z]{2}$/.test(u);
+}
+
+function normaliseACC(s) { return (s||'').toUpperCase().trim(); }
+
 function validDt(s)  { return /^\d{2}\/\d{2}\/\d{4}$/.test(s); }
-
-function isoDate(d) {
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-}
+function isoDate(d)  { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+function todayDisp() { const n=new Date(); return `${String(n.getDate()).padStart(2,'0')}/${String(n.getMonth()+1).padStart(2,'0')}/${n.getFullYear()}`; }
+function todayISO()  { return new Date().toISOString().split('T')[0]; }
 
 function showErr(boxId, msgId, msg) {
-  const b = document.getElementById(boxId);
-  if (msgId) document.getElementById(msgId).textContent = msg;
-  b.style.display = 'flex';
+  const b=document.getElementById(boxId);
+  if(msgId) document.getElementById(msgId).textContent=msg;
+  b.style.display='flex';
 }
-
-function hideErr(boxId) { document.getElementById(boxId).style.display = 'none'; }
-
-function todayDisp() {
-  const n = new Date();
-  return `${String(n.getDate()).padStart(2,'0')}/${String(n.getMonth()+1).padStart(2,'0')}/${n.getFullYear()}`;
-}
+function hideErr(id) { document.getElementById(id).style.display='none'; }
 
 function showOK(icon, title, msg, details, showHomeBtn=false) {
   document.getElementById('ok-icon').textContent  = icon;
   document.getElementById('ok-title').textContent = title;
   document.getElementById('ok-msg').textContent   = msg;
-  const det = document.getElementById('ok-detail');
-  if (details) {
-    det.style.display = 'block';
-    det.innerHTML = Object.entries(details)
-      .map(([k,v]) => `<div class="ibr"><span class="l">${k}</span><span class="v">${v}</span></div>`)
-      .join('');
-  } else {
-    det.style.display = 'none';
-  }
-  document.getElementById('ok-home-btn').style.display = showHomeBtn ? 'flex' : 'none';
+  const det=document.getElementById('ok-detail');
+  if(details){
+    det.style.display='block';
+    det.innerHTML=Object.entries(details).map(([k,v])=>`<div class="ibr"><span class="l">${k}</span><span class="v">${v}</span></div>`).join('');
+  } else { det.style.display='none'; }
+  document.getElementById('ok-home-btn').style.display = showHomeBtn ? 'flex':'none';
   go('s-ok');
 }
 
+function normalizeNZPhone(raw) {
+  const c=(raw||'').replace(/[\s\-\(\)]/g,'');
+  let e164='';
+  if(c.startsWith('+64'))      e164=c;
+  else if(c.startsWith('640')) e164='+64'+c.slice(2);
+  else if(c.startsWith('64'))  e164='+'+c;
+  else if(c.startsWith('0'))   e164='+64'+c.slice(1);
+  else return {ok:false, error:'请输入新西兰手机号（如 021 234 5678）'};
+  if(!/^\+64\d{9}$/.test(e164)) return {ok:false, error:'手机号格式不正确，应为9位数字'};
+  const mobile=e164.slice(3);
+  if(!['21','22','27','29'].some(p=>mobile.startsWith(p)))
+    return {ok:false, error:'请输入手机号（移动号段：021/022/027/029）'};
+  return {ok:true, e164, masked:e164.slice(0,5)+'xxx'+e164.slice(-3)};
+}
+
 /* ══════════════════════════════════════════
-   SCREEN 2: NEW PATIENT SUBMIT
+   NEW PATIENT FLOW
 ══════════════════════════════════════════ */
-async function submitNew() {
-  hideErr('n-err');
-  const acc    = (document.getElementById('n-acc').value||'').trim().toUpperCase();
-  const fam    = (document.getElementById('n-fam').value||'').trim();
-  const fir    = (document.getElementById('n-fir').value||'').trim();
-  const dob    = (document.getElementById('n-dob').value||'').trim();
-  const doa    = (document.getElementById('n-doa').value||'').trim();
-  const reason = (document.getElementById('n-reason').value||'').trim();
-  const ph     = (document.getElementById('n-ph').value||'').trim();
+function startNewWithACC() {
+  G.hasACC = true;
+  document.getElementById('personal-sub').textContent = '步骤 1/2：请填写您的基本信息';
+  go('s-new-personal');
+}
 
-  if (!validACC(acc))    { showErr('n-err','n-err-t','ACC号码格式错误：2个大写字母+5位数字'); return; }
-  if (!fam)              { showErr('n-err','n-err-t','请填写姓（Family Name）'); return; }
-  if (!fir)              { showErr('n-err','n-err-t','请填写名（First Name）'); return; }
-  if (!validDt(dob))     { showErr('n-err','n-err-t','出生日期格式错误，应为 DD/MM/YYYY'); return; }
-  if (!validDt(doa))     { showErr('n-err','n-err-t','受伤日期格式错误，应为 DD/MM/YYYY'); return; }
-  if (!reason)           { showErr('n-err','n-err-t','请填写受伤原因'); return; }
+function startNewNoACC() {
+  G.hasACC = false;
+  document.getElementById('personal-sub').textContent = '请填写您的基本信息';
+  go('s-new-personal');
+}
 
-  const btn = document.getElementById('n-sub-btn');
-  btn.disabled = true; block(true);
+function personalNext() {
+  hideErr('np-err');
+  const fam   = (document.getElementById('np-fam').value||'').trim();
+  const fir   = (document.getElementById('np-fir').value||'').trim();
+  const gender= document.getElementById('np-gender').value;
+  const dob   = (document.getElementById('np-dob').value||'').trim();
+  const ph    = (document.getElementById('np-ph').value||'').trim();
+  const addr  = (document.getElementById('np-addr').value||'').trim();
+  const email = (document.getElementById('np-email').value||'').trim();
 
+  if(!fam)             { showErr('np-err','np-err-t','请填写姓（Family Name）'); return; }
+  if(!fir)             { showErr('np-err','np-err-t','请填写名（First Name）'); return; }
+  if(!gender)          { showErr('np-err','np-err-t','请选择性别'); return; }
+  if(!validDt(dob))    { showErr('np-err','np-err-t','出生日期格式错误，应为 DD/MM/YYYY'); return; }
+  if(!ph)              { showErr('np-err','np-err-t','请填写联系电话'); return; }
+  if(!addr)            { showErr('np-err','np-err-t','请填写地址'); return; }
+  if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showErr('np-err','np-err-t','邮箱格式不正确'); return; }
+
+  // Store personal info temporarily
+  G._newPersonal = { familyName:fam, firstName:fir, gender, dob, phone:ph, address:addr, email };
+
+  if(G.hasACC) {
+    go('s-new-acc');
+  } else {
+    submitNoACC();
+  }
+}
+
+async function submitNoACC() {
+  const p = G._newPersonal;
+  block(true);
   const data = {
-    accNumber: acc, familyName: fam, firstName: fir,
-    dob, doa, reason, phone: ph,
+    ...p,
+    accNumber: null,
+    hasACC: false,
+    createdAt: new Date().toISOString(),
+    source: 'patient_portal'
+  };
+  try {
+    if(!DEMO_MODE) {
+      // Use phone as doc ID for no-ACC patients
+      const docId = p.phone.replace(/[\s\+\-]/g,'');
+      await db.collection('patients').doc('NOACCPH_'+docId).set(data);
+    }
+    G.patient = data;
+    showOK('📋','登记成功！',`欢迎，${p.firstName} ${p.familyName}！您的信息已提交，诊所已收到。`,{
+      '姓名': `${p.firstName} ${p.familyName}`, '电话': p.phone
+    }, false);
+  } catch(e) {
+    showErr('np-err','np-err-t','提交失败，请检查网络后重试');
+  } finally { block(false); }
+}
+
+async function submitNew() {
+  hideErr('na-err');
+  const acc    = normaliseACC(document.getElementById('na-acc').value||'');
+  const doa    = (document.getElementById('na-doa').value||'').trim();
+  const reason = (document.getElementById('na-reason').value||'').trim();
+  const read   = (document.getElementById('na-read').value||'').trim();
+
+  if(!validACC(acc))  { showErr('na-err','na-err-t','ACC号码格式错误：2字母+5数字，或5数字+2字母'); return; }
+  if(!validDt(doa))   { showErr('na-err','na-err-t','受伤日期格式错误，应为 DD/MM/YYYY'); return; }
+  if(!reason)         { showErr('na-err','na-err-t','请填写受伤原因'); return; }
+
+  const btn=document.getElementById('na-sub-btn');
+  btn.disabled=true; block(true);
+
+  const p = G._newPersonal || {};
+  const data = {
+    ...p,
+    accNumber: acc, doa, reason, readCode: read,
+    hasACC: true,
     createdAt: new Date().toISOString(),
     source: 'patient_portal'
   };
 
   try {
-    if (!DEMO_MODE) {
-      const ref = db.collection('patients').doc(acc);
-      const snap = await ref.get();
-      if (snap.exists) {
-        showErr('n-err','n-err-t',`ACC号码 ${acc} 已存在，请使用"已是患者"入口登录`);
+    if(!DEMO_MODE) {
+      const ref=db.collection('patients').doc(acc);
+      const snap=await ref.get();
+      if(snap.exists) {
+        showErr('na-err','na-err-t',`ACC号码 ${acc} 已存在，请使用"复诊"入口登录`);
         btn.disabled=false; block(false); return;
       }
       await ref.set(data);
     }
     G.patient = data;
-    showOK('📋','登记成功！',`欢迎，${fir} ${fam}！您的信息已提交，诊所已收到。`,{
-      'ACC号码': acc, '姓名': `${fir} ${fam}`, '受伤日期': doa
+    showOK('📋','登记成功！',`欢迎，${p.firstName} ${p.familyName}！您的信息已提交，诊所已收到。`,{
+      'ACC号码': acc, '姓名': `${p.firstName} ${p.familyName}`, '受伤日期': doa
     }, false);
   } catch(e) {
     console.error(e);
-    showErr('n-err','n-err-t','提交失败，请检查网络后重试');
-  } finally {
+    showErr('na-err','na-err-t','提交失败，请检查网络后重试');
+  } finally { btn.disabled=false; block(false); }
+}
+
+/* ══════════════════════════════════════════
+   RETURNING PATIENT — SMS FLOW
+══════════════════════════════════════════ */
+function startReturning() {
+  // Check for valid 10-min session — no SMS needed if still valid
+  const cached = Session.load();
+  if(cached) {
+    G.patient = cached;
+    showHome();
+    return;
+  }
+  go('s-phone');
+  // Clear phone input and reset error
+  document.getElementById('ph-input').value = '';
+  hideErr('ph-err');
+}
+
+function goBack() {
+  Session.clear();
+  clearInterval(_sessionTimerInterval);
+  go('s-welcome');
+}
+
+async function sendSMS() {
+  hideErr('ph-err');
+  const raw = document.getElementById('ph-input').value||'';
+  const nz  = normalizeNZPhone(raw);
+  if(!nz.ok) { showErr('ph-err','ph-err-t', nz.error); return; }
+  G._phoneE164 = nz.e164;
+
+  // ── 每日登录次数限制检查 ──
+  if(!DEMO_MODE && !RateLimit.canLogin(nz.e164)) {
+    showErr('ph-err','ph-err-t',
+      '今日登录已达上限（3次），请联系微信客服。
+Today's login limit reached, please contact WeChat support.');
+    return;
+  }
+
+  const btn=document.getElementById('send-sms-btn');
+  btn.disabled=true; block(true);
+
+  if(DEMO_MODE) {
+    block(false);
+    document.getElementById('sms-phone-disp').textContent = nz.masked;
+    go('s-sms');
+    startCountdown();
+    toast('演示模式：验证码为 123456');
+    btn.disabled=false;
+    return;
+  }
+
+  try {
+    if(!window._recaptchaVerifier) {
+      window._recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
+        'recaptcha-container',
+        { size:'invisible', callback:()=>{} }
+      );
+      await window._recaptchaVerifier.render();
+    }
+    G._confirmResult = await auth.signInWithPhoneNumber(nz.e164, window._recaptchaVerifier);
+
+    // ── 成功发出验证码，记录一次尝试 ──
+    RateLimit.increment(nz.e164);
+
+    const remaining = RateLimit.remaining(nz.e164);
+    document.getElementById('sms-phone-disp').textContent = nz.masked;
+    // 更新副标题，提示剩余次数
+    const subEl = document.getElementById('sms-sub');
+    if(subEl) {
+      subEl.innerHTML = `验证码已发送至 <strong>${nz.masked}</strong>` +
+        (remaining > 0
+          ? `<br><span style="font-size:12px;color:var(--ink-s)">今日剩余登录次数：${remaining} 次</span>`
+          : `<br><span style="font-size:12px;color:var(--red)">今日登录次数已用完，这是最后一次</span>`);
+    }
+
+    go('s-sms');
+    startCountdown();
+  } catch(e) {
+    showErr('ph-err','ph-err-t', friendlyAuthErr(e.code));
+    if(window._recaptchaVerifier) {
+      try { window._recaptchaVerifier.clear(); } catch(_){}
+      window._recaptchaVerifier = null;
+    }
+  } finally { btn.disabled=false; block(false); }
+}
+
+async function resendCode() {
+  document.getElementById('ph-input').value = G._phoneE164.replace('+64','0');
+  go('s-phone');
+  setTimeout(sendSMS, 100);
+}
+
+function startCountdown() {
+  clearInterval(G._countdownTimer);
+  const btn=document.getElementById('resend-btn');
+  const txt=document.getElementById('countdown-txt');
+  btn.disabled=true;
+  let sec=60;
+  txt.textContent=`${sec} 秒后可重新发送`;
+  G._countdownTimer = setInterval(()=>{
+    sec--;
+    if(sec<=0){
+      clearInterval(G._countdownTimer);
+      btn.disabled=false;
+      txt.textContent='';
+    } else {
+      txt.textContent=`${sec} 秒后可重新发送`;
+    }
+  },1000);
+}
+
+function codeInput(inp, idx) {
+  // Auto-advance to next input
+  inp.value=inp.value.replace(/\D/g,'').slice(-1);
+  if(inp.value && idx<5) {
+    document.querySelectorAll('#code-inputs input')[idx+1]?.focus();
+  }
+  // Auto-verify when all 6 filled
+  const all=[...document.querySelectorAll('#code-inputs input')];
+  if(all.every(i=>i.value)) verifyCode();
+}
+
+function codeBk(inp, idx, e) {
+  if(e.key==='Backspace' && !inp.value && idx>0) {
+    const all=document.querySelectorAll('#code-inputs input');
+    all[idx-1].focus();
+    all[idx-1].value='';
+  }
+}
+
+function getCodeValue() {
+  return [...document.querySelectorAll('#code-inputs input')].map(i=>i.value).join('');
+}
+
+async function verifyCode() {
+  hideErr('sms-err');
+  const code=getCodeValue();
+  if(code.length<6) { showErr('sms-err','sms-err-t','请输入完整的6位验证码'); return; }
+
+  const btn=document.getElementById('verify-btn');
+  btn.disabled=true; block(true);
+
+  if(DEMO_MODE) {
+    if(code==='123456') {
+      G.patient={ phone:G._phoneE164, firstName:'演示', familyName:'用户',
+                  accNumber:'DEMO01', dob:'01/01/1990' };
+      Session.save(G.patient);
+      startSessionTimer();
+      showHome();
+    } else {
+      showErr('sms-err','sms-err-t','演示模式验证码为 123456');
+    }
     btn.disabled=false; block(false);
+    return;
+  }
+
+  try {
+    const credential = await G._confirmResult.confirm(code);
+    const fbUser = credential.user;
+
+    // Lookup patient by phone
+    const snap = await db.collection('patients')
+      .where('phone','==', fbUser.phoneNumber)
+      .limit(1).get();
+
+    if(snap.empty) {
+      showErr('sms-err','sms-err-t','未找到该手机号的患者档案，请先进行"首次就诊"登记');
+      btn.disabled=false; block(false); return;
+    }
+
+    G.patient = snap.docs[0].data();
+    Session.save(G.patient);
+    startSessionTimer();
+    showHome();
+  } catch(e) {
+    showErr('sms-err','sms-err-t', friendlyAuthErr(e.code));
+  } finally { btn.disabled=false; block(false); }
+}
+
+function friendlyAuthErr(code) {
+  const m = {
+    'auth/invalid-verification-code': '验证码错误，请重新输入',
+    'auth/code-expired':              '验证码已过期，请重新发送',
+    'auth/too-many-requests':         '请求过多，请稍后再试',
+    'auth/invalid-phone-number':      '手机号格式不正确',
+    'auth/session-expired':           '会话超时，请重新发送验证码',
+  };
+  return m[code] || `验证失败（${code||'未知'}），请重试`;
+}
+
+function showHome() {
+  const p=G.patient;
+  document.getElementById('h-name').textContent = `${p.firstName||''} ${p.familyName||''}`.trim() || '患者';
+  document.getElementById('h-sub').textContent  = p.accNumber ? `ACC: ${p.accNumber}` : '自费患者';
+  checkNextSession();
+  go('s-home');
+  startSessionTimer();
+}
+
+/* ══════════════════════════════════════════
+   SESSION NUMBER LOGIC
+   计算下一次治疗编号（基于已提交签名数）
+══════════════════════════════════════════ */
+async function checkNextSession() {
+  if(!G.patient || DEMO_MODE) {
+    G.nextSession = 1;
+    updateSignDesc();
+    document.getElementById('sign-badge').style.display='inline';
+    return;
+  }
+
+  try {
+    // ── 主要逻辑：从 acc.html 同步过来的治疗记录中读取下次签字编号 ──
+    // acc.html 每次保存病历时会写入 patients/{acc}.nextSignSession
+    // 这与医生端的实际治疗记录保持同步，而不是单纯计数签名次数
+    const accNumber = G.patient.accNumber || '';
+    const patSnap = await db.collection('patients').doc(accNumber).get();
+
+    let nextSession = 1;
+    let treatmentCount = 0;
+
+    if(patSnap.exists) {
+      const data = patSnap.data();
+      if(typeof data.nextSignSession === 'number') {
+        nextSession     = Math.min(data.nextSignSession, MAX_SESSIONS);
+        treatmentCount  = data.treatmentCount || 0;
+      }
+    }
+
+    G.nextSession = nextSession;
+
+    // 检查今天是否已经签过字（防止重复）
+    const today = todayISO();
+    const todaySnap = await db.collection('signatures')
+      .where('accNumber','==', accNumber)
+      .where('date','==', today)
+      .limit(1).get();
+    const alreadySigned = !todaySnap.empty;
+
+    document.getElementById('sign-badge').style.display = alreadySigned ? 'none' : 'inline';
+
+    // 如果医生还没建档（新患者刚登记，acc.html 未录入），则 fallback 到签名计数
+    if(!patSnap.exists || typeof patSnap.data().nextSignSession !== 'number') {
+      const sigSnap = await db.collection('signatures')
+        .where('accNumber','==', accNumber).get();
+      G.nextSession = Math.min(sigSnap.size + 1, MAX_SESSIONS);
+    }
+
+    updateSignDesc();
+  } catch(e) {
+    console.warn('checkNextSession error:', e);
+    G.nextSession = 1;
+    updateSignDesc();
+  }
+}
+
+function updateSignDesc() {
+  const el = document.getElementById('sign-desc');
+  if(el) {
+    if(G.nextSession <= MAX_SESSIONS) {
+      el.textContent = `第 ${G.nextSession} 次治疗签字`;
+    } else {
+      el.textContent = '已完成全部治疗签字';
+    }
   }
 }
 
 /* ══════════════════════════════════════════
-   SCREEN 3: IDENTIFY RETURNING PATIENT
+   SIGN CONFIRM SCREEN
 ══════════════════════════════════════════ */
-async function identPt() {
-  hideErr('i-err');
-  const acc = (document.getElementById('i-acc').value||'').trim().toUpperCase();
-  if (!validACC(acc)) { showErr('i-err','i-err-t','ACC号码格式错误'); return; }
+function doSign() {
+  if(G.nextSession > MAX_SESSIONS) {
+    toast('您已完成全部 12 次治疗签字');
+    return;
+  }
+  // Fill confirm screen
+  const p = G.patient || {};
+  document.getElementById('confirm-session-num').textContent  = G.nextSession;
+  document.getElementById('confirm-session-name').textContent = `第 ${G.nextSession} 次治疗签字`;
+  document.getElementById('confirm-pt-name').textContent      = `${p.firstName||''} ${p.familyName||''}`.trim();
+  document.getElementById('confirm-acc').textContent          = p.accNumber || '（无ACC）';
+  document.getElementById('confirm-date').textContent         = todayDisp();
 
-  block(true);
-  try {
-    if (!DEMO_MODE) {
-      const snap = await db.collection('patients').doc(acc).get();
-      if (!snap.exists) {
-        showErr('i-err','i-err-t',`未找到ACC号码 ${acc}，请选择"首次就诊"登记`);
-        block(false); return;
-      }
-      G.patient = snap.data();
-    } else {
-      G.patient = { accNumber: acc, firstName: 'Demo', familyName: 'Patient', dob:'01/01/1990' };
-    }
-    showHome();
-  } catch(e) {
-    showErr('i-err','i-err-t','查询失败，请重试');
-  } finally { block(false); }
+  // Note explaining the session
+  let note = `您的签名将作为第 ${G.nextSession} 次针灸治疗的知情同意确认，`;
+  note += `记录于 ${todayDisp()}。`;
+  if(G.nextSession < MAX_SESSIONS) {
+    note += `\n\n完成后还剩 ${MAX_SESSIONS - G.nextSession} 次治疗（共12次）。`;
+  } else {
+    note += `\n\n这是您的第 ${MAX_SESSIONS} 次（最后一次）治疗签字。`;
+  }
+  document.getElementById('confirm-note').textContent = note;
+
+  hideErr('confirm-err');
+  go('s-sign-confirm');
 }
 
-function showHome() {
-  const p = G.patient;
-  document.getElementById('h-name').textContent = `${p.firstName} ${p.familyName}`;
-  document.getElementById('h-sub').textContent  = `ACC: ${p.accNumber}`;
-  checkTodaySig();
-  go('s-home');
-}
-
-async function checkTodaySig() {
-  if (!G.patient || DEMO_MODE) return;
-  const today = new Date().toISOString().split('T')[0];
-  try {
-    const snap = await db.collection('signatures')
-      .where('accNumber','==', G.patient.accNumber)
+function proceedToSign() {
+  // Check if already signed today
+  const today = todayISO();
+  if(!DEMO_MODE) {
+    db.collection('signatures')
+      .where('accNumber','==', G.patient?.accNumber||'')
       .where('date','==', today)
-      .limit(1).get();
-    document.getElementById('sign-badge').style.display = snap.empty ? 'inline' : 'none';
-  } catch(e) {
-    document.getElementById('sign-badge').style.display = 'none';
+      .limit(1).get()
+      .then(snap => {
+        if(!snap.empty) {
+          showErr('confirm-err','confirm-err-t',`您今天（${todayDisp()}）已完成签字，无需重复签名`);
+        } else {
+          openSignCanvas();
+        }
+      }).catch(() => openSignCanvas());
+  } else {
+    openSignCanvas();
   }
 }
 
-function logout() {
-  G.patient = null;
-  document.getElementById('i-acc').value = '';
-  go('s-welcome');
-}
-
-function doSign() {
+function openSignCanvas() {
   document.getElementById('sig-info').textContent =
-    `${todayDisp()} · ACC: ${G.patient?.accNumber||''}`;
+    `第 ${G.nextSession} 次治疗 · ${todayDisp()} · ACC: ${G.patient?.accNumber||'自费'}`;
   go('s-sign');
 }
 
 /* ══════════════════════════════════════════
-   SCREEN 5: SIGNATURE
+   SIGNATURE CANVAS
 ══════════════════════════════════════════ */
 let sigCtx, sigDrawing=false, sigLX, sigLY;
 
 function initSig() {
-  const cv = document.getElementById('sigCanvas');
+  const cv=document.getElementById('sigCanvas');
   cv.width  = cv.offsetWidth  * (window.devicePixelRatio||1);
   cv.height = cv.offsetHeight * (window.devicePixelRatio||1);
-  sigCtx = cv.getContext('2d');
+  sigCtx=cv.getContext('2d');
   sigCtx.scale(window.devicePixelRatio||1, window.devicePixelRatio||1);
-  sigCtx.strokeStyle = '#1c2b2b';
-  sigCtx.lineWidth   = 2.5;
-  sigCtx.lineCap     = 'round';
-  sigCtx.lineJoin    = 'round';
-  G.sigHistory = [];
-  hideErr('sig-err');
-
-  const on  = (type,fn) => cv.addEventListener(type,fn,{passive:false});
-  on('touchstart', e=>{e.preventDefault();sDown(e.touches[0])});
-  on('touchmove',  e=>{e.preventDefault();sMove(e.touches[0])});
-  on('touchend',   e=>{e.preventDefault();sigDrawing=false});
-  on('mousedown',  e=>sDown(e));
-  on('mousemove',  e=>sMove(e));
-  on('mouseup',    ()=>sigDrawing=false);
-  on('mouseleave', ()=>sigDrawing=false);
+  sigCtx.strokeStyle='#1c2b2b'; sigCtx.lineWidth=2.5;
+  sigCtx.lineCap='round'; sigCtx.lineJoin='round';
+  G.sigHistory=[]; hideErr('sig-err');
+  const on=(t,fn)=>cv.addEventListener(t,fn,{passive:false});
+  on('touchstart',e=>{e.preventDefault();sDown(e.touches[0])});
+  on('touchmove', e=>{e.preventDefault();sMove(e.touches[0])});
+  on('touchend',  e=>{e.preventDefault();sigDrawing=false});
+  on('mousedown', e=>sDown(e));
+  on('mousemove', e=>sMove(e));
+  on('mouseup',   ()=>sigDrawing=false);
+  on('mouseleave',()=>sigDrawing=false);
 }
 
-function pos(e) {
-  const cv = document.getElementById('sigCanvas');
-  const r  = cv.getBoundingClientRect();
-  return { x:(e.clientX-r.left)*(cv.width/r.width/(window.devicePixelRatio||1)),
-           y:(e.clientY-r.top) *(cv.height/r.height/(window.devicePixelRatio||1)) };
-}
-
-function sDown(e) {
-  sigDrawing=true;
-  const p=pos(e); sigLX=p.x; sigLY=p.y;
+function pos(e){
   const cv=document.getElementById('sigCanvas');
-  G.sigHistory.push(sigCtx.getImageData(0,0,cv.width,cv.height));
-  sigCtx.beginPath(); sigCtx.moveTo(sigLX,sigLY);
+  const r=cv.getBoundingClientRect();
+  return {
+    x:(e.clientX-r.left)*(cv.width/r.width/(window.devicePixelRatio||1)),
+    y:(e.clientY-r.top) *(cv.height/r.height/(window.devicePixelRatio||1))
+  };
 }
 
-function sMove(e) {
-  if(!sigDrawing) return;
-  const p=pos(e);
-  sigCtx.lineTo(p.x,p.y); sigCtx.stroke();
-  sigLX=p.x; sigLY=p.y;
-}
-
-function sigClear() {
-  const cv=document.getElementById('sigCanvas');
-  sigCtx.clearRect(0,0,cv.width,cv.height);
-  G.sigHistory=[];
-  hideErr('sig-err');
-}
-
-function sigUndo() {
-  const cv=document.getElementById('sigCanvas');
-  if(G.sigHistory.length>0) sigCtx.putImageData(G.sigHistory.pop(),0,0);
-  else sigCtx.clearRect(0,0,cv.width,cv.height);
-}
-
-function sigBlank(cv) {
-  const d=sigCtx.getImageData(0,0,cv.width,cv.height).data;
-  for(let i=3;i<d.length;i+=4) if(d[i]>0) return false;
-  return true;
-}
+function sDown(e){ sigDrawing=true; const p=pos(e); sigLX=p.x; sigLY=p.y; const cv=document.getElementById('sigCanvas'); G.sigHistory.push(sigCtx.getImageData(0,0,cv.width,cv.height)); sigCtx.beginPath(); sigCtx.moveTo(sigLX,sigLY); }
+function sMove(e){ if(!sigDrawing)return; const p=pos(e); sigCtx.lineTo(p.x,p.y); sigCtx.stroke(); sigLX=p.x; sigLY=p.y; }
+function sigClear(){ const cv=document.getElementById('sigCanvas'); sigCtx.clearRect(0,0,cv.width,cv.height); G.sigHistory=[]; hideErr('sig-err'); }
+function sigUndo(){ const cv=document.getElementById('sigCanvas'); if(G.sigHistory.length>0) sigCtx.putImageData(G.sigHistory.pop(),0,0); else sigCtx.clearRect(0,0,cv.width,cv.height); }
+function sigBlank(cv){ const d=sigCtx.getImageData(0,0,cv.width,cv.height).data; for(let i=3;i<d.length;i+=4) if(d[i]>0) return false; return true; }
 
 async function submitSig() {
   const cv=document.getElementById('sigCanvas');
   if(sigBlank(cv)){ document.getElementById('sig-err').style.display='flex'; return; }
   hideErr('sig-err');
 
-  const acc     = G.patient?.accNumber||'DEMO';
-  const today   = new Date().toISOString().split('T')[0];
+  const acc     = G.patient?.accNumber||'NOACCPH';
+  const today   = todayISO();
   const sigData = cv.toDataURL('image/png');
+  const sn      = G.nextSession;
 
   block(true);
   try {
-    if (!DEMO_MODE) {
-      await db.collection('signatures').doc(`${acc}_${today}`).set({
-        accNumber:   acc,
-        patientName: `${G.patient.firstName} ${G.patient.familyName}`,
-        date:        today,
+    if(!DEMO_MODE) {
+      const docId = `${acc}_${today}_session${sn}`;
+      await db.collection('signatures').doc(docId).set({
+        accNumber:     acc,
+        patientName:   `${G.patient.firstName||''} ${G.patient.familyName||''}`.trim(),
+        date:          today,
+        sessionNumber: sn,
         signatureData: sigData,
-        submittedAt: new Date().toISOString()
+        submittedAt:   new Date().toISOString()
       });
     }
     document.getElementById('sign-badge').style.display='none';
-    showOK('✅','签名已提交！',`今日治疗 (${todayDisp()}) 的签名已成功记录。`,null,true);
+    // Update next session in memory
+    G.nextSession = Math.min(sn + 1, MAX_SESSIONS);
+    updateSignDesc();
+    showOK('✅','签名已提交！',
+      `第 ${sn} 次治疗（${todayDisp()}）的签名已成功记录。`,
+      { '治疗次数': `第 ${sn} 次`, '签字日期': todayDisp(), 'ACC号码': acc },
+      true
+    );
   } catch(e) {
     toast('❌ 提交失败，请重试');
   } finally { block(false); }
 }
 
 /* ══════════════════════════════════════════
-   SCREENS 6 & 7: BOOKING CALENDAR
+   BOOKING CALENDAR
 ══════════════════════════════════════════ */
 async function loadSchedule() {
-  if (G.schedule) return;
-  if (DEMO_MODE)  { G.schedule = DEFAULT_SCHEDULE; return; }
+  if(G.schedule) return;
+  if(DEMO_MODE){ G.schedule=DEFAULT_SCHEDULE; return; }
   try {
-    const snap = await db.collection('settings').doc('schedule').get();
-    G.schedule  = snap.exists ? snap.data() : DEFAULT_SCHEDULE;
-  } catch(e) { G.schedule = DEFAULT_SCHEDULE; }
+    const snap=await db.collection('settings').doc('schedule').get();
+    G.schedule = snap.exists ? snap.data() : DEFAULT_SCHEDULE;
+  } catch(e){ G.schedule=DEFAULT_SCHEDULE; }
 }
 
-async function loadBooked(year, month) {
-  if (DEMO_MODE) return;
+async function loadBooked() {
+  if(DEMO_MODE) return;
   try {
-    const m = String(month+1).padStart(2,'0');
-    const snap = await db.collection('appointments')
-      .where('status','in',['pending','confirmed'])
-      .get();
-    snap.docs.forEach(d => {
-      const a  = d.data();
-      const dt = new Date(a.dateTime);
-      const k  = isoDate(dt);
-      const t  = `${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}`;
-      if (!G.bookedSlots[k]) G.bookedSlots[k] = [];
-      if (!G.bookedSlots[k].includes(t)) G.bookedSlots[k].push(t);
+    const snap=await db.collection('appointments').where('status','in',['pending','confirmed']).get();
+    snap.docs.forEach(d=>{
+      const a=d.data(); const dt=new Date(a.dateTime);
+      const k=isoDate(dt);
+      const t=`${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}`;
+      if(!G.bookedSlots[k]) G.bookedSlots[k]=[];
+      if(!G.bookedSlots[k].includes(t)) G.bookedSlots[k].push(t);
     });
-  } catch(e) { /* silently ignore */ }
+  } catch(e){}
 }
 
 function dateAvail(date, sch) {
   const today=new Date(); today.setHours(0,0,0,0);
   const d=new Date(date); d.setHours(0,0,0,0);
-  if (d<=today) return false;
-  const max=new Date(today);
-  max.setDate(max.getDate()+(sch.maxDaysAhead||60));
-  if (d>max) return false;
+  if(d<=today) return false;
+  const max=new Date(today); max.setDate(max.getDate()+(sch.maxDaysAhead||60));
+  if(d>max) return false;
   const iso=isoDate(d);
   for(const b of (sch.blockedRanges||[])) if(iso>=b.from&&iso<=b.to) return false;
-  const dow=d.getDay();
-  return (sch.weeklySlots||[]).some(s=>s.dayOfWeek===dow);
+  return (sch.weeklySlots||[]).some(s=>s.dayOfWeek===d.getDay());
 }
 
 function slotsFor(dateStr, sch) {
   const dow=new Date(dateStr+'T12:00:00').getDay();
   const slot=(sch.weeklySlots||[]).find(s=>s.dayOfWeek===dow);
   if(!slot) return [];
-  const times=[];
-  const step=sch.slotMinutes||30;
+  const times=[]; const step=sch.slotMinutes||30;
   for(let h=slot.startHour;h<slot.endHour;h++)
     for(let m=0;m<60;m+=step)
       times.push(`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`);
@@ -1021,180 +1537,138 @@ function slotsFor(dateStr, sch) {
 }
 
 async function initCal(inst) {
-  G.calMonth[inst] = new Date();
-  await loadSchedule();
-  await loadBooked(G.calMonth[inst].getFullYear(), G.calMonth[inst].getMonth());
+  G.calMonth[inst]=new Date();
+  await loadSchedule(); await loadBooked();
   renderCal(inst);
 }
 
-async function calShift(inst, d) {
-  G.calMonth[inst] = new Date(G.calMonth[inst].getFullYear(), G.calMonth[inst].getMonth()+d, 1);
-  await loadBooked(G.calMonth[inst].getFullYear(), G.calMonth[inst].getMonth());
-  renderCal(inst);
+async function calShift(inst,d) {
+  G.calMonth[inst]=new Date(G.calMonth[inst].getFullYear(),G.calMonth[inst].getMonth()+d,1);
+  await loadBooked(); renderCal(inst);
 }
 
 function renderCal(inst) {
-  const cm  = G.calMonth[inst];
-  const y   = cm.getFullYear(), mo = cm.getMonth();
-  document.getElementById(`cal-label-${inst}`).textContent = `${MO_ZH[mo]} ${y}`;
-  const grid  = document.getElementById(`cal-${inst}`);
-  grid.innerHTML = '';
-  const first = new Date(y,mo,1).getDay();
-  const last  = new Date(y,mo+1,0).getDate();
-  const sch   = G.schedule || DEFAULT_SCHEDULE;
-  const sel   = G.selected[inst].date;
-
-  for(let i=0;i<first;i++) {
+  const cm=G.calMonth[inst]; const y=cm.getFullYear(), mo=cm.getMonth();
+  document.getElementById(`cal-label-${inst}`).textContent=`${MO_ZH[mo]} ${y}`;
+  const grid=document.getElementById(`cal-${inst}`);
+  grid.innerHTML='';
+  const first=new Date(y,mo,1).getDay();
+  const last=new Date(y,mo+1,0).getDate();
+  const sch=G.schedule||DEFAULT_SCHEDULE; const sel=G.selected[inst].date;
+  for(let i=0;i<first;i++){const el=document.createElement('div');el.className='cd other';grid.appendChild(el);}
+  for(let d=1;d<=last;d++){
     const el=document.createElement('div');
-    el.className='cd other'; grid.appendChild(el);
-  }
-  for(let d=1;d<=last;d++) {
-    const el  = document.createElement('div');
-    const dt  = new Date(y,mo,d);
-    const iso = isoDate(dt);
-    el.textContent = d;
-    if (iso===sel) {
-      el.className='cd sel';
-    } else if (dateAvail(dt,sch)) {
-      el.className='cd avail';
-      el.onclick=()=>pickDate(inst,iso);
-    } else {
-      el.className='cd '+(dt<=new Date()?'past':'block');
-    }
+    const dt=new Date(y,mo,d); const iso=isoDate(dt);
+    el.textContent=d;
+    if(iso===sel){ el.className='cd sel'; }
+    else if(dateAvail(dt,sch)){ el.className='cd avail'; el.onclick=()=>pickDate(inst,iso); }
+    else{ el.className='cd '+(dt<=new Date()?'past':'block'); }
     grid.appendChild(el);
   }
 }
 
-function pickDate(inst, iso) {
-  G.selected[inst].date = iso;
-  G.selected[inst].time = null;
-  renderCal(inst);
-  renderSlots(inst, iso);
-}
+function pickDate(inst,iso){ G.selected[inst].date=iso; G.selected[inst].time=null; renderCal(inst); renderSlots(inst,iso); }
 
-function renderSlots(inst, iso) {
-  const card    = document.getElementById(`slot-card-${inst}`);
-  const grid    = document.getElementById(`slot-grid-${inst}`);
-  const hd      = document.getElementById(`slot-hd-${inst}`);
-  const btnRow  = document.getElementById(`book-btn-${inst}`);
-  const sch     = G.schedule || DEFAULT_SCHEDULE;
-  const times   = slotsFor(iso, sch);
-  const booked  = G.bookedSlots[iso] || [];
-
-  const [y,m,d] = iso.split('-');
-  hd.textContent = `${parseInt(d)} ${MO_ZH[parseInt(m)-1]} — 可用时段`;
-  card.style.display = 'block';
-  btnRow.style.display = 'none';
-  G.selected[inst].time = null;
-
-  grid.innerHTML = times.map(t => {
-    const tk = booked.includes(t);
-    return `<button class="slot${tk?' taken':''}" ${tk?'disabled':''} onclick="${tk?'':` slotPick('${inst}','${t}')`}">
-      ${tk ? `${t}<br><small style='font-size:10px'>已约</small>` : t}
-    </button>`;
+function renderSlots(inst,iso){
+  const card=document.getElementById(`slot-card-${inst}`);
+  const grid=document.getElementById(`slot-grid-${inst}`);
+  const hd=document.getElementById(`slot-hd-${inst}`);
+  const btnRow=document.getElementById(`book-btn-${inst}`);
+  const sch=G.schedule||DEFAULT_SCHEDULE;
+  const times=slotsFor(iso,sch); const booked=G.bookedSlots[iso]||[];
+  const[y,m,d]=iso.split('-');
+  hd.textContent=`${parseInt(d)} ${MO_ZH[parseInt(m)-1]} — 可用时段`;
+  card.style.display='block'; btnRow.style.display='none'; G.selected[inst].time=null;
+  grid.innerHTML=times.map(t=>{
+    const tk=booked.includes(t);
+    return `<button class="slot${tk?' taken':''}" ${tk?'disabled':''} onclick="${tk?'':` slotPick('${inst}','${t}')`}">${tk?`${t}<br><small style='font-size:10px'>已约</small>`:t}</button>`;
   }).join('');
 }
 
-function slotPick(inst, time) {
-  G.selected[inst].time = time;
-  document.querySelectorAll(`#slot-grid-${inst} .slot`).forEach(b => {
-    b.classList.toggle('sel', b.textContent.trim().startsWith(time));
+function slotPick(inst,time){
+  G.selected[inst].time=time;
+  document.querySelectorAll(`#slot-grid-${inst} .slot`).forEach(b=>{
+    b.classList.toggle('sel',b.textContent.trim().startsWith(time));
   });
   document.getElementById(`book-btn-${inst}`).style.display='flex';
 }
 
 async function doBook(inst) {
-  const errId  = inst==='main' ? 'book-err' : 'sa-err';
-  const errTId = inst==='main' ? 'book-err-t' : 'sa-err-t';
+  const errId=inst==='main'?'book-err':'sa-err';
+  const errTId=inst==='main'?'book-err-t':'sa-err-t';
   hideErr(errId);
-
-  const sel = G.selected[inst];
-  if (!sel.date || !sel.time) { showErr(errId,errTId,'请先选择日期和时段'); return; }
-
+  const sel=G.selected[inst];
+  if(!sel.date||!sel.time){ showErr(errId,errTId,'请先选择日期和时段'); return; }
   let accNum, ptName;
-  if (inst==='main') {
-    if (!G.patient) { showErr(errId,errTId,'请先登录'); return; }
-    accNum = G.patient.accNumber;
-    ptName = `${G.patient.firstName} ${G.patient.familyName}`;
+  if(inst==='main'){
+    if(!G.patient){ showErr(errId,errTId,'请先登录'); return; }
+    accNum=G.patient.accNumber||'NOACCPH';
+    ptName=`${G.patient.firstName||''} ${G.patient.familyName||''}`.trim();
   } else {
-    accNum = (document.getElementById('sa-acc').value||'').trim().toUpperCase();
-    ptName = (document.getElementById('sa-name').value||'').trim();
-    if (!validACC(accNum)) { showErr(errId,errTId,'ACC号码格式错误'); return; }
-    if (!ptName)            { showErr(errId,errTId,'请填写姓名'); return; }
+    accNum=normaliseACC(document.getElementById('sa-acc').value||'');
+    ptName=(document.getElementById('sa-name').value||'').trim();
+    if(!validACC(accNum)){ showErr(errId,errTId,'ACC号码格式错误'); return; }
+    if(!ptName)           { showErr(errId,errTId,'请填写姓名'); return; }
   }
-
   block(true);
-  const dtStr = `${sel.date}T${sel.time}:00`;
-  const appt  = {
-    accNumber: accNum, patientName: ptName,
-    dateTime: dtStr, status: 'pending',
-    createdAt: new Date().toISOString()
-  };
-
+  const dtStr=`${sel.date}T${sel.time}:00`;
+  const appt={ accNumber:accNum, patientName:ptName, dateTime:dtStr, status:'pending', createdAt:new Date().toISOString() };
   try {
-    if (!DEMO_MODE) {
-      const id = `${accNum}_${sel.date}_${sel.time.replace(':','')}`;
+    if(!DEMO_MODE){
+      const id=`${accNum}_${sel.date}_${sel.time.replace(':','')}`;
       await db.collection('appointments').doc(id).set(appt);
     }
-    if (!G.bookedSlots[sel.date]) G.bookedSlots[sel.date]=[];
+    if(!G.bookedSlots[sel.date]) G.bookedSlots[sel.date]=[];
     G.bookedSlots[sel.date].push(sel.time);
-
-    const [y,m,d]=sel.date.split('-');
+    const[y,m,d]=sel.date.split('-');
     const dateDisp=`${parseInt(d)} ${MO_ZH[parseInt(m)-1]} ${y}`;
     showOK('📅','预约成功！','诊所将为您确认预约，如需更改请提前联系诊所。',{
-      '姓名': ptName, 'ACC号码': accNum,
-      '日期': dateDisp, '时间': sel.time,
-      '状态': '待确认（诊所将通知您）'
+      '姓名':ptName,'ACC号码':accNum,'日期':dateDisp,'时间':sel.time,'状态':'待确认（诊所将通知您）'
     }, inst==='main');
-  } catch(e) {
+  } catch(e){
     showErr(errId,errTId,'预约失败，请重试或致电诊所');
   } finally { block(false); }
 }
 
 /* ══════════════════════════════════════════
-   SCREEN 8: MY APPOINTMENTS
+   MY APPOINTMENTS
 ══════════════════════════════════════════ */
 async function loadAppts() {
-  const el = document.getElementById('appt-list');
-  if (!G.patient || DEMO_MODE) {
-    el.innerHTML='<p style="color:var(--ink-s);text-align:center;padding:32px 0">暂无预约记录</p>';
-    return;
-  }
+  const el=document.getElementById('appt-list');
+  if(!G.patient||DEMO_MODE){ el.innerHTML='<p style="color:var(--ink-s);text-align:center;padding:32px 0">暂无预约记录</p>'; return; }
   el.innerHTML='<div class="spin-wrap"><div class="spin"></div><p>加载中...</p></div>';
   try {
-    const snap = await db.collection('appointments')
-      .where('accNumber','==',G.patient.accNumber)
+    const snap=await db.collection('appointments')
+      .where('accNumber','==',G.patient.accNumber||'')
       .orderBy('dateTime','desc').limit(20).get();
-    if(snap.empty){
-      el.innerHTML='<p style="color:var(--ink-s);text-align:center;padding:32px 0">暂无预约记录</p>';
-      return;
-    }
-    el.innerHTML = snap.docs.map(d => {
-      const a=d.data();
-      const dt=new Date(a.dateTime);
-      const day=dt.getDate();
-      const mon=MO_EN[dt.getMonth()];
+    if(snap.empty){ el.innerHTML='<p style="color:var(--ink-s);text-align:center;padding:32px 0">暂无预约记录</p>'; return; }
+    el.innerHTML=snap.docs.map(d=>{
+      const a=d.data(); const dt=new Date(a.dateTime);
+      const day=dt.getDate(); const mon=MO_EN[dt.getMonth()];
       const tim=`${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}`;
-      const sc = a.status==='confirmed' ? 'c' : 'p';
-      const st = a.status==='confirmed' ? '已确认' : '待确认';
-      return `<div class="ap">
-        <div class="ap-d"><div class="dd">${day}</div><div class="mm">${mon}</div></div>
-        <div class="ap-i"><h4>${tim}</h4><p>治疗预约</p></div>
-        <span class="ap-s ${sc}">${st}</span>
-      </div>`;
+      const sc=a.status==='confirmed'?'c':'p';
+      const st=a.status==='confirmed'?'已确认':'待确认';
+      return `<div class="ap"><div class="ap-d"><div class="dd">${day}</div><div class="mm">${mon}</div></div><div class="ap-i"><h4>${tim}</h4><p>治疗预约</p></div><span class="ap-s ${sc}">${st}</span></div>`;
     }).join('');
-  } catch(e) {
-    el.innerHTML='<p style="color:var(--red);text-align:center;padding:32px 0">加载失败，请重试</p>';
-  }
+  } catch(e){ el.innerHTML='<p style="color:var(--red);text-align:center;padding:32px 0">加载失败，请重试</p>'; }
 }
 
-/* ══════════════════════ DEMO MODE NOTICE ══════════════════════ */
-if (DEMO_MODE) {
-  const n = document.createElement('div');
+/* ══════════════════════ DEMO NOTICE ══════════════════════ */
+if(DEMO_MODE) {
+  const n=document.createElement('div');
   n.style.cssText='background:#fff3cd;color:#856404;text-align:center;font-size:12px;padding:6px 12px;border-bottom:1px solid #ffc107';
-  n.textContent = '⚠️ 演示模式 — Firebase 未配置，数据不会被保存';
-  document.body.insertBefore(n, document.body.firstChild);
+  n.textContent='⚠️ 演示模式 — Firebase 未配置，数据不会被保存 | 验证码使用 123456';
+  document.body.insertBefore(n,document.body.firstChild);
 }
+
+/* ══════════════════════ SESSION RESTORE ON LOAD ══════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  // If a valid session exists and user navigates to site,
+  // it will be picked up by startReturning() when they click the button.
+  // We just refresh the timer display if on home screen.
+  const cached = Session.load();
+  if(cached) startSessionTimer();
+});
 </script>
 </body>
 </html>
