@@ -1,2938 +1,1581 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" id="html-root">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>八字命盘 · 玄命</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>北京泽五堂中医诊所 · 患者自助服务</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --gold: #9a6e2a;
-    --gold-light: #c9a84c;
-    --gold-dim: #b8892e;
-    --ink: #fafaf7;
-    --ink-2: #f4f2ec;
-    --ink-3: #ede9e0;
-    --ink-4: #e5e0d4;
-    --stone: #d0c8b8;
-    --mist: #c0b8a8;
-    --text: #1a1812;
-    --text-dim: #5a5448;
-    --text-faint: #9a9080;
-    --red: #a03030;
-    --blue: #2a5a9a;
-    --green: #2a7a4a;
-    --white: #fafaf7;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    background: var(--ink);
-    color: var(--text);
-    font-family: 'Noto Serif SC', 'SimSun', '宋体', serif;
-    min-height: 100vh;
-    position: relative;
-    overflow-x: hidden;
-  }
-
-  /* Background texture */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: 
-      radial-gradient(ellipse 80% 50% at 20% 20%, rgba(154,110,42,0.04) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 80% at 80% 80%, rgba(42,90,154,0.02) 0%, transparent 60%),
-      repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(154,110,42,0.06) 40px, rgba(154,110,42,0.06) 41px),
-      repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(154,110,42,0.06) 40px, rgba(154,110,42,0.06) 41px);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 24px;
-    position: relative;
-    z-index: 1;
-  }
-
-  /* Header */
-  header {
-    padding: 40px 0 32px;
-    text-align: center;
-    border-bottom: 1px solid rgba(201,168,76,0.2);
-    position: relative;
-  }
-
-  header::after {
-    content: '☰';
-    position: absolute;
-    bottom: -1px;
-    left: 50%;
-    transform: translateX(-50%) translateY(50%);
-    background: var(--ink);
-    padding: 0 16px;
-    color: var(--gold-dim);
-    font-size: 12px;
-    letter-spacing: 8px;
-  }
-
-  .logo-zh {
-    font-family: 'Noto Serif SC', 'SimSun', '宋体', serif; font-weight: 600;
-    font-size: 48px;
-    color: var(--gold);
-    letter-spacing: 16px;
-    line-height: 1;
-    text-shadow: 0 0 40px rgba(201,168,76,0.3);
-  }
-
-  .logo-sub {
-    font-size: 13px;
-    color: var(--text-dim);
-    letter-spacing: 6px;
-    margin-top: 8px;
-  }
-
-  /* Input Panel */
-  .input-panel {
-    background: var(--ink-2);
-    border: 1px solid rgba(201,168,76,0.2);
-    border-radius: 2px;
-    padding: 40px;
-    margin: 48px 0;
-    position: relative;
-  }
-
-  .input-panel::before {
-    content: '命盘推算';
-    position: absolute;
-    top: -1px;
-    left: 40px;
-    transform: translateY(-50%);
-    background: var(--ink-2);
-    padding: 0 16px;
-    color: var(--gold);
-    font-size: 13px;
-    letter-spacing: 4px;
-    font-family: 'Noto Serif SC', 'SimSun', '宋体', serif; font-weight: 600;
-  }
-
-  .corner {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    border-color: var(--gold);
-    border-style: solid;
-  }
-  .corner-tl { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
-  .corner-tr { top: -1px; right: -1px; border-width: 2px 2px 0 0; }
-  .corner-bl { bottom: -1px; left: -1px; border-width: 0 0 2px 2px; }
-  .corner-br { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
-
-  .form-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 24px;
-    margin-bottom: 32px;
-  }
-
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  label {
-    font-size: 12px;
-    color: var(--gold-dim);
-    letter-spacing: 3px;
-  }
-
-  input, select {
-    background: var(--ink-3);
-    border: 1px solid var(--stone);
-    border-radius: 1px;
-    color: var(--text);
-    font-family: 'Noto Serif SC', 'SimSun', '宋体', serif;
-    font-size: 15px;
-    padding: 12px 16px;
-    width: 100%;
-    transition: border-color 0.3s;
-    outline: none;
-    -webkit-appearance: none;
-  }
-
-  input:focus, select:focus {
-    border-color: var(--gold-dim);
-    background: var(--ink-4);
-  }
-
-  select option {
-    background: var(--ink-3);
-  }
-
-  .form-row {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: 24px;
-    margin-bottom: 24px;
-  }
-
-  /* ---- 日期选择区域 ---- */
-  .date-section {
-    margin-bottom: 28px;
-  }
-
-  .date-section-title {
-    font-size: 11px;
-    color: var(--text-faint);
-    letter-spacing: 4px;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .date-section-title::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: rgba(201,168,76,0.1);
-  }
-
-  .date-tabs {
-    display: flex;
-    gap: 2px;
-    margin-bottom: 16px;
-    border-bottom: 1px solid rgba(201,168,76,0.15);
-  }
-
-  .date-tab {
-    padding: 8px 20px;
-    font-size: 13px;
-    letter-spacing: 2px;
-    color: var(--text-dim);
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    transition: all 0.2s;
-    margin-bottom: -1px;
-    background: none;
-    border-left: none;
-    border-right: none;
-    border-top: none;
-    font-family: 'Noto Serif SC', 'SimSun', '宋体', serif;
-  }
-
-  .date-tab.active {
-    color: var(--gold);
-    border-bottom-color: var(--gold);
-  }
-
-  .date-input-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr auto;
-    gap: 10px;
-    align-items: end;
-  }
-
-  .date-field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .date-field label {
-    font-size: 11px;
-  }
-
-  .date-field input {
-    padding: 10px 12px;
-    font-size: 15px;
-  }
-
-  .cal-btn {
-    background: rgba(201,168,76,0.1);
-    border: 1px solid rgba(201,168,76,0.3);
-    color: var(--gold);
-    width: 42px;
-    height: 42px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 18px;
-    transition: all 0.2s;
-    flex-shrink: 0;
-  }
-
-  .cal-btn:hover {
-    background: rgba(201,168,76,0.2);
-  }
-
-  .date-tab-content { display: none; }
-  .date-tab-content.active { display: block; }
-
-  /* ---- 弹出日历 ---- */
-  .cal-popup {
-    position: fixed;
-    z-index: 1000;
-    background: var(--ink-3);
-    border: 1px solid rgba(201,168,76,0.4);
-    padding: 0;
-    min-width: 300px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-    display: none;
-  }
-
-  .cal-popup.open { display: block; }
-
-  .cal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 14px 16px;
-    border-bottom: 1px solid rgba(201,168,76,0.15);
-    background: rgba(201,168,76,0.05);
-  }
-
-  .cal-nav {
-    background: none;
-    border: none;
-    color: var(--gold);
-    font-size: 18px;
-    cursor: pointer;
-    padding: 4px 10px;
-    transition: color 0.2s;
-  }
-
-  .cal-nav:hover { color: var(--gold-light); }
-
-  .cal-title {
-    font-family: 'Noto Serif SC', 'SimSun', '宋体', serif; font-weight: 600;
-    font-size: 15px;
-    color: var(--gold);
-    letter-spacing: 3px;
-    cursor: pointer;
-  }
-
-  .cal-grid {
-    padding: 12px;
-  }
-
-  .cal-weekdays {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    margin-bottom: 6px;
-  }
-
-  .cal-weekday {
-    text-align: center;
-    font-size: 11px;
-    color: var(--text-faint);
-    padding: 4px;
-    letter-spacing: 1px;
-  }
-
-  .cal-days {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 2px;
-  }
-
-  .cal-day {
-    text-align: center;
-    padding: 7px 4px;
-    font-size: 13px;
-    cursor: pointer;
-    border-radius: 1px;
-    transition: all 0.15s;
-    color: var(--text);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .cal-day:hover { background: rgba(201,168,76,0.15); color: var(--gold-light); }
-  .cal-day.other-month { color: var(--text-faint); }
-  .cal-day.selected { background: rgba(201,168,76,0.25); color: var(--gold); border: 1px solid rgba(201,168,76,0.5); }
-  .cal-day.today { color: var(--gold-light); font-weight: bold; }
-  .cal-day.empty { cursor: default; }
-
-  .cal-lunar-day {
-    font-size: 9px;
-    color: var(--text-faint);
-    margin-top: 1px;
-    line-height: 1;
-  }
-
-  .cal-selected-day .cal-lunar-day { color: var(--gold-dim); }
-
-  /* 农历日历 */
-  .cal-lunar-header {
-    display: grid;
-    grid-template-columns: repeat(7,1fr);
-    margin-bottom: 6px;
-  }
-
-  /* 年份/月份选择模式 */
-  .cal-year-grid {
-    display: grid;
-    grid-template-columns: repeat(4,1fr);
-    gap: 4px;
-    padding: 12px;
-    max-height: 220px;
-    overflow-y: auto;
-  }
-
-  .cal-year-item {
-    text-align: center;
-    padding: 8px 4px;
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.15s;
-    color: var(--text);
-  }
-
-  .cal-year-item:hover { background: rgba(201,168,76,0.15); color: var(--gold); }
-  .cal-year-item.selected { color: var(--gold); border: 1px solid rgba(201,168,76,0.4); }
-
-  .cal-month-grid {
-    display: grid;
-    grid-template-columns: repeat(4,1fr);
-    gap: 4px;
-    padding: 12px;
-  }
-
-  .cal-month-item {
-    text-align: center;
-    padding: 10px 4px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.15s;
-    color: var(--text);
-    font-family: 'Noto Serif SC', 'SimSun', '宋体', serif; font-weight: 600;
-    letter-spacing: 2px;
-  }
-
-  .cal-month-item:hover { background: rgba(201,168,76,0.15); color: var(--gold); }
-  .cal-month-item.selected { color: var(--gold); border: 1px solid rgba(201,168,76,0.4); }
-
-  .cal-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 999;
-    display: none;
-  }
-  .cal-overlay.open { display: block; }
-
-  .sync-hint {
-    font-size: 11px;
-    color: var(--text-faint);
-    margin-top: 8px;
-    letter-spacing: 1px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .sync-hint::before {
-    content: '⇄';
-    color: var(--gold-dim);
-  }
-
-  .btn-analyze {
-    display: block;
-    width: 100%;
-    padding: 16px;
-    background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.08));
-    border: 1px solid var(--gold);
-    color: var(--gold);
-    font-family: 'Noto Serif SC', 'SimSun', '宋体', serif; font-weight: 600;
-    font-size: 18px;
-    letter-spacing: 8px;
-    cursor: pointer;
-    transition: all 0.3s;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .btn-analyze::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(201,168,76,0.2), transparent);
-    transform: translateX(-100%);
-    transition: transform 0.5s;
-  }
-
-  .btn-analyze:hover::before {
-    transform: translateX(0);
-  }
-
-  .btn-analyze:hover {
-    color: var(--gold-light);
-    box-shadow: 0 0 30px rgba(201,168,76,0.15);
-  }
-
-  .btn-analyze:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  /* Collapsed input panel */
-  .input-panel.collapsed {
-    padding: 0 !important;
-    margin: 12px 0;
-    border-color: rgba(201,168,76,0.1);
-  }
-  .input-panel.collapsed::before { display: none; }
-  .input-panel .collapsed-bar {
-    display: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    align-items: center;
-    justify-content: space-between;
-    color: var(--text-dim);
-    font-size: 12px;
-    letter-spacing: 2px;
-  }
-  .input-panel.collapsed .collapsed-bar { display: flex; }
-  .input-panel.collapsed .input-inner { display: none; }
-  .input-panel .collapsed-bar:hover { color: var(--gold); }
-  .collapsed-expand-icon { color: var(--gold-dim); font-size: 14px; }
-
-  /* Loading */
-  #loading {
-    display: none;
-    text-align: center;
-    padding: 60px;
-  }
-
-  .loading-char {
-    font-family: 'Noto Serif SC', 'SimSun', '宋体', serif; font-weight: 600;
-    font-size: 40px;
-    color: var(--gold);
-    display: inline-block;
-    animation: spin 3s linear infinite;
-  }
-
-  @keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-
-  .loading-text {
-    margin-top: 20px;
-    color: var(--text-dim);
-    letter-spacing: 4px;
-    font-size: 14px;
-  }
-
-  /* Results */
-  #results {
-    display: none;
-    animation: fadeIn 0.6s ease;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* Section */
-  .section {
-    margin-bottom: 40px;
-  }
-
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid rgba(201,168,76,0.15);
-  }
-
-  .section-num {
-    font-family: 'Noto Serif SC', 'SimSun', '宋体', serif; font-weight: 600;
-    font-size: 32px;
-    color: rgba(201,168,76,0.3);
-    line-height: 1;
-  }
-
-  .section-title {
-    font-family: 'Noto Serif SC', 'SimSun', '宋体', serif; font-weight: 600;
-    font-size: 20px;
-    color: var(--gold);
-    letter-spacing: 6px;
-  }
-
-  /* 四柱表格 */
-  .pillars-table {
-    display: grid;
-    grid-template-columns: 80px repeat(4, 1fr);
-    border: 1px solid rgba(201,168,76,0.2);
-    overflow: hidden;
-  }
-
-  .pillars-table .cell {
-    padding: 16px 12px;
-    text-align: center;
-    border-right: 1px solid rgba(201,168,76,0.1);
-    border-bottom: 1px solid rgba(201,168,76,0.1);
-    font-size: 14px;
-    line-height: 1.4;
-  }
-
-  .pillars-table .cell:last-child {
-    border-right: none;
-  }
-
-  .pillars-table .row-label {
-    background: rgba(201,168,76,0.05);
-    color: var(--gold-dim);
-    font-size: 12px;
-    letter-spacing: 2px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .pillars-table .col-header {
-    background: rgba(201,168,76,0.08);
-    color: var(--gold);
-    font-family: 'Noto Serif SC', 'SimSun', '宋体', serif; font-weight: 600;
-    font-size: 16px;
-    letter-spacing: 4px;
-  }
-
-  .tg-char {
-    font-family: 'Noto Serif SC', 'SimSun', '宋体', serif; font-weight: 600;
-    font-size: 28px;
-    display: block;
-    margin-bottom: 4px;
-  }
-
-  .shishen {
-    font-size: 11px;
-    padding: 2px 8px;
-    border-radius: 1px;
-    display: inline-block;
-    margin-top: 4px;
-  }
-
-  /* 天干地支颜色 */
-  .wuxing-wood { color: #2d7a3a; }
-  .wuxing-fire { color: #aa3030; }
-  .wuxing-earth { color: #8a6010; }
-  .wuxing-metal { color: #3a6888; }
-  .wuxing-water { color: #2a4a9a; }
-
-  /* 五行图表 */
-  .wuxing-chart {
-    background: var(--ink-2);
-    border: 1px solid rgba(201,168,76,0.15);
-    padding: 32px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-    align-items: center;
-  }
-
-  .pentagon-wrap {
-    display: flex;
-    justify-content: center;
-  }
-
-  .wuxing-bars {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .bar-item {
-    display: grid;
-    grid-template-columns: 40px 1fr 40px;
-    gap: 12px;
-    align-items: center;
-  }
-
-  .bar-label {
-    font-family: 'Noto Serif SC', 'SimSun', '宋体', serif; font-weight: 600;
-    font-size: 18px;
-    text-align: center;
-  }
-
-  .bar-track {
-    height: 8px;
-    background: var(--ink-4);
-    border-radius: 0;
-    overflow: hidden;
-    position: relative;
-  }
-
-  .bar-fill {
-    height: 100%;
-    transition: width 1s ease;
-    position: relative;
-  }
-
-  .bar-fill::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 4px;
-    height: 100%;
-    background: rgba(255,255,255,0.4);
-  }
-
-  .bar-pct {
-    font-size: 11px;
-    color: var(--text-dim);
-    text-align: right;
-    white-space: nowrap;
-  }
-
-  /* 大运流年 */
-  .dayun-scroll {
-    display: flex;
-    gap: 12px;
-    overflow-x: auto;
-    padding-bottom: 12px;
-    scrollbar-width: thin;
-    scrollbar-color: var(--gold-dim) var(--ink-3);
-  }
-
-  .dayun-item {
-    flex: 0 0 68px;
-    background: var(--ink-2);
-    border: 1px solid rgba(201,168,76,0.15);
-    padding: 12px 6px 8px;
-    text-align: center;
-    transition: all 0.3s;
-    position: relative;
-    cursor: default;
-  }
-
-  .dayun-item.current {
-    border-color: var(--gold);
-    background: rgba(201,168,76,0.06);
-    padding-top: 26px;
-  }
-
-  .dayun-item.current::before {
-    content: '当前';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: var(--gold);
-    color: var(--ink);
-    font-size: 9px;
-    padding: 3px 0;
-    letter-spacing: 2px;
-    text-align: center;
-    white-space: nowrap;
-  }
-
-  .dayun-age {
-    font-size: 9px;
-    color: var(--text-faint);
-    margin-bottom: 4px;
-    letter-spacing: 0;
-  }
-
-  .dayun-gz {
-    font-family: 'Noto Serif SC', 'SimSun', '宋体', serif; font-weight: 600;
-    font-size: 22px;
-    color: var(--text);
-    margin-bottom: 4px;
-    display: flex;
-    justify-content: center;
-    gap: 4px;
-  }
-
-  .liuyear-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
-    gap: 5px;
-    margin-top: 12px;
-  }
-
-  .liuyear-item {
-    background: var(--ink-3);
-    border: 1px solid var(--stone);
-    padding: 5px 4px;
-    text-align: center;
-  }
-
-  .liuyear-item.current-year {
-    border-color: var(--gold-dim);
-    background: rgba(201,168,76,0.05);
-  }
-
-  .liuyear-year {
-    font-size: 9px;
-    color: var(--text-faint);
-  }
-
-  .liuyear-gz {
-    font-family: 'Noto Serif SC', 'SimSun', '宋体', serif; font-weight: 600;
-    font-size: 16px;
-    margin-top: 4px;
-  }
-
-  /* AI分析 */
-  .ai-panel {
-    background: var(--ink-2);
-    border: 1px solid rgba(201,168,76,0.2);
-    padding: 40px;
-    position: relative;
-  }
-
-  .ai-panel::before {
-    content: '✦';
-    position: absolute;
-    top: 20px;
-    right: 24px;
-    color: var(--gold-dim);
-    font-size: 20px;
-    animation: pulse 3s ease infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 1; }
-  }
-
-  .ai-content {
-    line-height: 2;
-    font-size: 15px;
-    color: var(--text);
-    white-space: pre-wrap;
-  }
-
-  .ai-tag {
-    display: inline-block;
-    background: rgba(201,168,76,0.1);
-    border: 1px solid rgba(201,168,76,0.3);
-    color: var(--gold);
-    font-size: 11px;
-    padding: 2px 10px;
-    letter-spacing: 3px;
-    margin-bottom: 16px;
-    font-family: 'Noto Serif SC', 'SimSun', '宋体', serif; font-weight: 600;
-  }
-
-  /* Info grid */
-  .info-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-    gap: 1px;
-    background: rgba(201,168,76,0.1);
-    border: 1px solid rgba(201,168,76,0.1);
-    margin-bottom: 16px;
-  }
-
-  .info-item {
-    background: var(--ink-2);
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .info-label {
-    font-size: 11px;
-    color: var(--text-faint);
-    letter-spacing: 2px;
-  }
-
-  .info-value {
-    font-family: 'Noto Serif SC', 'SimSun', '宋体', serif; font-weight: 600;
-    font-size: 18px;
-    color: var(--text);
-  }
-
-  /* Error */
-  .error-msg {
-    background: rgba(201,76,76,0.1);
-    border: 1px solid rgba(201,76,76,0.3);
-    padding: 16px 24px;
-    color: #e09090;
-    font-size: 14px;
-    display: none;
-    margin-top: 16px;
-  }
-
-  /* Responsive */
-  @media (max-width: 768px) {
-    .form-row { grid-template-columns: 1fr; }
-    .wuxing-chart { grid-template-columns: 1fr; }
-    .pillars-table { grid-template-columns: 60px repeat(4, 1fr); }
-    .pillars-table .cell { padding: 10px 6px; font-size: 12px; }
-    .tg-char { font-size: 22px; }
-    .input-panel { padding: 24px; }
-  }
-
-  /* SVG Pentagon */
-  svg text { font-family: 'Noto Serif SC', 'SimSun', '宋体', serif; font-weight: 600; }
-
-  /* Scrollbar */
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: var(--ink-3); }
-  ::-webkit-scrollbar-thumb { background: var(--gold); }
-
-  .divider {
-    height: 1px;
-    background: linear-gradient(to right, transparent, rgba(201,168,76,0.3), transparent);
-    margin: 40px 0;
-  }
-
-  /* Two-column results layout */
-  .results-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    align-items: start;
-    margin-bottom: 40px;
-  }
-
-  .bar-pct {
-    font-size: 11px;
-    color: var(--text-dim);
-    text-align: right;
-    white-space: nowrap;
-  }
-
-  @media (max-width: 900px) {
-    .results-layout { grid-template-columns: 1fr; }
-  }
-
-  /* ===== LEFT SIDEBAR NAV ===== */
-  /* Results wrapper: sidebar + content */
-  .results-with-nav {
-    display: flex;
-    gap: 0;
-    align-items: stretch;
-    padding-left: 70px;   /* fixed sidebar width + gap */
-  }
-
-  /* Left vertical nav — fixed, viewport height, 3 equal thirds */
-  .side-nav {
-    width: 58px;
-    flex-shrink: 0;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    background: linear-gradient(180deg, #2a1f0e 0%, #1e1608 60%, #2a1f0e 100%);
-    border-right: 1px solid rgba(154,110,42,0.35);
-    overflow: hidden;
-    box-shadow: 2px 0 20px rgba(0,0,0,0.25);
-    z-index: 100;
-  }
-
-  .side-nav-btn {
-    flex: 1;                     /* equal thirds */
-    background: none;
-    border: none;
-    border-bottom: 1px solid rgba(154,110,42,0.18);
-    padding: 0;
-    font-family: 'Noto Serif SC', 'SimSun', '宋体', serif;
-    font-size: 16px;
-    font-weight: 700;
-    writing-mode: vertical-rl;
-    text-orientation: upright;
-    letter-spacing: 12px;
-    color: rgba(230,200,120,0.82);
-    cursor: pointer;
-    transition: all 0.25s;
-    position: relative;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .side-nav-btn:last-child { border-bottom: none; }
-
-  .side-nav-btn:hover {
-    color: #f5e080;
-    background: rgba(201,168,76,0.10);
-  }
-
-  .side-nav-btn.active {
-    color: #fff0a0;
-    background: linear-gradient(90deg, rgba(201,168,76,0.28) 0%, rgba(201,168,76,0.06) 100%);
-    text-shadow: 0 0 20px rgba(255,240,160,0.7);
-  }
-
-  .side-nav-btn.active::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 15%; bottom: 15%;
-    width: 3px;
-    background: linear-gradient(180deg, transparent, #c9a84c, transparent);
-    border-radius: 0 2px 2px 0;
-  }
-
-  /* Content area takes remaining width */
-  .side-content {
-    flex: 1;
-    min-width: 0;
-    width: 100%;
-  }
-
-  /* Each section panel — always visible */
-  .tab-pane {
-    display: block !important;
-    margin-bottom: 48px;
-  }
-
-  .tab-pane:last-child { margin-bottom: 0; }
-
-  @keyframes fadeIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:none; } }
-
-  @media (max-width: 768px) {
-    .side-nav { width: 44px; }
-    .results-with-nav { padding-left: 56px; }
-    .side-nav-btn { font-size: 13px; letter-spacing: 5px; }
-  }
-
-  /* ===== AI 断语 果+因 样式 ===== */
-  .ai-section-title {
-    font-family: 'Noto Serif SC','SimSun','宋体',serif;
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--gold);
-    letter-spacing: 5px;
-    margin: 32px 0 12px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid rgba(154,110,42,0.2);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .ai-section-title:first-child { margin-top: 0; }
-  .ai-section-title::before {
-    content: '';
-    display: inline-block;
-    width: 3px;
-    height: 15px;
-    background: var(--gold);
-    border-radius: 2px;
-    flex-shrink: 0;
-  }
-  .ai-item {
-    padding: 9px 0;
-    border-bottom: 1px solid rgba(154,110,42,0.06);
-  }
-  .ai-item:last-child { border-bottom: none; }
-  /* item with 因 — clickable */
-  .ai-item.has-yin .ai-guo { cursor: pointer; }
-  .ai-guo {
-    font-size: 15px;
-    color: var(--text);
-    line-height: 1.75;
-    display: flex;
-    align-items: baseline;
-    gap: 7px;
-    cursor: default;
-    user-select: text;
-  }
-  .ai-arrow {
-    font-size: 9px;
-    color: var(--gold-dim);
-    flex-shrink: 0;
-    transition: transform 0.18s;
-    margin-top: 1px;
-  }
-  .ai-item.open .ai-arrow { transform: rotate(90deg); }
-  .ai-yin {
-    display: none;
-    font-size: 13px;
-    color: var(--text-faint);
-    line-height: 1.65;
-    padding: 6px 0 2px 16px;
-    border-left: 2px solid rgba(154,110,42,0.18);
-    margin: 4px 0 0 2px;
-  }
-  .ai-item.open .ai-yin { display: block; }
-
+:root{--teal:#2a7c7c;--teal-l:#3a9e9e;--teal-d:#1a5555;--gold:#c9a84c;--cream:#f7f9f8;--ink:#1c2b2b;--ink-m:#3d5050;--ink-s:#7a9494;--border:#dde8e8;--red:#c0392b;--green:#27ae60;--white:#ffffff;--shadow:0 2px 16px rgba(26,85,85,0.08);}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{font-size:16px}
+body{font-family:'DM Sans',-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--cream);min-height:100vh;color:var(--ink);padding-bottom:40px;}
+.app-bar{background:var(--teal-d);padding:14px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;}
+.bar-icon{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.bar-title{font-size:15px;font-weight:700;color:#fff;line-height:1.2}
+.bar-sub{font-size:11px;color:rgba(255,255,255,0.55);margin-top:1px}
+.bar-spacer{flex:1}
+.lang-btn{background:#ffffff;border:2px solid rgba(255,255,255,0.6);color:#ff4444;font:900 15px/1 'DM Sans',sans-serif;padding:6px 24px;border-radius:4px;cursor:pointer;transition:background .2s;white-space:nowrap;flex-shrink:0;}
+.lang-btn:hover{background:rgba(255,255,255,0.25)}
+.page{padding:20px 16px;max-width:460px;margin:0 auto}
+.screen{display:none}.screen.active{display:block;animation:up .28s ease}
+@keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.back{display:inline-flex;align-items:center;gap:5px;background:none;border:none;color:var(--teal);font:700 14px/1 'DM Sans',sans-serif;cursor:pointer;padding:0;margin-bottom:20px;}
+.back:hover{color:var(--teal-l)}
+.stitle{font-size:22px;font-weight:700;color:var(--ink);margin-bottom:6px;line-height:1.3}
+.ssub{font-size:14px;color:var(--ink-s);margin-bottom:22px;line-height:1.5}
+.card{background:var(--white);border-radius:16px;padding:20px 18px;margin-bottom:14px;box-shadow:var(--shadow);}
+.card-label{font-size:11px;font-weight:700;color:var(--ink-s);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:14px;padding-bottom:10px;border-bottom:1.5px solid var(--border);}
+.fg{margin-bottom:16px}
+.fg label{display:block;font-size:11px;font-weight:700;color:var(--ink-m);letter-spacing:.3px;margin-bottom:7px;}
+.fg input,.fg select,.fg textarea{width:100%;padding:12px 14px;font:15px/1.4 'DM Sans',sans-serif;border:2px solid var(--border);border-radius:10px;background:var(--white);color:var(--ink);transition:border .2s,box-shadow .2s;appearance:none;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(42,124,124,0.1);}
+.fg input.err{border-color:var(--red)}
+.fg small{display:block;font-size:12px;color:var(--ink-s);margin-top:5px}
+.btn-row{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.btn{width:100%;padding:15px;border:none;border-radius:12px;font:700 16px/1 'DM Sans',sans-serif;cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-p{background:var(--teal);color:#fff}.btn-p:hover{background:var(--teal-l)}.btn-p:active{transform:scale(.98)}
+.btn-o{background:transparent;color:var(--teal);border:2px solid var(--teal)}.btn-o:hover{background:#e8f5f5}
+.btn-q{background:#f0f4f4;color:var(--ink-m);font-size:14px;padding:12px}.btn-q:hover{background:#e0eaea}
+.hero{text-align:center;padding:32px 0 24px}
+.hero-icon{font-size:52px;margin-bottom:14px}
+.hero h2{font-size:26px;font-weight:700;margin-bottom:8px}
+.hero p{font-size:15px;color:var(--ink-m);line-height:1.6}
+.w-cards{display:flex;flex-direction:column;gap:12px}
+.w-card{background:var(--white);border-radius:16px;padding:18px 16px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow);cursor:pointer;border:2px solid transparent;transition:all .2s;}
+.w-card:hover{border-color:var(--teal);transform:translateY(-1px)}
+.wci{width:48px;height:48px;border-radius:14px;font-size:22px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.wct{flex:1}.wct h3{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.wct p{font-size:13px;color:var(--ink-s);line-height:1.4}
+.arr{font-size:20px;color:var(--ink-s);flex-shrink:0}
+.choice-cards{display:flex;flex-direction:column;gap:14px;margin-top:8px}
+.choice-card{background:var(--white);border-radius:16px;padding:22px 20px;display:flex;align-items:center;gap:16px;box-shadow:var(--shadow);cursor:pointer;border:2px solid transparent;transition:all .2s;}
+.choice-card:hover{border-color:var(--teal);transform:translateY(-2px);box-shadow:0 6px 24px rgba(26,85,85,0.13);}
+.choice-icon{font-size:32px;flex-shrink:0}
+.choice-text h3{font-size:17px;font-weight:700;color:var(--ink);margin-bottom:5px}
+.choice-text p{font-size:13px;color:var(--ink-s);line-height:1.5}
+.phone-wrap{text-align:center;padding:12px 0 4px}
+.phone-wrap .big-icon{font-size:48px;margin-bottom:16px}
+.code-inputs{display:flex;gap:10px;justify-content:center;margin:20px 0}
+.code-inputs input{width:46px;height:56px;border:2px solid var(--border);border-radius:10px;text-align:center;font:700 22px 'DM Sans',sans-serif;color:var(--ink);background:var(--white);transition:border .2s;}
+.code-inputs input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(42,124,124,0.1);}
+.resend-row{display:flex;align-items:center;gap:10px;margin-top:12px;}
+.resend-btn{background:none;border:none;color:var(--teal);font:600 14px 'DM Sans',sans-serif;cursor:pointer;padding:6px}
+.resend-btn:disabled{color:var(--ink-s);cursor:default}
+.countdown{font-size:13px;color:var(--ink-s);margin-top:4px}
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.cal-nav h3{font-size:18px;font-weight:700;color:var(--ink)}
+.cnb{width:34px;height:34px;border:2px solid var(--border);border-radius:9px;background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:border .2s;}
+.cnb:hover{border-color:var(--teal)}
+.cal-heads{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:4px}
+.ch{text-align:center;font-size:11px;font-weight:700;color:var(--ink-s);padding:3px 0}
+.cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cd{text-align:center;padding:9px 3px;border-radius:8px;font-size:14px;transition:all .15s;}
+.cd.avail{cursor:pointer;background:#e8f5f5;color:var(--teal);font-weight:700}
+.cd.avail:hover{background:var(--teal);color:#fff}
+.cd.sel{background:var(--teal);color:#fff;font-weight:700}
+.cd.past,.cd.block,.cd.other{color:#ccc;cursor:default}
+.slots-hd{font-size:14px;font-weight:700;color:var(--ink-m);margin-bottom:10px}
+.slots{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.slot{padding:9px 4px;text-align:center;border:2px solid var(--border);border-radius:8px;background:var(--white);font:600 13px 'DM Sans',sans-serif;color:var(--ink);cursor:pointer;transition:all .15s;}
+.slot:hover{border-color:var(--teal);color:var(--teal)}
+.slot.taken{background:#fdecea;color:#c0392b;cursor:not-allowed;border-color:#f5c6c6;font-size:12px;font-weight:600}
+.slot-legend{display:flex;gap:14px;align-items:center;margin-bottom:12px;flex-wrap:wrap;}
+.slot-legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-m);}
+.slot-legend-dot{width:16px;height:16px;border-radius:4px;flex-shrink:0;}
+.slot-legend-dot.avail{background:#e8f5f5;border:2px solid var(--teal);}
+.slot-legend-dot.taken{background:#fdecea;border:2px solid #f5c6c6;}
+.slot.sel{background:var(--teal);color:#fff;border-color:var(--teal)}
+.ebox{background:#fdf0ef;border:1.5px solid #f5c6c6;border-radius:10px;padding:12px 14px;font-size:14px;color:var(--red);display:none;align-items:flex-start;gap:8px;margin-bottom:14px;}
+.succ{text-align:center;padding:44px 16px}
+.succ .s-icon{width:68px;height:68px;border-radius:50%;background:#edfaf3;font-size:34px;display:flex;align-items:center;justify-content:center;margin:0 auto 22px;}
+.succ h2{font-size:24px;font-weight:700;color:var(--green);margin-bottom:10px}
+.succ p{font-size:15px;color:var(--ink-m);line-height:1.6}
+.ibox{background:#f5fbfb;border:1.5px solid var(--border);border-radius:12px;padding:14px;margin:18px 0;text-align:left;}
+.ibr{display:flex;justify-content:space-between;font-size:14px;padding:7px 0;border-bottom:1px solid var(--border);}
+.ibr:last-child{border-bottom:none}.ibr .l{color:var(--ink-s)}.ibr .v{font-weight:700;color:var(--ink)}
+.spin-wrap{display:flex;flex-direction:column;align-items:center;padding:48px 0;gap:14px}
+.spin{width:32px;height:32px;border-radius:50%;border:3px solid var(--border);border-top-color:var(--teal);animation:sp .8s linear infinite;}
+@keyframes sp{to{transform:rotate(360deg)}}
+.spin-wrap p{font-size:14px;color:var(--ink-s)}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--teal-d);color:#fff;padding:11px 22px;border-radius:50px;font-size:14px;font-weight:600;z-index:9999;transition:transform .28s ease;white-space:nowrap;pointer-events:none;}
+.toast.on{transform:translateX(-50%) translateY(0)}
+.blocker{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:500;display:none;align-items:center;justify-content:center;}
+.blocker.on{display:flex}
+.blocker-inner{background:#fff;border-radius:16px;padding:28px 24px;text-align:center;width:260px}
+.blocker-inner p{font-size:15px;color:var(--ink-m);margin-top:12px}
+/* PRICING */
+.pr-notice{background:linear-gradient(135deg,#f0f8f8,#e8f5f0);border:1.5px solid var(--teal-l);border-radius:14px;padding:16px 18px;margin-bottom:20px;}
+.pr-notice-title{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:var(--teal-d);margin-bottom:12px;}
+.pr-dot{width:8px;height:8px;background:var(--teal);border-radius:50%;flex-shrink:0;}
+.pr-notice-body p{font-size:14px;color:var(--ink-m);line-height:1.7;margin-bottom:12px;}
+.pr-en{font-size:12px;color:var(--ink-s);font-style:italic;}
+.pr-pills{display:flex;gap:10px;margin:12px 0;}
+.pr-pill{flex:1;background:var(--white);border:1.5px solid var(--teal-l);border-radius:12px;padding:12px 10px;text-align:center;}
+.pr-pill-num{font-size:26px;font-weight:700;color:var(--teal-d);line-height:1;}
+.pr-pill-label{font-size:11px;color:var(--ink-s);margin-top:4px;line-height:1.4;}
+.pr-tabs{display:flex;background:var(--white);border-radius:12px 12px 0 0;border:1.5px solid var(--border);border-bottom:none;overflow:hidden;}
+.pr-tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 6px 10px;cursor:pointer;position:relative;transition:all .2s;border-right:1px solid var(--border);gap:2px;}
+.pr-tab:last-of-type{border-right:none;}
+.pr-tab-name{font-size:13px;font-weight:700;color:var(--ink-s);transition:color .2s;white-space:nowrap;}
+.pr-tab.active .pr-tab-name{color:var(--teal-d);}
+.pr-tab.active::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--teal);border-radius:3px 3px 0 0;}
+.pr-panels{background:var(--white);border:1.5px solid var(--border);border-top:none;border-radius:0 0 14px 14px;padding:6px 16px 16px;margin-bottom:4px;box-shadow:var(--shadow);}
+.pr-panel{display:none;}.pr-panel.active{display:block;}
+.pr-item{padding:16px 0;border-bottom:1px solid var(--border);}
+.pr-item-name{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:4px;}
+.pr-item-note{font-size:11px;color:var(--ink-s);margin-top:4px;}
+.pr-item-price{display:flex;align-items:center;gap:10px;margin-top:10px;}
+.pr-price{font-size:28px;font-weight:700;color:var(--teal-d);}
+.pr-badge-self{background:#f0f4f4;color:var(--ink-s);font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;}
+.pr-item-dual{display:flex;align-items:stretch;gap:0;margin-top:12px;border:1.5px solid var(--border);border-radius:12px;overflow:hidden;}
+.pr-dual-col{flex:1;padding:12px 10px;display:flex;flex-direction:column;align-items:center;gap:4px;background:#fafcfc;}
+.pr-dual-col.acc-col{background:#fff9ed;}
+.pr-dual-label{font-size:10px;font-weight:600;color:var(--ink-s);text-align:center;line-height:1.4;}
+.pr-dual-price{font-size:22px;font-weight:700;color:var(--ink);}
+.pr-dual-price.acc-p{color:var(--gold);}
+.pr-dual-sub{font-size:10px;color:var(--gold);font-weight:600;text-align:center;line-height:1.4;}
+.pr-dual-sep{width:1px;background:var(--border);flex-shrink:0;}
+.pr-consult-row{display:flex;gap:0;border:1.5px solid var(--border);border-radius:12px;overflow:hidden;margin-top:4px;}
+.pr-consult-col{flex:1;padding:14px 12px;background:#fafcfc;}
+.pr-consult-col:last-child{background:#f5faf8;}
+.pr-consult-sep{width:1px;background:var(--border);flex-shrink:0;}
+/* BOOKING NOTICE */
+.book-notice{background:linear-gradient(135deg,#f0f8f8,#e8f5f0);border:1.5px solid var(--teal-l);border-radius:14px;padding:18px 18px 16px;margin-bottom:18px;}
+.bn-zh{font-size:12px;font-weight:600;color:var(--ink-m);line-height:1.7;}
+.bn-link{color:#1a3a6b;text-decoration:underline;font-size:12px;font-weight:600;cursor:pointer;}
+.book-welcome{background:var(--teal-d);color:#fff;border-radius:12px;padding:12px 16px;font-size:15px;font-weight:600;margin-bottom:16px;text-align:center;}
+#recaptcha-book,#recaptcha-cp{margin:8px 0;min-height:0;}
+.dob-row{display:flex;gap:10px;}
+.dob-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.dob-col input{width:100%;padding:8px 6px;font-size:15px;font-weight:600;text-align:center;border:2px solid var(--border);border-radius:10px;background:var(--white);color:var(--ink);transition:border .2s;}
+.dob-col input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(42,124,124,0.1);}
+.dob-lbl{font-size:11px;color:var(--ink-s);font-weight:600;letter-spacing:.5px;}
+/* PAGE TITLES */
+.pg-title{text-align:center;margin-bottom:20px}
+.pg-title-main{font-size:24px;font-weight:700;color:var(--gold);letter-spacing:2px;font-family:'Noto Serif SC',serif}
+.pg-title-sub{font-size:12px;color:var(--ink-s);margin-top:4px;letter-spacing:1px}
 </style>
 </head>
 <body>
 
-<div class="container">
+<header class="app-bar">
+  <div class="bar-icon">🏥</div>
+  <div>
+    <div class="bar-title" data-i18n="clinic-name">北京泽五堂中医诊所</div>
+    <div class="bar-sub" data-i18n="self-service">患者自助服务</div>
+  </div>
+  <div class="bar-spacer"></div>
+  <button class="lang-btn" id="lang-btn" onclick="toggleLang()">中文/En</button>
+</header>
 
-  <!-- Header -->
-  <header>
-    <div class="logo-zh">玄　命</div>
-    <div class="logo-sub">八字命盘推演系统</div>
-  </header>
+<div class="page">
 
-  <!-- Input Panel -->
-  <div class="input-panel" id="inputPanel">
-    <div class="corner corner-tl"></div>
-    <div class="corner corner-tr"></div>
-    <div class="corner corner-bl"></div>
-    <div class="corner corner-br"></div>
-
-    <!-- Collapsed summary bar -->
-    <div class="collapsed-bar" onclick="expandInput()">
-      <span id="collapsedLabel">点击重新输入</span>
-      <span class="collapsed-expand-icon">＋</span>
+  <!-- S-WELCOME -->
+  <div class="screen active" id="s-welcome">
+    <div class="hero">
+      <h2 data-i18n="welcome-h2">欢迎</h2>
+      <p data-i18n="welcome-sub">请选择您今天需要的服务</p>
     </div>
-
-    <!-- 基本信息 -->
-    <div class="input-inner">
-    <div class="form-row">
-      <div class="form-group">
-        <label>姓　名（选填）</label>
-        <input type="text" id="name" placeholder="命主姓名">
+    <div class="w-cards">
+      <div class="w-card" onclick="go('s-pricing')" style="border-left:4px solid var(--gold)">
+        <div class="wci" style="background:#fdf3e0">💴</div>
+        <div class="wct">
+          <h3 data-i18n="pricing-card-h">查看收费标准</h3>
+          <p data-i18n="pricing-card-p">ACC 说明及各医生诊疗费用</p>
+        </div>
+        <span class="arr">›</span>
       </div>
-      <div class="form-group">
-        <label>性　别</label>
-        <select id="gender">
-          <option value="male">男</option>
-          <option value="female">女</option>
+      <div class="w-card" onclick="go('s-new-choice')">
+        <div class="wci" style="background:#e8f5f5">📋</div>
+        <div class="wct">
+          <h3 data-i18n="newpt-card-h">首次就诊</h3>
+          <p data-i18n="newpt-card-p">填写您的个人信息进行登记</p>
+        </div>
+        <span class="arr">›</span>
+      </div>
+      <div class="w-card" onclick="go('s-book-sa')">
+        <div class="wci" style="background:#fdf3e0">📅</div>
+        <div class="wct">
+          <h3 data-i18n="book-card-h">预约时间</h3>
+          <p data-i18n="book-card-p">查看可用时段并预约治疗</p>
+        </div>
+        <span class="arr">›</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- S-NEW-CHOICE -->
+  <div class="screen" id="s-new-choice">
+    <button class="back" onclick="go('s-welcome')">‹ <span data-i18n="back">返回</span></button>
+    <div class="pg-title">
+      <div class="pg-title-main" data-i18n="newpt-title">首次就诊登记</div>
+      <div class="pg-title-sub" data-i18n="newpt-title-en">NEW PATIENT REGISTRATION</div>
+    </div>
+    <div class="ssub" data-i18n="newpt-choice-sub">请选择您的情况</div>
+    <div class="choice-cards">
+      <div class="choice-card" onclick="startNewWithACC()">
+        <div class="choice-icon">✅</div>
+        <div class="choice-text">
+          <h3 data-i18n="acc-yes-h">我有 ACC 保单</h3>
+          <p data-i18n="acc-yes-p">我已获得 ACC 批准，有 ACC 号码</p>
+        </div>
+        <span class="arr">›</span>
+      </div>
+      <div class="choice-card" onclick="startNewNoACC()">
+        <div class="choice-icon">📋</div>
+        <div class="choice-text">
+          <h3 data-i18n="acc-no-h">我没有 ACC 保单</h3>
+          <p data-i18n="acc-no-p">自费就诊，填写个人信息即可</p>
+        </div>
+        <span class="arr">›</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- S-NEW-PERSONAL -->
+  <div class="screen" id="s-new-personal">
+    <button class="back" id="personal-back-btn" onclick="go('s-new-choice')">‹ <span data-i18n="back">返回</span></button>
+    <div class="pg-title">
+      <div class="pg-title-main" data-i18n="personal-title">个人信息</div>
+      <div class="pg-title-sub" data-i18n="personal-title-en">PERSONAL INFORMATION</div>
+    </div>
+    <div class="ssub" id="personal-sub" data-i18n="personal-sub-noACC">请填写您的基本信息</div>
+    <div class="card">
+      <div class="card-label" data-i18n="personal-card-label">基本信息</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="fg" style="margin-bottom:0">
+          <label data-i18n="lbl-family-name">姓</label>
+          <input id="np-fam" type="text" data-i18n-ph="ph-family-name" placeholder="Zhang">
+        </div>
+        <div class="fg" style="margin-bottom:0">
+          <label data-i18n="lbl-first-name">名</label>
+          <input id="np-fir" type="text" data-i18n-ph="ph-first-name" placeholder="San">
+        </div>
+      </div>
+      <div class="fg" style="margin-top:14px">
+        <label data-i18n="lbl-gender">性别</label>
+        <select id="np-gender">
+          <option value="" data-i18n-opt="opt-gender-default">— 请选择 —</option>
+          <option value="male" data-i18n-opt="opt-male">男</option>
+          <option value="female" data-i18n-opt="opt-female">女</option>
         </select>
       </div>
-      <div class="form-group">
-        <label>出生地（选填，用于真太阳时）</label>
-        <input type="text" id="birthplace" placeholder="如：北京、上海">
+      <div class="fg">
+        <label data-i18n="lbl-dob">出生日期 (DD/MM/YYYY)</label>
+        <input id="np-dob" type="text" placeholder="DD/MM/YYYY" maxlength="10" oninput="fmtDate(this)">
+      </div>
+      <div class="fg">
+        <label data-i18n="lbl-phone">联系电话</label>
+        <input id="np-ph" type="tel" data-i18n-ph="ph-mobile" placeholder="021 xxx xxxx">
+        <small data-i18n="phone-hint">新西兰手机号</small>
+      </div>
+      <div class="fg">
+        <label data-i18n="lbl-address">地址（选填）</label>
+        <textarea id="np-addr" rows="2" data-i18n-ph="ph-addr" placeholder="街道地址, Auckland"></textarea>
+      </div>
+      <div class="fg">
+        <label data-i18n="lbl-email">邮箱（选填）</label>
+        <input id="np-email" type="email" placeholder="you@example.com">
       </div>
     </div>
-
-    <!-- 出生日期 tabs -->
-    <div class="date-section">
-      <div class="date-section-title">出 生 日 期</div>
-
-      <div class="date-tabs">
-        <button class="date-tab active" onclick="switchDateTab('solar')">公　历</button>
-        <button class="date-tab" onclick="switchDateTab('lunar')">农　历</button>
-      </div>
-
-      <!-- 公历 -->
-      <div id="tab-solar" class="date-tab-content active">
-        <div class="date-input-row">
-          <div class="date-field">
-            <label>年</label>
-            <input type="number" id="solar-year" value="1980" min="1900" max="2100" placeholder="年" oninput="onSolarInput()">
-          </div>
-          <div class="date-field">
-            <label>月</label>
-            <input type="number" id="solar-month" value="1" min="1" max="12" placeholder="月" oninput="onSolarInput()">
-          </div>
-          <div class="date-field">
-            <label>日</label>
-            <input type="number" id="solar-day" value="1" min="1" max="31" placeholder="日" oninput="onSolarInput()">
-          </div>
-          <button class="cal-btn" onclick="openCal('solar')" title="打开日历">📅</button>
-        </div>
-        <div class="sync-hint" id="solar-sync-hint">对应农历：1979年十二月初五</div>
-      </div>
-
-      <!-- 农历 -->
-      <div id="tab-lunar" class="date-tab-content">
-        <div class="date-input-row">
-          <div class="date-field">
-            <label>年</label>
-            <input type="number" id="lunar-year" value="1980" min="1900" max="2100" placeholder="年" oninput="onLunarInput()">
-          </div>
-          <div class="date-field">
-            <label>月（1–13，闰月加0.5）</label>
-            <input type="number" id="lunar-month" value="1" min="1" max="13" placeholder="月" step="0.5" oninput="onLunarInput()">
-          </div>
-          <div class="date-field">
-            <label>日</label>
-            <input type="number" id="lunar-day" value="1" min="1" max="30" placeholder="日" oninput="onLunarInput()">
-          </div>
-          <button class="cal-btn" onclick="openCal('lunar')" title="打开农历日历">📅</button>
-        </div>
-        <div class="sync-hint" id="lunar-sync-hint">对应公历：1980年1月28日</div>
-      </div>
+    <div class="ebox" id="np-err"><span>⚠️</span><span id="np-err-t"></span></div>
+    <div class="btn-row">
+      <button class="btn btn-p" onclick="personalNext()" data-i18n="btn-next">下一步</button>
     </div>
-
-    <!-- 时辰 -->
-    <div class="form-group" style="margin-bottom:28px">
-      <label>出 生 时 辰</label>
-      <select id="hour">
-        <option value="23">晚子时　23:00 – 24:00（日柱算当天）</option>
-        <option value="0">早子时　00:00 – 01:00（日柱算次日）</option>
-        <option value="1">丑时　01:00 – 03:00</option>
-        <option value="3">寅时　03:00 – 05:00</option>
-        <option value="5">卯时　05:00 – 07:00</option>
-        <option value="7">辰时　07:00 – 09:00</option>
-        <option value="9">巳时　09:00 – 11:00</option>
-        <option value="11">午时　11:00 – 13:00</option>
-        <option value="13">未时　13:00 – 15:00</option>
-        <option value="15">申时　15:00 – 17:00</option>
-        <option value="17">酉时　17:00 – 19:00</option>
-        <option value="19">戌时　19:00 – 21:00</option>
-        <option value="21">亥时　21:00 – 23:00</option>
-      </select>
-    </div>
-
-    <button class="btn-analyze" id="analyzeBtn" onclick="analyze()">
-      推　演　命　盘
-    </button>
-    </div><!-- end .input-inner -->
   </div>
 
-  <!-- Error message (outside input panel so always visible) -->
-  <div class="error-msg" id="errorMsg"></div>
-
-  <!-- 日历弹窗 -->
-  <div class="cal-overlay" id="calOverlay" onclick="closeCal()"></div>
-  <div class="cal-popup" id="calPopup">
-    <div class="cal-header">
-      <button class="cal-nav" id="calPrev" onclick="calNavigate(-1)">‹</button>
-      <div class="cal-title" id="calTitle" onclick="calToggleMode()">2000年 一月</div>
-      <button class="cal-nav" id="calNext" onclick="calNavigate(1)">›</button>
+  <!-- S-NEW-ACC -->
+  <div class="screen" id="s-new-acc">
+    <button class="back" onclick="go('s-new-personal')">‹ <span data-i18n="back">返回</span></button>
+    <div class="pg-title">
+      <div class="pg-title-main" data-i18n="acc-info-title">ACC 信息</div>
+      <div class="pg-title-sub" data-i18n="acc-info-title-en">ACC CLAIM DETAILS</div>
     </div>
-    <div id="calBody"></div>
+    <div class="ssub" data-i18n="acc-info-sub">请填写您的 ACC 保单信息</div>
+    <div class="card">
+      <div class="card-label" data-i18n="acc-card-label">ACC 保单信息</div>
+      <div class="fg">
+        <label>ACC45 No. *</label>
+        <input id="na-acc" type="text" data-i18n-ph="ph-acc45" placeholder="例: AA12345 或 12345AA"
+          maxlength="7" oninput="this.value=this.value.toUpperCase()">
+      </div>
+      <div class="fg">
+        <label data-i18n="lbl-doa">受伤日期</label>
+        <input id="na-doa" type="text" placeholder="DD/MM/YYYY" maxlength="10" oninput="fmtDate(this)">
+      </div>
+      <div class="fg">
+        <label data-i18n="lbl-reason">受伤原因</label>
+        <input id="na-reason" type="text" data-i18n-ph="ph-reason" placeholder="例: 跌倒、运动受伤、交通事故...">
+      </div>
+      <div class="fg">
+        <label>Read Code *</label>
+        <input id="na-read" type="text" placeholder="例: S572">
+      </div>
+    </div>
+    <div class="ebox" id="na-err"><span>⚠️</span><span id="na-err-t"></span></div>
+    <div class="btn-row">
+      <button class="btn btn-p" id="na-sub-btn" onclick="submitNew()" data-i18n="btn-submit">提交登记</button>
+    </div>
   </div>
 
-  <!-- Loading -->
-  <div id="loading">
-    <div class="loading-char">☯</div>
-    <div class="loading-text" id="loadingText">正在推演命盘，稍候片刻…</div>
-  </div>
+  <!-- S-BOOK-SA -->
+  <div class="screen" id="s-book-sa">
+    <button class="back" onclick="go('s-welcome')">‹ <span data-i18n="back">返回</span></button>
+    <div class="pg-title">
+      <div class="pg-title-main" data-i18n="book-title">预约时间</div>
+      <div class="pg-title-sub" data-i18n="book-title-en">BOOK APPOINTMENT</div>
+    </div>
 
-  <!-- Results: sidebar + scroll layout -->
-  <div id="results">
-
-    <div class="results-with-nav">
-    <!-- Left vertical nav -->
-    <nav class="side-nav" id="sideNav">
-      <button class="side-nav-btn active" data-target="tab-basic">基本排盘</button>
-      <button class="side-nav-btn" data-target="tab-dayun">大运流年</button>
-      <button class="side-nav-btn" data-target="tab-ai"><span style="text-combine-upright:all;letter-spacing:0;display:inline-block;line-height:1;margin-bottom:12px">AI</span>断<span style="display:block;margin-top:0">语</span></button>
-    </nav>
-
-    <!-- Scrollable content -->
-    <div class="side-content">
-
-    <!-- Section 1: 基本排盘 -->
-    <div class="tab-pane" id="tab-basic">
-      <!-- 命主信息 -->
-      <div class="section">
-        <div class="section-header">
-          <div class="section-num">一</div>
-          <div class="section-title">命主信息</div>
-        </div>
-        <div class="info-grid" id="basicInfo"></div>
+    <!-- Step 1: Name+DOB then Phone -->
+    <div id="book-step-phone">
+      <div class="book-notice">
+        <p class="bn-zh" data-i18n="book-notice-1">请先确认您已在本系统中登记了您的个人信息。</p>
+        <p class="bn-zh" style="margin-top:8px" data-i18n="book-notice-2">请输入您的姓名和出生日期进行验证。</p>
+        <p class="bn-zh" style="margin-top:8px"><span data-i18n="book-notice-3">如果您新换了手机号，</span><a href="javascript:void(0)" onclick="go('s-change-phone')" class="bn-link" data-i18n="book-notice-link">请点击此处</a></p>
       </div>
-      <!-- 四柱命盘 -->
-      <div class="section">
-        <div class="section-header">
-          <div class="section-num">二</div>
-          <div class="section-title">四柱命盘</div>
-        </div>
-        <div id="pillarsTable"></div>
-      </div>
-      <div class="divider"></div>
-      <!-- 五行分析 -->
-      <div class="section">
-        <div class="section-header">
-          <div class="section-num">三</div>
-          <div class="section-title">五行分析</div>
-        </div>
-        <div class="wuxing-chart">
-          <div class="pentagon-wrap">
-            <svg id="pentagonChart" width="200" height="200" viewBox="0 0 200 200"></svg>
+
+      <!-- Sub-step A: Name + DOB -->
+      <div id="book-sub-name">
+        <div class="card">
+          <div class="fg" style="margin-bottom:14px">
+            <label style="font-size:14px" data-i18n="lbl-your-full-name">您的姓名</label>
+            <input id="book-name" type="text" data-i18n-ph="ph-book-name" placeholder="例：张三 或 San Zhang" style="font-size:15px">
+            <small data-i18n="book-name-hint">例如：张三，请输入 "San Zhang"</small>
           </div>
-          <div class="wuxing-bars" id="wuxingBars"></div>
+          <div class="fg" style="margin-bottom:0">
+            <label style="font-size:14px" data-i18n="lbl-dob-verify">出生日期</label>
+            <div class="dob-row" style="margin-top:4px">
+              <div class="dob-col">
+                <input id="book-dob-y" type="tel" maxlength="4" placeholder="" oninput="if(this.value.length===4)document.getElementById('book-dob-m').focus()">
+                <span class="dob-lbl" data-i18n="dob-year">年</span>
+              </div>
+              <div class="dob-col">
+                <input id="book-dob-m" type="tel" maxlength="2" placeholder="" oninput="if(this.value.length===2)document.getElementById('book-dob-d').focus()">
+                <span class="dob-lbl" data-i18n="dob-month">月</span>
+              </div>
+              <div class="dob-col">
+                <input id="book-dob-d" type="tel" maxlength="2" placeholder="">
+                <span class="dob-lbl" data-i18n="dob-day">日</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ebox" id="book-name-err"><span>⚠️</span><span id="book-name-err-t"></span></div>
+        <div class="btn-row">
+          <button class="btn btn-p" id="book-name-btn" onclick="bookCheckName()" data-i18n="btn-next">下一步</button>
+        </div>
+      </div>
+
+      <!-- Sub-step B: Phone + SMS -->
+      <div id="book-sub-phone" style="display:none">
+        <div class="card">
+          <div class="fg">
+            <label data-i18n="lbl-mobile">手机号码</label>
+            <input id="book-ph" type="tel" data-i18n-ph="ph-mobile" placeholder="021 xxx xxxx"
+              onkeydown="if(event.key==='Enter')bookSendSMS()">
+            <small data-i18n="mobile-hint">请输入登记时使用的新西兰手机号</small>
+          </div>
+          <div id="recaptcha-book"></div>
+          <div class="ebox" id="book-ph-err"><span>⚠️</span><span id="book-ph-err-t"></span></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-p" id="book-send-btn" onclick="bookSendSMS()" data-i18n="btn-send-code">发送验证码</button>
         </div>
       </div>
     </div>
 
-    <!-- Section 2: 大运流年 -->
-    <div class="tab-pane" id="tab-dayun">
-      <div class="section">
-        <div class="section-header">
-          <div class="section-num">四</div>
-          <div class="section-title">大运流年</div>
+    <!-- Step 2: Code -->
+    <div id="book-step-code" style="display:none">
+      <div class="phone-wrap"><div class="big-icon">💬</div></div>
+      <div class="stitle" style="margin-bottom:6px" data-i18n="verify-title">输入验证码</div>
+      <div class="ssub"><span data-i18n="verify-sub-prefix">验证码已发送至</span> <strong id="book-phone-disp"></strong></div>
+      <div class="card">
+        <div class="code-inputs" id="book-code-inputs">
+          <input type="tel" maxlength="1" oninput="bookCodeInput(this,0)" onkeydown="bookCodeBk(this,0,event)">
+          <input type="tel" maxlength="1" oninput="bookCodeInput(this,1)" onkeydown="bookCodeBk(this,1,event)">
+          <input type="tel" maxlength="1" oninput="bookCodeInput(this,2)" onkeydown="bookCodeBk(this,2,event)">
+          <input type="tel" maxlength="1" oninput="bookCodeInput(this,3)" onkeydown="bookCodeBk(this,3,event)">
+          <input type="tel" maxlength="1" oninput="bookCodeInput(this,4)" onkeydown="bookCodeBk(this,4,event)">
+          <input type="tel" maxlength="1" oninput="bookCodeInput(this,5)" onkeydown="bookCodeBk(this,5,event)">
         </div>
-        <div class="dayun-scroll" id="dayunList"></div>
-        <div class="liuyear-grid" id="liuyearGrid"></div>
+        <div class="ebox" id="book-code-err"><span>⚠️</span><span id="book-code-err-t"></span></div>
+        <div class="resend-row">
+          <button class="resend-btn" id="book-resend-btn" onclick="bookResend()" disabled data-i18n="btn-resend">重新发送</button>
+          <div class="countdown" id="book-countdown"></div>
+        </div>
       </div>
-      <!-- AI对大运流年的断语，推演完成后填入 -->
-      <div class="section" id="aiDayunSection" style="display:none;margin-top:28px;">
-        <div class="section-header">
-          <div class="section-num" style="font-size:12px;padding:5px 8px;letter-spacing:1px">AI</div>
-          <div class="section-title">玄机断语 · 大运流年</div>
-        </div>
-        <div class="ai-content" id="aiDayunContent" style="padding:12px 0;"></div>
+      <div class="btn-row">
+        <button class="btn btn-p" id="book-verify-btn" onclick="bookVerify()" data-i18n="btn-verify">验证</button>
       </div>
     </div>
 
-    <!-- Section 3: AI 断语 -->
-    <div class="tab-pane" id="tab-ai">
-      <div class="ai-panel">
-        <div class="corner corner-tl"></div>
-        <div class="corner corner-tr"></div>
-        <div class="corner corner-bl"></div>
-        <div class="corner corner-br"></div>
-        <div class="ai-tag">玄机推演</div>
-        <div class="ai-content" id="aiContent"></div>
+    <!-- Step 3: Calendar -->
+    <div id="book-step-cal" style="display:none">
+      <div class="book-welcome" id="book-welcome-name"></div>
+      <div class="card">
+        <div class="cal-nav">
+          <button class="cnb" onclick="calShift('sa',-1)">‹</button>
+          <h3 id="cal-label-sa">...</h3>
+          <button class="cnb" onclick="calShift('sa',1)">›</button>
+        </div>
+        <div class="cal-heads" id="cal-heads-sa">
+          <div class="ch">日</div><div class="ch">一</div><div class="ch">二</div>
+          <div class="ch">三</div><div class="ch">四</div><div class="ch">五</div><div class="ch">六</div>
+        </div>
+        <div class="cal-days" id="cal-sa"></div>
+      </div>
+      <div class="card" id="slot-card-sa" style="display:none">
+        <div class="slots-hd" id="slot-hd-sa" data-i18n="slot-hd">选择时段</div>
+        <div class="slot-legend" id="slot-legend-sa">
+          <div class="slot-legend-item"><div class="slot-legend-dot avail"></div><span data-i18n="legend-avail">可选</span></div>
+          <div class="slot-legend-item"><div class="slot-legend-dot taken"></div><span data-i18n="legend-taken">已被占用</span></div>
+        </div>
+        <div class="slots" id="slot-grid-sa"></div>
+      </div>
+      <div class="ebox" id="sa-err"><span>⚠️</span><span id="sa-err-t"></span></div>
+      <div class="btn-row" id="book-btn-sa" style="display:none">
+        <button class="btn btn-p" onclick="doBook('sa')" data-i18n="btn-confirm-book">确认预约</button>
       </div>
     </div>
+  </div>
 
-    </div><!-- end side-content -->
-    </div><!-- end results-with-nav -->
-  </div><!-- end results -->
+  <!-- S-CHANGE-PHONE -->
+  <div class="screen" id="s-change-phone">
+    <button class="back" onclick="go('s-book-sa')">‹ <span data-i18n="back">返回</span></button>
+    <div class="pg-title">
+      <div class="pg-title-main" data-i18n="change-ph-title">更换手机号</div>
+      <div class="pg-title-sub" data-i18n="change-ph-title-en">CHANGE MOBILE NUMBER</div>
+    </div>
+    <div class="ssub" data-i18n="change-ph-sub">请先验证您的身份，再绑定新手机号</div>
+    <div id="cp-step-verify">
+      <div class="card">
+        <div class="card-label" data-i18n="identity-label">身份验证</div>
+        <div class="fg">
+          <label data-i18n="lbl-your-name">您的姓名</label>
+          <input id="cp-name" type="text" data-i18n-ph="ph-your-name" placeholder="请输入登记时填写的姓名">
+        </div>
+        <div class="fg">
+          <label data-i18n="lbl-last4">旧手机号后四位</label>
+          <input id="cp-last4" type="tel" maxlength="4" data-i18n-ph="ph-last4" placeholder="例：5678">
+        </div>
+        <div class="ebox" id="cp-verify-err"><span>⚠️</span><span id="cp-verify-err-t"></span></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-p" id="cp-verify-btn" onclick="cpVerifyIdentity()" data-i18n="btn-verify-id">验证身份</button>
+      </div>
+    </div>
+    <div id="cp-step-newphone" style="display:none">
+      <div style="background:#edfaf3;border:1.5px solid #27ae60;border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:14px;color:#1a6b3a;font-weight:600" data-i18n="id-verified-msg">
+        ✅ 身份验证成功，请输入您的新手机号码
+      </div>
+      <div class="card">
+        <div class="fg">
+          <label data-i18n="lbl-new-mobile">新手机号码</label>
+          <input id="cp-newph" type="tel" data-i18n-ph="ph-mobile" placeholder="021 xxx xxxx">
+          <small data-i18n="phone-hint">新西兰手机号</small>
+        </div>
+        <div id="recaptcha-cp"></div>
+        <div class="ebox" id="cp-newph-err"><span>⚠️</span><span id="cp-newph-err-t"></span></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-p" id="cp-send-btn" onclick="cpSendSMS()" data-i18n="btn-send-code">发送验证码</button>
+      </div>
+    </div>
+    <div id="cp-step-code" style="display:none">
+      <div class="phone-wrap"><div class="big-icon">💬</div></div>
+      <div class="stitle" style="margin-bottom:6px" data-i18n="verify-title">输入验证码</div>
+      <div class="ssub"><span data-i18n="verify-sub-prefix">验证码已发送至</span> <strong id="cp-phone-disp"></strong></div>
+      <div class="card">
+        <div class="code-inputs" id="cp-code-inputs">
+          <input type="tel" maxlength="1" oninput="cpCodeInput(this,0)" onkeydown="cpCodeBk(this,0,event)">
+          <input type="tel" maxlength="1" oninput="cpCodeInput(this,1)" onkeydown="cpCodeBk(this,1,event)">
+          <input type="tel" maxlength="1" oninput="cpCodeInput(this,2)" onkeydown="cpCodeBk(this,2,event)">
+          <input type="tel" maxlength="1" oninput="cpCodeInput(this,3)" onkeydown="cpCodeBk(this,3,event)">
+          <input type="tel" maxlength="1" oninput="cpCodeInput(this,4)" onkeydown="cpCodeBk(this,4,event)">
+          <input type="tel" maxlength="1" oninput="cpCodeInput(this,5)" onkeydown="cpCodeBk(this,5,event)">
+        </div>
+        <div class="ebox" id="cp-code-err"><span>⚠️</span><span id="cp-code-err-t"></span></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-p" id="cp-confirm-btn" onclick="cpConfirmCode()" data-i18n="btn-confirm-code">确认验证码</button>
+      </div>
+    </div>
+  </div>
 
+  <!-- S-OK -->
+  <div class="screen" id="s-ok">
+    <div class="succ">
+      <div class="s-icon" id="ok-icon">✅</div>
+      <h2 id="ok-title">提交成功！</h2>
+      <p id="ok-msg">您的信息已成功提交。</p>
+      <div class="ibox" id="ok-detail" style="display:none"></div>
+      <div class="btn-row" style="margin-top:30px">
+        <button class="btn btn-p" onclick="go('s-welcome')" data-i18n="btn-back-home">返回首页</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- S-PRICING -->
+  <div class="screen" id="s-pricing">
+    <button class="back" onclick="go('s-welcome')">‹ <span data-i18n="back">返回</span></button>
+    <div class="pg-title">
+      <div class="pg-title-main" data-i18n="pricing-title">收费标准</div>
+      <div class="pg-title-sub" data-i18n="pricing-title-en">PRICING SCHEDULE</div>
+    </div>
+    <div class="pr-notice">
+      <div class="pr-notice-title">
+        <span class="pr-dot"></span><span data-i18n="acc-notice-title">ACC 使用说明</span>
+      </div>
+      <div class="pr-notice-body">
+        <p data-i18n-html="acc-notice-body">本诊所可接受 ACC 保险，但<strong>无法为您开具 ACC</strong>，需您先向<strong>家庭医生</strong>申请。</p>
+        <div class="pr-pills">
+          <div class="pr-pill">
+            <div class="pr-pill-num">12</div>
+            <div class="pr-pill-label" data-i18n="weeks-valid">周内有效</div>
+          </div>
+          <div class="pr-pill">
+            <div class="pr-pill-num">≤12</div>
+            <div class="pr-pill-label" data-i18n="max-treatments">最多可用次数</div>
+          </div>
+        </div>
+        <p style="font-size:12px;color:var(--ink-s);margin-top:8px;line-height:1.6" data-i18n="acc-severity">次数多少和受伤部位及受伤程度相关。</p>
+      </div>
+    </div>
+    <div class="pr-tabs">
+      <div class="pr-tab active" onclick="prTab(0)"><span class="pr-tab-name" data-i18n="dr-zhang-cs">张传生医生</span></div>
+      <div class="pr-tab" onclick="prTab(1)"><span class="pr-tab-name" data-i18n="dr-zhang-c">张超医生</span></div>
+      <div class="pr-tab" onclick="prTab(2)"><span class="pr-tab-name" data-i18n="dr-zhang-y">张宇医生</span></div>
+    </div>
+    <div class="pr-panels">
+      <!-- Panel 0 -->
+      <div class="pr-panel active" id="prp-0">
+        <div class="pr-item">
+          <div class="pr-consult-row">
+            <div class="pr-consult-col">
+              <div class="pr-item-name" data-i18n="initial-consult">初诊诊费</div>
+              <div class="pr-item-note" data-i18n="self-pay-note">自费，不被 ACC 涵盖</div>
+              <div class="pr-price" style="margin-top:8px">$150</div>
+            </div>
+            <div class="pr-consult-sep"></div>
+            <div class="pr-consult-col">
+              <div class="pr-item-name" data-i18n="followup-consult">复诊诊费</div>
+              <div class="pr-item-note" data-i18n="self-pay-note">自费，不被 ACC 涵盖</div>
+              <div class="pr-price" style="margin-top:8px">$50</div>
+              <div class="pr-item-note" style="margin-top:6px;color:var(--gold);font-size:11px">仅在开药时收取，正骨不收复诊费</div>
+            </div>
+          </div>
+        </div>
+        <div class="pr-item">
+          <div class="pr-item-name" data-i18n="bone-setting">正骨</div>
+          <div class="pr-item-dual">
+            <div class="pr-dual-col"><div class="pr-dual-label" data-i18n="without-acc">无 ACC</div><div class="pr-dual-price">$80</div></div>
+            <div class="pr-dual-sep"></div>
+            <div class="pr-dual-col acc-col"><div class="pr-dual-label" data-i18n="with-acc">有 ACC</div><div class="pr-dual-price acc-p">$15</div><div class="pr-dual-sub" data-i18n="self-sign">自费 + 签字</div></div>
+          </div>
+        </div>
+        <div class="pr-item" style="border-bottom:none">
+          <div class="pr-item-name" data-i18n="herbal">中药</div>
+          <div class="pr-item-note" data-i18n="self-pay-note">自费，不被 ACC 涵盖</div>
+          <div class="pr-item-price" style="margin-top:10px"><span class="pr-price" style="font-size:20px;color:var(--ink-s)" data-i18n="herbal-price">按方计费</span><span class="pr-badge-self" data-i18n="self-pay-badge">自费</span></div>
+        </div>
+      </div>
+      <!-- Panel 1 -->
+      <div class="pr-panel" id="prp-1">
+        <div class="pr-item">
+          <div class="pr-consult-row">
+            <div class="pr-consult-col">
+              <div class="pr-item-name" data-i18n="initial-consult">初诊诊费</div>
+              <div class="pr-item-note" data-i18n="self-pay-note">自费，不被 ACC 涵盖</div>
+              <div class="pr-price" style="margin-top:8px">$50</div>
+            </div>
+            <div class="pr-consult-sep"></div>
+            <div class="pr-consult-col">
+              <div class="pr-item-name" data-i18n="followup-free">复诊免诊费</div>
+            </div>
+          </div>
+        </div>
+        <div class="pr-item">
+          <div class="pr-item-name" data-i18n="acupuncture">针灸</div>
+          <div class="pr-item-dual">
+            <div class="pr-dual-col"><div class="pr-dual-label" data-i18n="without-acc">无 ACC</div><div class="pr-dual-price">$85</div></div>
+            <div class="pr-dual-sep"></div>
+            <div class="pr-dual-col acc-col"><div class="pr-dual-label" data-i18n="with-acc">有 ACC</div><div class="pr-dual-price acc-p">$20</div><div class="pr-dual-sub" data-i18n="self-sign">自费 + 签字</div></div>
+          </div>
+        </div>
+        <div class="pr-item">
+          <div class="pr-item-name" data-i18n="bone-setting">正骨</div>
+          <div class="pr-item-dual">
+            <div class="pr-dual-col"><div class="pr-dual-label" data-i18n="without-acc">无 ACC</div><div class="pr-dual-price">$80</div></div>
+            <div class="pr-dual-sep"></div>
+            <div class="pr-dual-col acc-col"><div class="pr-dual-label" data-i18n="with-acc">有 ACC</div><div class="pr-dual-price acc-p">$15</div><div class="pr-dual-sub" data-i18n="self-sign">自费 + 签字</div></div>
+          </div>
+        </div>
+        <div class="pr-item" style="border-bottom:none">
+          <div class="pr-item-name" data-i18n="herbal">中药</div>
+          <div class="pr-item-note" data-i18n="self-pay-note">自费，不被 ACC 涵盖</div>
+          <div class="pr-item-price" style="margin-top:10px"><span class="pr-price" style="font-size:20px;color:var(--ink-s)" data-i18n="herbal-price">按方计费</span><span class="pr-badge-self" data-i18n="self-pay-badge">自费</span></div>
+        </div>
+      </div>
+      <!-- Panel 2 -->
+      <div class="pr-panel" id="prp-2">
+        <div class="pr-item">
+          <div class="pr-consult-row">
+            <div class="pr-consult-col">
+              <div class="pr-item-name" data-i18n="initial-consult">初诊诊费</div>
+              <div class="pr-item-note" data-i18n="self-pay-note">自费，不被 ACC 涵盖</div>
+              <div class="pr-price" style="margin-top:8px">$50</div>
+            </div>
+            <div class="pr-consult-sep"></div>
+            <div class="pr-consult-col">
+              <div class="pr-item-name" data-i18n="followup-free">复诊免诊费</div>
+            </div>
+          </div>
+        </div>
+        <div class="pr-item">
+          <div class="pr-item-name" data-i18n="acupuncture">针灸</div>
+          <div class="pr-item-dual">
+            <div class="pr-dual-col"><div class="pr-dual-label" data-i18n="without-acc">无 ACC</div><div class="pr-dual-price">$85</div></div>
+            <div class="pr-dual-sep"></div>
+            <div class="pr-dual-col acc-col"><div class="pr-dual-label" data-i18n="with-acc">有 ACC</div><div class="pr-dual-price acc-p">$20</div><div class="pr-dual-sub" data-i18n="self-sign">自费 + 签字</div></div>
+          </div>
+        </div>
+        <div class="pr-item">
+          <div class="pr-item-name" data-i18n="bone-setting">正骨</div>
+          <div class="pr-item-dual">
+            <div class="pr-dual-col"><div class="pr-dual-label" data-i18n="without-acc">无 ACC</div><div class="pr-dual-price">$80</div></div>
+            <div class="pr-dual-sep"></div>
+            <div class="pr-dual-col acc-col"><div class="pr-dual-label" data-i18n="with-acc">有 ACC</div><div class="pr-dual-price acc-p">$15</div><div class="pr-dual-sub" data-i18n="self-sign">自费 + 签字</div></div>
+          </div>
+        </div>
+        <div class="pr-item" style="border-bottom:none">
+          <div class="pr-item-name" data-i18n="herbal">中药</div>
+          <div class="pr-item-note" data-i18n="self-pay-note">自费，不被 ACC 涵盖</div>
+          <div class="pr-item-price" style="margin-top:10px"><span class="pr-price" style="font-size:20px;color:var(--ink-s)" data-i18n="herbal-price">按方计费</span><span class="pr-badge-self" data-i18n="self-pay-badge">自费</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:24px">
+      <button class="btn btn-p" onclick="go('s-welcome')" data-i18n="btn-back-home">返回首页</button>
+    </div>
+  </div>
+
+</div><!-- .page -->
+
+<div class="toast" id="toast"></div>
+<div class="blocker" id="blocker">
+  <div class="blocker-inner">
+    <div class="spin" style="margin:0 auto"></div>
+    <p data-i18n="processing">处理中，请稍候...</p>
+  </div>
 </div>
 
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
 <script>
-// ==============================
-// 八字核心数据
-// ==============================
-
-const TIANGAN = ['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
-const DIZHI = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
-const WUXING_TG = ['木','木','火','火','土','土','金','金','水','水'];
-const WUXING_DZ = ['水','土','木','木','土','火','火','土','金','金','土','水'];
-const YINYANG_TG = ['阳','阴','阳','阴','阳','阴','阳','阴','阳','阴'];
-const YINYANG_DZ = ['阳','阴','阳','阴','阳','阴','阳','阴','阳','阴','阳','阴'];
-const NAYIN = [
-  '海中金','炉中火','大林木','路旁土','剑锋金','山头火','涧下水','城头土',
-  '白蜡金','杨柳木','泉中水','屋上土','霹雳火','松柏木','长流水','沙中金',
-  '山下火','平地木','壁上土','金箔金','覆灯火','天河水','大驿土','钗钏金',
-  '桑柘木','大溪水','沙中土','天上火','石榴木','大海水'
-];
-const CHANGSHENG = ['长生','沐浴','冠带','临官','帝旺','衰','病','死','墓','绝','胎','养'];
-
-// 藏干
-const CANGGAN = {
-  '子':['壬'], '丑':['己','癸','辛'], '寅':['甲','丙','戊'],
-  '卯':['乙'], '辰':['戊','乙','癸'], '巳':['丙','庚','戊'],
-  '午':['丁','己'], '未':['己','丁','乙'], '申':['庚','壬','戊'],
-  '酉':['辛'], '戌':['戊','辛','丁'], '亥':['壬','甲']
+/* ══════════════════════════════════════════════════════════
+   TRANSLATIONS
+══════════════════════════════════════════════════════════ */
+const STRINGS = {
+  zh: {
+    'clinic-name':'北京泽五堂中医诊所','self-service':'患者自助服务',
+    'welcome-h2':'欢迎','welcome-sub':'请选择您今天需要的服务',
+    'pricing-card-h':'查看收费标准','pricing-card-p':'ACC 说明及各医生诊疗费用',
+    'newpt-card-h':'首次就诊','newpt-card-p':'填写您的个人信息进行登记',
+    'book-card-h':'预约时间','book-card-p':'查看可用时段并预约治疗',
+    'back':'返回',
+    'newpt-title':'首次就诊登记','newpt-title-en':'NEW PATIENT REGISTRATION',
+    'newpt-choice-sub':'请选择您的情况',
+    'acc-yes-h':'我有 ACC 保单','acc-yes-p':'我已获得 ACC 批准，有 ACC 号码',
+    'acc-no-h':'我没有 ACC 保单','acc-no-p':'自费就诊，填写个人信息即可',
+    'personal-title':'个人信息','personal-title-en':'PERSONAL INFORMATION',
+    'personal-sub-acc':'步骤 1/2：请填写您的基本信息',
+    'personal-sub-noACC':'请填写您的基本信息',
+    'personal-card-label':'基本信息',
+    'lbl-family-name':'姓','lbl-first-name':'名',
+    'lbl-gender':'性别','lbl-dob':'出生日期 (DD/MM/YYYY)',
+    'lbl-phone':'联系电话','lbl-address':'地址（选填）','lbl-email':'邮箱（选填）',
+    'ph-family-name':'Zhang','ph-first-name':'San','ph-mobile':'021 xxx xxxx',
+    'ph-addr':'街道地址, Auckland',
+    'opt-gender-default':'— 请选择 —','opt-male':'男','opt-female':'女',
+    'phone-hint':'新西兰手机号',
+    'btn-next':'下一步',
+    'acc-info-title':'ACC 信息','acc-info-title-en':'ACC CLAIM DETAILS',
+    'acc-info-sub':'请填写您的 ACC 保单信息',
+    'acc-card-label':'ACC 保单信息',
+    'lbl-doa':'受伤日期','ph-acc45':'例: AA12345 或 12345AA',
+    'lbl-reason':'受伤原因','ph-reason':'例: 跌倒、运动受伤、交通事故...',
+    'btn-submit':'提交登记',
+    'book-title':'预约时间','book-title-en':'BOOK APPOINTMENT',
+    'book-notice-1':'请先确认您已在本系统中登记了您的个人信息。',
+    'book-notice-2':'请输入您的姓名和出生日期进行验证。',
+    'book-notice-3':'如果您新换了手机号，','book-notice-link':'请点击此处',
+    'lbl-your-full-name':'您的姓名','ph-book-name':'例：张三 或 San Zhang','book-name-hint':'请直接输入您的姓名（中文或英文均可）','lbl-dob-verify':'出生日期','dob-year':'年','dob-month':'月','dob-day':'日',
+    'lbl-mobile':'手机号码','mobile-hint':'请输入登记时使用的新西兰手机号',
+    'btn-send-code':'发送验证码',
+    'verify-title':'输入验证码','verify-sub-prefix':'验证码已发送至',
+    'btn-resend':'重新发送','countdown-suffix':'秒后可重新发送',
+    'btn-verify':'验证','slot-hd':'选择时段','btn-confirm-book':'确认预约',
+    'slot-taken':'已占用','no-slots':'该日无可用时段','legend-avail':'可选时段','legend-taken':'已被占用（不可选）',
+    'verified-ok':'✅ 验证成功，欢迎',
+    'change-ph-title':'更换手机号','change-ph-title-en':'CHANGE MOBILE NUMBER',
+    'change-ph-sub':'请先验证您的身份，再绑定新手机号',
+    'identity-label':'身份验证',
+    'lbl-your-name':'您的姓名','ph-your-name':'请输入登记时填写的姓名',
+    'lbl-last4':'旧手机号后四位','ph-last4':'例：5678',
+    'btn-verify-id':'验证身份',
+    'id-verified-msg':'✅ 身份验证成功，请输入您的新手机号码',
+    'lbl-new-mobile':'新手机号码',
+    'btn-confirm-code':'确认验证码',
+    'btn-back-home':'返回首页',
+    'pricing-title':'收费标准','pricing-title-en':'PRICING SCHEDULE',
+    'acc-notice-title':'ACC 使用说明',
+    'acc-notice-body':'本诊所可接受 ACC 保险，但<strong>无法为您开具 ACC</strong>，需您先向<strong>家庭医生</strong>申请。',
+    'weeks-valid':'周内有效','max-treatments':'最多可用次数',
+    'acc-severity':'次数多少和受伤部位及受伤程度相关。',
+    'dr-zhang-cs':'张传生医生','dr-zhang-c':'张超医生','dr-zhang-y':'张宇医生',
+    'initial-consult':'初诊诊费','followup-consult':'复诊诊费','followup-free':'复诊免诊费',
+    'self-pay-note':'自费，不被 ACC 涵盖',
+    'acupuncture':'针灸','bone-setting':'正骨','herbal':'中药',
+    'herbal-price':'按方计费','self-pay-badge':'自费',
+    'without-acc':'无 ACC','with-acc':'有 ACC','self-sign':'自费 + 签字',
+    'processing':'处理中，请稍候...',
+    'cal-heads':['日','一','二','三','四','五','六'],
+    'months':['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'],
+    'reg-success-title':'登记成功！','reg-success-body-prefix':'欢迎，',
+    'reg-success-body-suffix':'！您的信息已提交。',
+    'book-success-title':'预约成功！','book-success-body':'您的预约已确认，诊所会在日历中看到。',
+    'lbl-name':'姓名','lbl-phone2':'电话','lbl-acc':'ACC号码','lbl-doa2':'受伤日期',
+    'lbl-date':'日期','lbl-time':'时间',
+    'phone-updated':'✅ 手机号已更新，正在进入预约页面...',
+    'ph-updated-welcome':'✅ 验证成功，手机号已更新',
+  },
+  en: {
+    'clinic-name':'Beijing Zewutang TCM Clinic','self-service':'Patient Self-Service',
+    'welcome-h2':'Welcome','welcome-sub':'Please choose a service below',
+    'pricing-card-h':'Pricing','pricing-card-p':'ACC info & consultation fees',
+    'newpt-card-h':'New Patient','newpt-card-p':'Register your personal information',
+    'book-card-h':'Book Appointment','book-card-p':'View available slots and book a visit',
+    'back':'Back',
+    'newpt-title':'New Patient Registration','newpt-title-en':'NEW PATIENT REGISTRATION',
+    'newpt-choice-sub':'Please select your situation',
+    'acc-yes-h':'I have ACC coverage','acc-yes-p':'I have an ACC-approved claim number',
+    'acc-no-h':'No ACC coverage','acc-no-p':'Self-pay visit, personal info only',
+    'personal-title':'Personal Information','personal-title-en':'PERSONAL INFORMATION',
+    'personal-sub-acc':'Step 1/2: Please fill in your basic details',
+    'personal-sub-noACC':'Please fill in your basic details',
+    'personal-card-label':'Personal Details',
+    'lbl-family-name':'Family Name','lbl-first-name':'First Name',
+    'lbl-gender':'Gender','lbl-dob':'Date of Birth (DD/MM/YYYY)',
+    'lbl-phone':'Phone','lbl-address':'Address (optional)','lbl-email':'Email (optional)',
+    'ph-family-name':'Zhang','ph-first-name':'San','ph-mobile':'021 xxx xxxx',
+    'ph-addr':'Street address, Auckland',
+    'opt-gender-default':'— Please select —','opt-male':'Male','opt-female':'Female',
+    'phone-hint':'NZ mobile number',
+    'btn-next':'Next',
+    'acc-info-title':'ACC Information','acc-info-title-en':'ACC CLAIM DETAILS',
+    'acc-info-sub':'Please fill in your ACC claim details',
+    'acc-card-label':'ACC Claim Details',
+    'lbl-doa':'Date of Accident','ph-acc45':'e.g. AA12345 or 12345AA',
+    'lbl-reason':'Reason for Injury','ph-reason':'e.g. Fall, sports injury, motor accident...',
+    'btn-submit':'Submit Registration',
+    'book-title':'Book Appointment','book-title-en':'BOOK APPOINTMENT',
+    'book-notice-1':'Please ensure you have registered your personal information in this system.',
+    'book-notice-2':'Enter your name and date of birth to verify.',
+    'book-notice-3':'If you have a new mobile number, ','book-notice-link':'click here',
+    'lbl-your-full-name':'Your Name','ph-book-name':'e.g. Zhang San or John Smith','book-name-hint':'Enter your name in Chinese or English','lbl-dob-verify':'Date of Birth','dob-year':'Year','dob-month':'Month','dob-day':'Day',
+    'lbl-mobile':'Mobile Number','mobile-hint':'NZ mobile number used at registration',
+    'btn-send-code':'Send Code',
+    'verify-title':'Enter Verification Code','verify-sub-prefix':'Code sent to',
+    'btn-resend':'Resend','countdown-suffix':'seconds until resend',
+    'btn-verify':'Verify','slot-hd':'Select a Time Slot','btn-confirm-book':'Confirm Booking',
+    'slot-taken':'Taken','no-slots':'No available slots on this day','legend-avail':'Available','legend-taken':'Already booked',
+    'verified-ok':'✅ Verified — Welcome,',
+    'change-ph-title':'Change Mobile Number','change-ph-title-en':'CHANGE MOBILE NUMBER',
+    'change-ph-sub':'Please verify your identity before updating your number',
+    'identity-label':'Identity Verification',
+    'lbl-your-name':'Your Name','ph-your-name':'Name used at registration',
+    'lbl-last4':'Last 4 digits of old number','ph-last4':'e.g. 5678',
+    'btn-verify-id':'Verify Identity',
+    'id-verified-msg':'✅ Identity verified. Please enter your new mobile number.',
+    'lbl-new-mobile':'New Mobile Number',
+    'btn-confirm-code':'Confirm Code',
+    'btn-back-home':'Back to Home',
+    'pricing-title':'Pricing Schedule','pricing-title-en':'PRICING SCHEDULE',
+    'acc-notice-title':'ACC Information',
+    'acc-notice-body':'We accept ACC but <strong>cannot issue ACC claims</strong>. Please obtain one from your <strong>GP</strong> first.',
+    'weeks-valid':'weeks valid','max-treatments':'max treatments',
+    'acc-severity':'Number of treatments depends on injury type and severity.',
+    'dr-zhang-cs':'Dr. Chuansheng Zhang','dr-zhang-c':'Dr. Chao Zhang','dr-zhang-y':'Dr. Yu Zhang',
+    'initial-consult':'Initial Consultation','followup-consult':'Follow-up Consultation','followup-free':'Follow-up Free',
+    'self-pay-note':'Self-pay, not covered by ACC',
+    'acupuncture':'Acupuncture','bone-setting':'Bone-setting','herbal':'Herbal Medicine',
+    'herbal-price':'Priced by prescription','self-pay-badge':'Self-pay',
+    'without-acc':'Without ACC','with-acc':'With ACC','self-sign':'Co-pay + signature',
+    'processing':'Processing, please wait...',
+    'cal-heads':['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+    'months':['January','February','March','April','May','June','July','August','September','October','November','December'],
+    'reg-success-title':'Registration Successful!','reg-success-body-prefix':'Welcome, ',
+    'reg-success-body-suffix':'! Your information has been submitted.',
+    'book-success-title':'Booking Confirmed!','book-success-body':'Your appointment has been confirmed.',
+    'lbl-name':'Name','lbl-phone2':'Phone','lbl-acc':'ACC No.','lbl-doa2':'Date of Accident',
+    'lbl-date':'Date','lbl-time':'Time',
+    'phone-updated':'✅ Number updated. Redirecting to booking...',
+    'ph-updated-welcome':'✅ Verified — number updated',
+  }
 };
 
-// 十二长生起始地支（对天干）
-const CHANGSHENG_START = {
-  '甲':2, '乙':6, '丙':2, '丁':10, '戊':2, '己':10,
-  '庚':8, '辛':0, '壬':8, '癸':2
+let curLang = 'zh';
+function T(key) { return STRINGS[curLang][key] ?? STRINGS.zh[key] ?? key; }
+
+function applyLang() {
+  // text content
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    const val = T(key);
+    if(val !== undefined) el.textContent = val;
+  });
+  // innerHTML (for bold tags etc)
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const key = el.dataset.i18nHtml;
+    const val = T(key);
+    if(val !== undefined) el.innerHTML = val;
+  });
+  // placeholders
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const key = el.dataset.i18nPh;
+    const val = T(key);
+    if(val !== undefined) el.placeholder = val;
+  });
+  // select options
+  document.querySelectorAll('[data-i18n-opt]').forEach(el => {
+    const key = el.dataset.i18nOpt;
+    const val = T(key);
+    if(val !== undefined) el.textContent = val;
+  });
+  // calendar heads
+  const heads = document.querySelectorAll('#cal-heads-sa .ch');
+  const ch = T('cal-heads');
+  if(ch && heads.length) heads.forEach((h,i) => h.textContent = ch[i]);
+  // html lang attribute
+  document.getElementById('html-root').lang = curLang === 'zh' ? 'zh-CN' : 'en';
+  // lang button
+  document.getElementById('lang-btn').textContent = '中文/En';
+}
+
+function toggleLang() {
+  curLang = curLang === 'zh' ? 'en' : 'zh';
+  applyLang();
+  // Re-render calendar if visible
+  if(G && G.calMonth && G.calMonth.sa) renderCal('sa');
+}
+
+/* ══════════════════════════════════════════════════════════
+   CONFIG
+══════════════════════════════════════════════════════════ */
+const FB_CFG = {
+  apiKey:            "AIzaSyCyhx_TzDpvjT2v7DzhlZEc2bjZEomZ8ZI",
+  authDomain:        "zewutangnz.firebaseapp.com",
+  projectId:         "zewutangnz",
+  storageBucket:     "zewutangnz.firebasestorage.app",
+  messagingSenderId: "618994948679",
+  appId:             "1:618994948679:web:08ad2805a3691b1ad82f62"
 };
-const YANGGAN = ['甲','丙','戊','庚','壬'];
 
-// ==============================
-// 万年历核心：求年柱月柱日柱时柱
-// ==============================
+const DEFAULT_SCHEDULE = {
+  weeklySlots: [{dayOfWeek:2,startHour:9,endHour:17},{dayOfWeek:5,startHour:9,endHour:17}],  /* endHour=17 → slots 9:00-17:00 */
+  blockedRanges: [], slotMinutes: 30, maxDaysAhead: 60
+};
 
-// 节气数据 (简化版，以标准节气时间估算月干支起始)
-// 精确版需要完整节气数据库，这里用近似算法
-const JIEQI_MONTHS = [
-  // 寅月从立春(约2月4日)开始
-  {m:2,d:4},{m:3,d:6},{m:4,d:5},{m:5,d:6},
-  {m:6,d:6},{m:7,d:7},{m:8,d:7},{m:9,d:8},
-  {m:10,d:8},{m:11,d:7},{m:12,d:7},{m:1,d:6}
-];
+/* ══════════════════════════════════════════════════════════
+   WECHAT DETECTION
+══════════════════════════════════════════════════════════ */
+(function detectWeChat(){
+  if(!/MicroMessenger/i.test(navigator.userAgent||'')) return;
+  document.addEventListener('DOMContentLoaded',()=>{
+    const overlay=document.createElement('div');
+    overlay.style.cssText='position:fixed;inset:0;background:#fff;z-index:999999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 28px;text-align:center;';
 
-function getSolarYear(year, month, day) {
-  // 返回干支年：以立春(约2月4日)为界换年
-  let y = year;
-  if (month < 2 || (month === 2 && day < 4)) y--;
-  return y;
-}
+    // 手写风箭头：fixed定位在页面最右上角，指向右上
+    const arrow=document.createElement('svg');
+    arrow.setAttribute('width','90');
+    arrow.setAttribute('height','90');
+    arrow.setAttribute('viewBox','0 0 90 90');
+    arrow.setAttribute('fill','none');
+    arrow.setAttribute('xmlns','http://www.w3.org/2000/svg');
+    arrow.style.cssText='position:fixed;top:6px;right:6px;z-index:1000000;pointer-events:none;';
+    arrow.innerHTML=
+      '<path d="M72 18 C60 28, 38 42, 14 72" stroke="#cc0000" stroke-width="3.5" stroke-linecap="round" fill="none" stroke-dasharray="5 3"/>'
+      +'<path d="M66 10 C68 14, 72 16, 76 14" stroke="#cc0000" stroke-width="3.5" stroke-linecap="round" fill="none"/>'
+      +'<path d="M72 18 C74 12, 76 10, 76 14" stroke="#cc0000" stroke-width="3.5" stroke-linecap="round" fill="none"/>';
 
-function getYearGanzhi(year) {
-  const idx = ((year - 4) % 60 + 60) % 60;
-  return { tg: TIANGAN[idx % 10], dz: DIZHI[idx % 12], idx };
-}
+    overlay.innerHTML=
+      '<div style="font-size:56px;margin-bottom:24px;">📱</div>'
+      +'<div style="font-size:22px;font-weight:800;color:#111;line-height:1.7;margin-bottom:6px;">'
+      +'请点击右上角 <span style="font-size:26px;color:#cc0000;font-weight:900">···</span> →'
+      +'<br>在浏览器中<span style="color:#cc0000;">打开</span>'
+      +'</div>'
+      +'<div style="font-size:14px;color:#888;margin-bottom:28px;line-height:1.6;">方可正常使用本页面的登录功能</div>'
+      +'<div style="width:48px;height:2px;background:#eee;margin-bottom:24px;border-radius:2px;"></div>'
+      +'<div style="font-size:16px;font-weight:700;color:#333;line-height:1.7;margin-bottom:6px;">'
+      +'Tap <span style="font-size:20px;color:#cc0000;font-weight:900">···</span> in the top-right corner'
+      +'<br>→ <span style="color:#cc0000;">Open in Browser</span>'
+      +'</div>'
+      +'<div style="font-size:13px;color:#aaa;line-height:1.6;">Required to use the login feature on this page</div>';
 
-function getMonthGanzhi(year, month, day) {
-  // FIX: 修复月柱undefined bug - lunarMonthIdx=-1时归入腊月(11)
-  const solarYear = getSolarYear(year, month, day);
-  const inputDate = new Date(year, month - 1, day);
-  let lunarMonthIdx = -1;
-
-  for (let i = 0; i < 12; i++) {
-    const jq = JIEQI_MONTHS[i];
-    const jqDate = new Date(year, jq.m - 1, jq.d);
-    let nextDate;
-    if (i < 11) {
-      const nj = JIEQI_MONTHS[i + 1];
-      const njYear = (nj.m === 1) ? year + 1 : year;
-      nextDate = new Date(njYear, nj.m - 1, nj.d);
-    } else {
-      nextDate = new Date(year + 1, 1, 4); // 下一年立春
-    }
-    if (inputDate >= jqDate && inputDate < nextDate) {
-      lunarMonthIdx = i;
-      break;
-    }
-  }
-
-  // 未匹配（极少边界情况）：归入上一年腊月
-  if (lunarMonthIdx === -1) lunarMonthIdx = 11;
-
-  const ygIdx = ((solarYear - 4) % 10 + 10) % 10;
-  // 五虎遁年起月法：甲己→丙寅(2), 乙庚→戊寅(4), 丙辛→庚寅(6), 丁壬→壬寅(8), 戊癸→甲寅(0)
-  const monthTgBase = ((ygIdx % 5) * 2 + 2) % 10;
-  const monthTgIdx = (monthTgBase + lunarMonthIdx) % 10;
-  const monthDzIdx = (2 + lunarMonthIdx) % 12;
-
-  return {
-    tg: TIANGAN[monthTgIdx],
-    dz: DIZHI[monthDzIdx],
-    monthIdx: lunarMonthIdx
-  };
-}
-
-// 日柱：以2000年1月1日(戊午日, idx=54)为基准
-// 锚点：万年历确认1995年4月26日=丁亥日(idx=23)，由此反推2000/1/1的idx=54
-function getDayGanzhi(year, month, day) {
-  const base = new Date(2000, 0, 1);
-  const target = new Date(year, month - 1, day);
-  const diff = Math.round((target - base) / 86400000);
-  const idx = ((54 + diff) % 60 + 60) % 60;
-  return { tg: TIANGAN[idx % 10], dz: DIZHI[idx % 12], idx };
-}
-
-function getHourGanzhi(dayTgIdx, hour) {
-  // 时辰
-  let dzIdx;
-  if (hour === 23 || hour === 0) dzIdx = 0;
-  else dzIdx = Math.floor((hour + 1) / 2) % 12;
-  
-  const tgBase = (dayTgIdx % 5) * 2;
-  const tgIdx = (tgBase + dzIdx) % 10;
-  return { tg: TIANGAN[tgIdx], dz: DIZHI[dzIdx] };
-}
-
-function getChangsheng(tg, dz) {
-  const tgIdx = TIANGAN.indexOf(tg);
-  const dzIdx = DIZHI.indexOf(dz);
-  const startDz = CHANGSHENG_START[tg];
-  const isYang = YANGGAN.includes(tg);
-  let diff;
-  if (isYang) {
-    diff = (dzIdx - startDz + 12) % 12;
-  } else {
-    diff = (startDz - dzIdx + 12) % 12;
-  }
-  return CHANGSHENG[diff];
-}
-
-function getNayin(tgIdx, dzIdx) {
-  const ganzhiIdx = Math.floor(((tgIdx) * 6 + dzIdx * 0.5)) % 30;
-  // 纳音：每两个干支共一纳音
-  const pairIdx = Math.floor(((tgIdx % 10) + (dzIdx % 12)) / 2) % 30;
-  // 简化算法
-  const idx60 = ((tgIdx % 10) * 6) % 30;
-  return NAYIN[Math.abs(tgIdx * 3 + Math.floor(dzIdx/2)) % 30];
-}
-
-// 十神
-function getShishen(riTg, targetTg) {
-  const riWx = WUXING_TG[TIANGAN.indexOf(riTg)];
-  const targetWx = WUXING_TG[TIANGAN.indexOf(targetTg)];
-  const riYy = YINYANG_TG[TIANGAN.indexOf(riTg)];
-  const targetYy = YINYANG_TG[TIANGAN.indexOf(targetTg)];
-  const same = riYy === targetYy;
-  
-  const SHENG = {木:'火',火:'土',土:'金',金:'水',水:'木'};
-  const KE = {木:'土',土:'水',水:'火',火:'金',金:'木'};
-  
-  if (targetWx === riWx) return same ? '比肩' : '劫财';
-  if (SHENG[riWx] === targetWx) return same ? '食神' : '伤官';
-  if (SHENG[targetWx] === riWx) return same ? '偏印' : '正印';
-  if (KE[riWx] === targetWx) return same ? '偏财' : '正财';
-  if (KE[targetWx] === riWx) return same ? '七杀' : '正官';
-  return '';
-}
-
-// ==============================
-// 计算整体命盘
-// ==============================
-
-function calcBazi(year, month, day, hour, gender) {
-  // 早子时（0:00–01:00）：时柱为子时，但日柱以前一天（昨日）计
-  let calcYear = year, calcMonth = month, calcDay = day;
-  if (hour === 0) {
-    const prev = new Date(year, month - 1, day - 1);
-    calcYear  = prev.getFullYear();
-    calcMonth = prev.getMonth() + 1;
-    calcDay   = prev.getDate();
-  }
-
-  const yearGZ  = getYearGanzhi(calcYear);
-  const monthGZ = getMonthGanzhi(calcYear, calcMonth, calcDay);
-  const dayGZ   = getDayGanzhi(calcYear, calcMonth, calcDay);
-  const dayTgIdx = TIANGAN.indexOf(dayGZ.tg);
-  const hourGZ  = getHourGanzhi(dayTgIdx, hour);
-
-  const pillars = [
-    { label: '年柱', ...yearGZ, cs: getChangsheng(dayGZ.tg, yearGZ.dz) },
-    { label: '月柱', ...monthGZ, cs: getChangsheng(dayGZ.tg, monthGZ.dz) },
-    { label: '日柱', ...dayGZ, cs: '日主' },
-    { label: '时柱', ...hourGZ, cs: getChangsheng(dayGZ.tg, hourGZ.dz) }
-  ];
-
-  // 五行统计
-  const wuxingCount = {木:0, 火:0, 土:0, 金:0, 水:0};
-  pillars.forEach(p => {
-    wuxingCount[WUXING_TG[TIANGAN.indexOf(p.tg)]]++;
-    wuxingCount[WUXING_DZ[DIZHI.indexOf(p.dz)]]++;
-    // 藏干
-    CANGGAN[p.dz]?.forEach(cg => {
-      wuxingCount[WUXING_TG[TIANGAN.indexOf(cg)]] += 0.5;
-    });
+    document.body.insertBefore(overlay,document.body.firstChild);
+    document.body.insertBefore(arrow,document.body.firstChild);
   });
-
-  // 大运
-  const dayuns = calcDayun(year, month, day, monthGZ.monthIdx, gender, yearGZ.tg);
-
-  // 十神
-  pillars.forEach((p, i) => {
-    if (i !== 2) {
-      p.shishen_tg = getShishen(dayGZ.tg, p.tg);
-    } else {
-      p.shishen_tg = '日主';
-    }
-    p.shishen_dz = CANGGAN[p.dz]?.[0] ? getShishen(dayGZ.tg, CANGGAN[p.dz][0]) : '';
-    p.canggan = CANGGAN[p.dz] || [];
-  });
-
-  // 空亡
-  const dayIdx = dayGZ.idx;
-  const xunStart = Math.floor(dayIdx / 10) * 10;
-  const kongwang = DIZHI[(xunStart % 12) + 10] + DIZHI[(xunStart % 12) + 11] || '戌亥';
-
-  return { pillars, wuxingCount, dayuns, dayGZ, yearGZ, kongwang, gender };
-}
-
-function calcDayun(year, month, day, monthIdx, gender, yearTg) {
-  // 阳年男、阴年女顺排；阴年男、阳年女逆排
-  const yearTgIdx = TIANGAN.indexOf(yearTg);
-  const isYangYear = yearTgIdx % 2 === 0;
-  const isMale = gender === 'male';
-  const shun = (isYangYear && isMale) || (!isYangYear && !isMale);
-
-  // 起运岁数：从出生日到下一个(顺)或上一个(逆)节气的天数/3
-  // 简化：用固定算法估算，通常3-8岁起运
-  const qiyunAge = 3 + (Math.abs(monthIdx * 3 + day) % 5);
-
-  const dayuns = [];
-  // 月柱干支索引
-  const monthTgBase = (Math.floor(((year - 4) % 10 + 10) % 10 / 1) % 5) * 2;
-  const startTgIdx = TIANGAN.indexOf(TIANGAN[monthTgBase + monthIdx % 10]) ;
-  
-  // 重新计算月柱干支索引
-  const yearSolar = getSolarYear(year, month, day);
-  const ygIdx = ((yearSolar - 4) % 10 + 10) % 10;
-  const mTgBase = (ygIdx % 5) * 2;
-  const mTgIdx = (mTgBase + monthIdx) % 10;
-  const mDzIdx = (2 + monthIdx) % 12;
-
-  for (let i = 1; i <= 10; i++) {
-    let tgIdx, dzIdx;
-    if (shun) {
-      tgIdx = (mTgIdx + i) % 10;
-      dzIdx = (mDzIdx + i) % 12;
-    } else {
-      tgIdx = (mTgIdx - i + 100) % 10;
-      dzIdx = (mDzIdx - i + 120) % 12;
-    }
-    dayuns.push({
-      tg: TIANGAN[tgIdx],
-      dz: DIZHI[dzIdx],
-      startAge: qiyunAge + (i - 1) * 10,
-      endAge: qiyunAge + i * 10 - 1,
-      startYear: year + qiyunAge + (i - 1) * 10
-    });
-  }
-  return { list: dayuns, qiyunAge };
-}
-
-// ==============================
-// 渲染函数
-// ==============================
-
-function wuxingColor(wx) {
-  const map = {木:'#2d7a3a',火:'#aa3030',土:'#8a6010',金:'#3a6888',水:'#2a4a9a'};
-  return map[wx] || '#888';
-}
-
-function renderBasicInfo(bazi, inputData) {
-  const { dayGZ, yearGZ } = bazi;
-  const shengxiao = ['鼠','牛','虎','兔','龙','蛇','马','羊','猴','鸡','狗','猪'];
-  const sx = shengxiao[(inputData.year - 4) % 12];
-  const riWx = WUXING_TG[TIANGAN.indexOf(dayGZ.tg)];
-  const riYy = YINYANG_TG[TIANGAN.indexOf(dayGZ.tg)];
-  
-  document.getElementById('basicInfo').innerHTML = `
-    <div class="info-item">
-      <div class="info-label">命主</div>
-      <div class="info-value">${inputData.name || '（未填）'}</div>
-    </div>
-    <div class="info-item">
-      <div class="info-label">性别</div>
-      <div class="info-value">${inputData.gender === 'male' ? '男' : '女'}</div>
-    </div>
-    <div class="info-item">
-      <div class="info-label">出生</div>
-      <div class="info-value" style="font-size:14px">${inputData.year}年${inputData.month}月${inputData.day}日</div>
-    </div>
-    <div class="info-item">
-      <div class="info-label">生肖</div>
-      <div class="info-value">${sx}</div>
-    </div>
-    <div class="info-item">
-      <div class="info-label">日主</div>
-      <div class="info-value" style="color:${wuxingColor(riWx)}">${riYy}${riWx} ${dayGZ.tg}</div>
-    </div>
-    <div class="info-item">
-      <div class="info-label">干支来源</div>
-      <div class="info-value" style="font-size:13px;${inputData.apiVerified ? 'color:#4a9a5a' : 'color:#9a7a2a'}">
-        ${inputData.apiVerified ? '✓ 万年历联网校验' : '⚠ 本地算法（未联网）'}
-      </div>
-    </div>
-  `;
-}
-
-function renderPillars(pillars) {
-  const rows = [
-    { label: '天干', key: 'tg' },
-    { label: '十神', key: 'shishen_tg' },
-    { label: '地支', key: 'dz' },
-    { label: '藏干', key: 'canggan' },
-    { label: '十神', key: 'shishen_dz' },
-    { label: '长生', key: 'cs' },
-    { label: '五行', key: 'wuxing' },
-  ];
-
-  let html = '<div class="pillars-table">';
-  
-  // Header
-  html += '<div class="cell row-label"></div>';
-  pillars.forEach(p => {
-    html += `<div class="cell col-header">${p.label}</div>`;
-  });
-
-  // 天干
-  html += '<div class="cell row-label">天干</div>';
-  pillars.forEach(p => {
-    const wx = WUXING_TG[TIANGAN.indexOf(p.tg)];
-    html += `<div class="cell"><span class="tg-char wuxing-${{'木':'wood','火':'fire','土':'earth','金':'metal','水':'water'}[wx]}">${p.tg}</span><small style="color:var(--text-dim)">${YINYANG_TG[TIANGAN.indexOf(p.tg)]}${wx}</small></div>`;
-  });
-
-  // 十神（天干）
-  html += '<div class="cell row-label">十神</div>';
-  pillars.forEach(p => {
-    html += `<div class="cell"><span style="color:var(--gold-dim);font-size:13px">${p.shishen_tg}</span></div>`;
-  });
-
-  // 地支
-  html += '<div class="cell row-label">地支</div>';
-  pillars.forEach(p => {
-    const wx = WUXING_DZ[DIZHI.indexOf(p.dz)];
-    html += `<div class="cell"><span class="tg-char wuxing-${{'木':'wood','火':'fire','土':'earth','金':'metal','水':'water'}[wx]}">${p.dz}</span><small style="color:var(--text-dim)">${YINYANG_DZ[DIZHI.indexOf(p.dz)]}${wx}</small></div>`;
-  });
-
-  // 藏干
-  html += '<div class="cell row-label">藏干</div>';
-  pillars.forEach(p => {
-    const cg = p.canggan || [];
-    html += `<div class="cell" style="font-size:13px;color:var(--text-dim)">${cg.join(' ')}</div>`;
-  });
-
-  // 十神（地支藏干）
-  html += '<div class="cell row-label">十神</div>';
-  pillars.forEach(p => {
-    html += `<div class="cell"><span style="color:var(--text-faint);font-size:12px">${p.shishen_dz}</span></div>`;
-  });
-
-  // 长生十二宫
-  html += '<div class="cell row-label">长生</div>';
-  pillars.forEach(p => {
-    html += `<div class="cell" style="font-size:12px;color:var(--text-dim)">${p.cs}</div>`;
-  });
-
-  html += '</div>';
-  document.getElementById('pillarsTable').innerHTML = html;
-}
-
-function renderWuxing(wuxingCount) {
-  const total = Object.values(wuxingCount).reduce((a,b) => a+b, 0);
-  const items = [
-    {name:'木', color:'#2d7a3a', count: wuxingCount['木']},
-    {name:'火', color:'#aa3030', count: wuxingCount['火']},
-    {name:'土', color:'#8a6010', count: wuxingCount['土']},
-    {name:'金', color:'#3a6888', count: wuxingCount['金']},
-    {name:'水', color:'#2a4a9a', count: wuxingCount['水']},
-  ];
-
-  // FIX 7: Bars with explicit inline background-color + show percentage
-  let barsHtml = '';
-  items.forEach(item => {
-    const pct = total > 0 ? Math.round(item.count / total * 100) : 0;
-    barsHtml += `
-      <div class="bar-item">
-        <div class="bar-label" style="color:${item.color}">${item.name}</div>
-        <div class="bar-track">
-          <div class="bar-fill" style="width:${pct}%;background-color:${item.color};height:100%;"></div>
-        </div>
-        <div class="bar-pct">${pct}%</div>
-      </div>
-    `;
-  });
-  document.getElementById('wuxingBars').innerHTML = barsHtml;
-
-  // FIX 6: Pentagon SVG - labels placed at labelR=r+22 to avoid overlap
-  // SVG viewBox 200x200, cx=100,cy=100, r=72 (leaves room for labels at r+22=94)
-  const cx = 100, cy = 100, r = 72, labelR = 94;
-  const angles = [-90, -18, 54, 126, 198];
-
-  const outerPts = angles.map(a => {
-    const rad = a * Math.PI / 180;
-    return `${(cx + r * Math.cos(rad)).toFixed(1)},${(cy + r * Math.sin(rad)).toFixed(1)}`;
-  }).join(' ');
-
-  // Data polygon: min radius 8 so always visible
-  const dataCoords = items.map((item, i) => {
-    const ratio = total > 0 ? item.count / (total / 5 * 2.5) : 0;
-    const pr = Math.max(8, Math.min(r * ratio, r));
-    const rad = angles[i] * Math.PI / 180;
-    return { x: (cx + pr * Math.cos(rad)).toFixed(1), y: (cy + pr * Math.sin(rad)).toFixed(1) };
-  });
-
-  const dataPts = dataCoords.map(p => `${p.x},${p.y}`).join(' ');
-
-  let svgHtml = '';
-
-  // Grid rings at 1/3, 2/3, 1
-  [1/3, 2/3, 1].forEach(f => {
-    const gPts = angles.map(a => {
-      const rad = a * Math.PI / 180;
-      return `${(cx + r*f * Math.cos(rad)).toFixed(1)},${(cy + r*f * Math.sin(rad)).toFixed(1)}`;
-    }).join(' ');
-    svgHtml += `<polygon points="${gPts}" fill="none" stroke="rgba(201,168,76,${f===1?0.2:0.08})" stroke-width="1"/>`;
-  });
-
-  // Axis lines
-  angles.forEach(a => {
-    const rad = a * Math.PI / 180;
-    svgHtml += `<line x1="${cx}" y1="${cy}" x2="${(cx+r*Math.cos(rad)).toFixed(1)}" y2="${(cy+r*Math.sin(rad)).toFixed(1)}" stroke="rgba(201,168,76,0.12)" stroke-width="1"/>`;
-  });
-
-  // Data area
-  svgHtml += `<polygon points="${dataPts}" fill="rgba(201,168,76,0.18)" stroke="rgba(201,168,76,0.7)" stroke-width="1.5"/>`;
-  dataCoords.forEach(p => {
-    svgHtml += `<circle cx="${p.x}" cy="${p.y}" r="3" fill="rgba(201,168,76,0.8)"/>`;
-  });
-
-  // Labels at labelR - NO overlap with data area since labelR > r
-  items.forEach((item, i) => {
-    const rad = angles[i] * Math.PI / 180;
-    const lx = (cx + labelR * Math.cos(rad)).toFixed(1);
-    const ly = (cy + labelR * Math.sin(rad) + 5).toFixed(1);
-    svgHtml += `<text x="${lx}" y="${ly}" text-anchor="middle" fill="${item.color}" font-size="14" font-family="'Noto Serif SC','SimSun',serif" font-weight="600">${item.name}</text>`;
-  });
-
-  document.getElementById('pentagonChart').innerHTML = svgHtml;
-}
-
-function renderDayun(dayuns, birthYear) {
-  const currentYear = new Date().getFullYear();
-  let html = '';
-  dayuns.list.forEach(dy => {
-    const isCurrent = dy.startYear <= currentYear && dy.startYear + 10 > currentYear;
-    html += `
-      <div class="dayun-item ${isCurrent ? 'current' : ''}">
-        <div class="dayun-age">${dy.startAge}–${dy.endAge}岁</div>
-        <div class="dayun-gz">
-          <span style="color:${wuxingColor(WUXING_TG[TIANGAN.indexOf(dy.tg)])}">${dy.tg}</span>
-          <span style="color:${wuxingColor(WUXING_DZ[DIZHI.indexOf(dy.dz)])}">${dy.dz}</span>
-        </div>
-        <div style="font-size:11px;color:var(--text-faint)">${dy.startYear}年起</div>
-      </div>
-    `;
-  });
-  document.getElementById('dayunList').innerHTML = html;
-
-  // 流年：显示最近10年
-  const GANZHIS = [];
-  for (let y = currentYear - 2; y <= currentYear + 7; y++) {
-    const gz = getYearGanzhi(y);
-    GANZHIS.push({ year: y, ...gz });
-  }
-  
-  let lyHtml = '<div style="font-size:12px;color:var(--text-faint);letter-spacing:3px;margin-bottom:12px">— 流年 —</div>';
-  GANZHIS.forEach(gy => {
-    const isCY = gy.year === currentYear;
-    lyHtml += `
-      <div class="liuyear-item ${isCY ? 'current-year' : ''}">
-        <div class="liuyear-year">${gy.year}</div>
-        <div class="liuyear-gz" style="color:${wuxingColor(WUXING_TG[TIANGAN.indexOf(gy.tg)])}">${gy.tg}${gy.dz}</div>
-      </div>
-    `;
-  });
-  document.getElementById('liuyearGrid').innerHTML = lyHtml;
-}
-
-// ==============================
-// 农历转换核心数据（寿星万年历简化版，覆盖1900-2100）
-// ==============================
-
-// 农历数据：每年4字节 hex
-// 高16位：各月大小（1=大30天，0=小29天），位15对应1月，位14对应2月...
-// 低8位：闰月月份（0=无闰月）
-// 另外首字节最高4位=春节公历月，次4位=春节公历日
-const LUNAR_INFO = [
-  0x04AE53,0x0A5748,0x5526BD,0x0D2650,0x0D9544,0x46AAB9,0x056A4D,0x09AD42,0x24AEB6,0x04AE4A,//1900-1909
-  0x6AA550,0x0B5544,0x0AD5B8,0x056C4D,0x0B6C42,0x699BC6,0x049754,0x04A748,0x6AA5BC,0x0AD550,//1910-1919
-  0x0AB544,0x4BABB8,0x0A974D,0x047642,0x66A9B6,0x056A4A,0x096D50,0x4AADB4,0x04AE48,0x4AE7BC,//1920-1929
-  0x0A4D52,0x0D2546,0x5D52BA,0x0B544E,0x0D6A43,0x296D37,0x095B4B,0x749BC0,0x049754,0x0A4B48,//1930-1939
-  0x5AA6BC,0x0AD550,0x052B44,0x4AB5B8,0x0A574D,0x052642,0x6664B6,0x0D624A,0x0EA650,0x56D4A5,//1940-1949
-  0x05AA49,0x4AB5BD,0x0A5652,0x052646,0x5D9ABA,0x0D624E,0x0DA543,0x755AB7,0x056A4C,0x0A6D41,//1950-1959
-  0x24AEB5,0x04AE4A,0x6AA5BE,0x0A5252,0x0B2546,0x5B52BB,0x0B544F,0x0B6A43,0x699BD7,0x049751,//1960-1969
-  0x04A745,0x5AA7B9,0x0AD54E,0x056A43,0x4AADB7,0x09AD4C,0x74AEB1,0x04AE46,0x0A4EB9,0x6A4D4E,//1970-1979
-  0x0A1642,0x5D25B6,0x0D524B,0x0DA53F,0x66AA53,0x056D48,0x04AE3C,0x4AE7B0,0x0A4D45,0x5AA5B9,//1980-1989
-  0x0B244D,0x0AD442,0x6ADA36,0x055249,0x056D3D,0x4AB5B1,0x096D46,0x24ADBA,0x04AB4E,0x04A543,//1990-1999
-  0x5AA5B7,0x0AD54C,0x056A40,0x4AB5B4,0x0A5748,0x652ABC,0x0D2650,0x0D5244,0x5DD4B8,0x0DA54D,//2000-2009
-  0x056A43,0x49B5B7,0x04B64B,0x04AE40,0x6AA4B4,0x0A5248,0x4B25BC,0x0B5450,0x0B6A44,0x699BB8,//2010-2019
-  0x055B4D,0x04AB43,0x64A5B6,0x0AD54A,0x055A4E,0x4ABA43,0x0A5748,0x652ABC,0x0D2650,0x0EA545,//2020-2029
-  0x56D4B9,0x05AA4D,0x04AB42,0x4AAB36,0x0A574B,0x5526BF,0x0D2653,0x0D5247,0x5DAA3B,0x0DA54F,//2030-2039
-  0x056A44,0x49ADB8,0x04AD4C,0x04AE41,0x6AA5B5,0x0A524A,0x4B253D,0x0B5452,0x0B6A47,0x699BBB,//2040-2049
-];
-
-function getLunarYearData(y) {
-  return LUNAR_INFO[y - 1900] || 0;
-}
-
-function getLunarLeapMonth(y) {
-  return getLunarYearData(y) & 0xf;
-}
-
-function getLunarLeapDays(y) {
-  const lm = getLunarLeapMonth(y);
-  if (!lm) return 0;
-  return (getLunarYearData(y) & 0x10000) ? 30 : 29;
-}
-
-function getLunarMonthDays(y, m) {
-  return (getLunarYearData(y) & (0x10000 >> m)) ? 30 : 29;
-}
-
-function getLunarYearDays(y) {
-  let sum = 348;
-  for (let i = 0x8000; i > 0x8; i >>= 1) {
-    sum += (getLunarYearData(y) & i) ? 1 : 0;
-  }
-  return sum + getLunarLeapDays(y);
-}
-
-// 农历春节对应的公历日期（通过数据包头计算）
-function getLunarYearOffset(y) {
-  const d = getLunarYearData(y);
-  // 高24位包含春节月日
-  const springMonth = (d >> 20) & 0xf || 1;
-  const springDay = (d >> 16) & 0xf || 1;
-  // 简化：直接用已知春节数据
-  return { month: springMonth, day: springDay };
-}
-
-// 公历转农历（核心算法）
-function solar2lunar(y, m, d) {
-  // 基准：1900年1月31日 = 农历1900年正月初一
-  const baseDate = new Date(1900, 0, 31);
-  const objDate = new Date(y, m - 1, d);
-  let offset = Math.round((objDate - baseDate) / 86400000);
-
-  let dayCyl, monCyl, yearCyl;
-  let leap = 0, isLeap = false;
-  let lunarY = 1900, lunarM = 1, lunarD = 1;
-
-  // 找农历年
-  let i;
-  for (i = 1900; i < 2050 && offset > 0; i++) {
-    const daysInYear = getLunarYearDays(i);
-    offset -= daysInYear;
-  }
-  if (offset < 0) {
-    offset += getLunarYearDays(--i);
-  }
-  lunarY = i;
-
-  // 找农历月
-  leap = getLunarLeapMonth(i);
-  isLeap = false;
-  let j;
-  for (j = 1; j <= 12 && offset > 0; j++) {
-    if (leap > 0 && j === leap + 1 && !isLeap) {
-      --j;
-      isLeap = true;
-      const leapDays = getLunarLeapDays(lunarY);
-      offset -= leapDays;
-    } else {
-      offset -= getLunarMonthDays(lunarY, j);
-    }
-    if (isLeap && j === leap) isLeap = false;
-  }
-  if (offset === 0 && leap > 0 && j === leap + 1) {
-    if (isLeap) { isLeap = false; } else { isLeap = true; --j; }
-  }
-  if (offset < 0) {
-    offset += isLeap ? getLunarLeapDays(lunarY) : getLunarMonthDays(lunarY, j);
-    --j;
-  }
-  lunarM = j;
-  lunarD = offset + 1;
-
-  return { year: lunarY, month: lunarM, day: lunarD, isLeap };
-}
-
-// 农历转公历（遍历查找）
-function lunar2solar(ly, lm, ld, isLeap) {
-  // 找该农历年正月初一对应公历
-  const baseDate = new Date(1900, 0, 31);
-  let offset = 0;
-  for (let i = 1900; i < ly; i++) {
-    offset += getLunarYearDays(i);
-  }
-  const leapM = getLunarLeapMonth(ly);
-  for (let j = 1; j < lm; j++) {
-    if (leapM === j) offset += getLunarLeapDays(ly);
-    offset += getLunarMonthDays(ly, j);
-  }
-  if (isLeap) offset += getLunarMonthDays(ly, lm);
-  offset += ld - 1;
-  const result = new Date(baseDate.getTime() + offset * 86400000);
-  return { year: result.getFullYear(), month: result.getMonth() + 1, day: result.getDate() };
-}
-
-const LUNAR_MONTH_NAMES = ['正','二','三','四','五','六','七','八','九','十','冬','腊'];
-const LUNAR_DAY_NAMES = ['初一','初二','初三','初四','初五','初六','初七','初八','初九','初十',
-  '十一','十二','十三','十四','十五','十六','十七','十八','十九','二十',
-  '廿一','廿二','廿三','廿四','廿五','廿六','廿七','廿八','廿九','三十'];
-
-function lunarMonthName(m, isLeap) {
-  return (isLeap ? '闰' : '') + LUNAR_MONTH_NAMES[m - 1] + '月';
-}
-
-function lunarDayName(d) {
-  return LUNAR_DAY_NAMES[d - 1] || d + '日';
-}
-
-// ==============================
-// 全局状态
-// ==============================
-
-// 当前使用公历
-let activeTab = 'solar';
-// 日历状态
-let calMode = 'solar'; // 'solar' | 'lunar'
-let calViewYear = 1980, calViewMonth = 1;
-let calSelectMode = 'days'; // 'days' | 'months' | 'years'
-
-// 已选公历日期（主数据源）
-let selectedSolarYear = 1980, selectedSolarMonth = 1, selectedSolarDay = 1;
-
-function switchDateTab(tab) {
-  activeTab = tab;
-  document.querySelectorAll('.date-tab').forEach((el, i) => {
-    el.classList.toggle('active', (i === 0 && tab === 'solar') || (i === 1 && tab === 'lunar'));
-  });
-  document.getElementById('tab-solar').classList.toggle('active', tab === 'solar');
-  document.getElementById('tab-lunar').classList.toggle('active', tab === 'lunar');
-}
-
-// ── 农历↔公历互转：完全依赖万年历API，不使用本地算法 ──────────────────
-
-let _solarDebounce = null;
-let _lunarDebounce = null;
-
-// 公历输入 → 查API获取对应农历
-function onSolarInput() {
-  const y = parseInt(document.getElementById('solar-year').value);
-  const m = parseInt(document.getElementById('solar-month').value);
-  const d = parseInt(document.getElementById('solar-day').value);
-  if (!y || !m || !d || y < 1900 || y > 2100 || m < 1 || m > 12 || d < 1 || d > 31) return;
-  selectedSolarYear = y; selectedSolarMonth = m; selectedSolarDay = d;
-  document.getElementById('solar-sync-hint').textContent = '查询中…';
-  clearTimeout(_solarDebounce);
-  _solarDebounce = setTimeout(async () => {
-    try {
-      const resp = await Promise.race([
-        fetch(`https://api.t1qq.com/api/tool/day/time?y=${y}&m=${m}&d=${d}&h=12`),
-        new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 5000))
-      ]);
-      const data = await resp.json();
-      if (data && data.lunarYear) {
-        const lunarY = parseInt(data.lunarYear);
-        const lunarM = parseInt(data.lunarMonth);
-        const lunarD = parseInt(data.lunarDay);
-        const isLeap = data.lunarLeapMonth && parseInt(data.lunarLeapMonth) === lunarM;
-        const mName = data.lunarMonthName || `${lunarM}月`;
-        const dName = data.lunarDayName || `${lunarD}日`;
-        document.getElementById('solar-sync-hint').textContent = `对应农历：${lunarY}年${mName}${dName}`;
-        document.getElementById('lunar-year').value = lunarY;
-        document.getElementById('lunar-month').value = lunarM;
-        document.getElementById('lunar-day').value = lunarD;
-        document.getElementById('lunar-sync-hint').textContent = `对应公历：${y}年${m}月${d}日`;
-      } else {
-        document.getElementById('solar-sync-hint').textContent = '农历查询失败';
-      }
-    } catch(e) {
-      document.getElementById('solar-sync-hint').textContent = '网络错误，农历无法查询';
-    }
-  }, 600);
-}
-
-// 农历输入 → 查API获取对应公历
-function onLunarInput() {
-  const ly = parseInt(document.getElementById('lunar-year').value);
-  const lm = parseInt(document.getElementById('lunar-month').value);
-  const ld = parseInt(document.getElementById('lunar-day').value);
-  if (!ly || !lm || !ld || ly < 1900 || ly > 2100 || lm < 1 || lm > 13 || ld < 1 || ld > 30) return;
-  document.getElementById('lunar-sync-hint').textContent = '查询中…';
-  clearTimeout(_lunarDebounce);
-  _lunarDebounce = setTimeout(async () => {
-    try {
-      // 用万年历工具页面：通过搜索农历日期对应的公历
-      // API tool/day/time 支持农历查询：传 lunar=1 参数
-      const resp = await Promise.race([
-        fetch(`https://api.t1qq.com/api/tool/day/lunar?y=${ly}&m=${lm}&d=${ld}`),
-        new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 5000))
-      ]);
-      const data = await resp.json();
-      if (data && data.year) {
-        const sy = parseInt(data.year), sm = parseInt(data.month), sd = parseInt(data.day);
-        selectedSolarYear = sy; selectedSolarMonth = sm; selectedSolarDay = sd;
-        document.getElementById('solar-year').value = sy;
-        document.getElementById('solar-month').value = sm;
-        document.getElementById('solar-day').value = sd;
-        document.getElementById('lunar-sync-hint').textContent = `对应公历：${sy}年${sm}月${sd}日`;
-        document.getElementById('solar-sync-hint').textContent = `对应农历：${ly}年${lm}月${ld}日`;
-      } else {
-        // 备用：用公历API逐日搜索（用 time 接口 + lunar 参数）
-        await fallbackLunarSearch(ly, lm, ld);
-      }
-    } catch(e) {
-      await fallbackLunarSearch(ly, lm, ld);
-    }
-  }, 600);
-}
-
-// 备用：先用本地算法估算，再用API验证并修正
-async function fallbackLunarSearch(ly, lm, ld) {
-  document.getElementById('lunar-sync-hint').textContent = '查询中…';
-  try {
-    // 1. 先用本地算法得到估算公历（可能有偏差）
-    let estSolar;
-    try { estSolar = lunar2solar(ly, lm, ld, false); } catch(e) { estSolar = null; }
-    
-    // 2. 在估算结果附近 ±5 天内逐一用API验证
-    const center = estSolar
-      ? new Date(estSolar.year, estSolar.month - 1, estSolar.day)
-      : new Date(ly, 0, 20);
-    
-    for (let offset = -5; offset <= 35; offset++) {
-      const d = new Date(center);
-      d.setDate(center.getDate() + offset);
-      const sy = d.getFullYear(), sm = d.getMonth()+1, sd = d.getDate();
-      const resp = await Promise.race([
-        fetch(`https://api.t1qq.com/api/tool/day/time?y=${sy}&m=${sm}&d=${sd}&h=12`),
-        new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 4000))
-      ]);
-      const data = await resp.json();
-      if (data && parseInt(data.lunarYear)===ly && parseInt(data.lunarMonth)===lm && parseInt(data.lunarDay)===ld) {
-        selectedSolarYear = sy; selectedSolarMonth = sm; selectedSolarDay = sd;
-        document.getElementById('solar-year').value = sy;
-        document.getElementById('solar-month').value = sm;
-        document.getElementById('solar-day').value = sd;
-        document.getElementById('lunar-sync-hint').textContent = `对应公历：${sy}年${sm}月${sd}日`;
-        document.getElementById('solar-sync-hint').textContent = `对应农历：${data.lunarYear}年${data.lunarMonthName}${data.lunarDayName}`;
-        return;
-      }
-    }
-    document.getElementById('lunar-sync-hint').textContent = '未找到匹配公历，请检查农历日期';
-  } catch(e) {
-    document.getElementById('lunar-sync-hint').textContent = '网络错误，无法查询';
-  }
-}
-
-// ==============================
-// 日历弹窗
-// ==============================
-
-function openCal(mode) {
-  calMode = mode;
-  calSelectMode = 'days';
-  if (mode === 'solar') {
-    calViewYear = selectedSolarYear || 1980;
-    calViewMonth = selectedSolarMonth || 1;
-  } else {
-    try {
-      const lunar = solar2lunar(selectedSolarYear, selectedSolarMonth, selectedSolarDay);
-      calViewYear = lunar.year;
-      calViewMonth = lunar.month;
-    } catch(e) {
-      calViewYear = 1980; calViewMonth = 1;
-    }
-  }
-  document.getElementById('calOverlay').classList.add('open');
-  const popup = document.getElementById('calPopup');
-  popup.classList.add('open');
-
-  // Position popup near the button
-  const btn = event.target.closest('.cal-btn');
-  if (btn) {
-    const rect = btn.getBoundingClientRect();
-    const popW = 320;
-    let left = rect.left;
-    if (left + popW > window.innerWidth) left = window.innerWidth - popW - 10;
-    let top = rect.bottom + 8;
-    if (top + 380 > window.innerHeight) top = rect.top - 390;
-    popup.style.left = left + 'px';
-    popup.style.top = top + 'px';
-  }
-
-  renderCal();
-}
-
-function closeCal() {
-  document.getElementById('calOverlay').classList.remove('open');
-  document.getElementById('calPopup').classList.remove('open');
-}
-
-function calNavigate(dir) {
-  if (calSelectMode === 'years') {
-    calViewYear += dir * 12;
-  } else if (calSelectMode === 'months') {
-    calViewYear += dir;
-  } else {
-    calViewMonth += dir;
-    if (calViewMonth > 12) { calViewMonth = 1; calViewYear++; }
-    if (calViewMonth < 1) { calViewMonth = 12; calViewYear--; }
-  }
-  renderCal();
-}
-
-function calToggleMode() {
-  if (calSelectMode === 'days') calSelectMode = 'months';
-  else if (calSelectMode === 'months') calSelectMode = 'years';
-  else calSelectMode = 'days';
-  renderCal();
-}
-
-function renderCal() {
-  const body = document.getElementById('calBody');
-  const title = document.getElementById('calTitle');
-
-  if (calSelectMode === 'years') {
-    const start = Math.floor(calViewYear / 12) * 12;
-    title.textContent = `${start} – ${start + 11}`;
-    let html = '<div class="cal-year-grid">';
-    for (let y = start; y < start + 12; y++) {
-      const sel = (calMode === 'solar' && y === selectedSolarYear) ||
-                  (calMode === 'lunar' && (() => { try { return solar2lunar(selectedSolarYear,selectedSolarMonth,selectedSolarDay).year === y; } catch(e){ return false; } })());
-      html += `<div class="cal-year-item${sel?' selected':''}" onclick="calSelectYear(${y})">${y}</div>`;
-    }
-    html += '</div>';
-    body.innerHTML = html;
-    return;
-  }
-
-  if (calSelectMode === 'months') {
-    title.textContent = `${calViewYear}年`;
-    const CN_MONTHS = ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
-    const LUNAR_MONTHS_CN = ['正月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
-    const names = calMode === 'solar' ? CN_MONTHS : LUNAR_MONTHS_CN;
-    let html = '<div class="cal-month-grid">';
-    for (let m = 1; m <= 12; m++) {
-      const sel = (calMode === 'solar' && calViewYear === selectedSolarYear && m === selectedSolarMonth) ||
-                  (calMode === 'lunar' && (() => { try { const l=solar2lunar(selectedSolarYear,selectedSolarMonth,selectedSolarDay); return l.year===calViewYear && l.month===m; } catch(e){ return false; } })());
-      html += `<div class="cal-month-item${sel?' selected':''}" onclick="calSelectMonth(${m})">${names[m-1]}</div>`;
-    }
-    html += '</div>';
-    body.innerHTML = html;
-    return;
-  }
-
-  // Days view
-  if (calMode === 'solar') {
-    renderSolarCalDays();
-  } else {
-    renderLunarCalDays();
-  }
-}
-
-function calSelectYear(y) { calViewYear = y; calSelectMode = 'months'; renderCal(); }
-function calSelectMonth(m) { calViewMonth = m; calSelectMode = 'days'; renderCal(); }
-
-function renderSolarCalDays() {
-  const title = document.getElementById('calTitle');
-  const CN_MONTHS = ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
-  title.textContent = `${calViewYear}年 ${CN_MONTHS[calViewMonth-1]}`;
-
-  const firstDay = new Date(calViewYear, calViewMonth - 1, 1).getDay();
-  const daysInMonth = new Date(calViewYear, calViewMonth, 0).getDate();
-  const daysInPrev = new Date(calViewYear, calViewMonth - 1, 0).getDate();
-
-  let html = `
-    <div class="cal-grid">
-      <div class="cal-weekdays">
-        ${['日','一','二','三','四','五','六'].map(d=>`<div class="cal-weekday">${d}</div>`).join('')}
-      </div>
-      <div class="cal-days">
-  `;
-
-  // Prev month days
-  for (let i = firstDay - 1; i >= 0; i--) {
-    const d = daysInPrev - i;
-    const lunar = solar2lunar(calViewMonth === 1 ? calViewYear-1 : calViewYear, calViewMonth === 1 ? 12 : calViewMonth-1, d);
-    html += `<div class="cal-day other-month" onclick="calPickSolar(${calViewMonth===1?calViewYear-1:calViewYear},${calViewMonth===1?12:calViewMonth-1},${d})">
-      ${d}<span class="cal-lunar-day">${lunarDayName(lunar.day)}</span></div>`;
-  }
-
-  // Current month
-  for (let d = 1; d <= daysInMonth; d++) {
-    const isSelected = calViewYear === selectedSolarYear && calViewMonth === selectedSolarMonth && d === selectedSolarDay;
-    let lunar;
-    try { lunar = solar2lunar(calViewYear, calViewMonth, d); } catch(e) { lunar = {day:1}; }
-    const lunarLabel = lunar.day === 1 ? lunarMonthName(lunar.month, lunar.isLeap) : lunarDayName(lunar.day);
-    html += `<div class="cal-day${isSelected?' selected':''}" onclick="calPickSolar(${calViewYear},${calViewMonth},${d})">
-      ${d}<span class="cal-lunar-day">${lunarLabel}</span></div>`;
-  }
-
-  // Next month fill
-  const remaining = 42 - firstDay - daysInMonth;
-  for (let d = 1; d <= remaining && remaining < 7; d++) {
-    const lunar = solar2lunar(calViewMonth === 12 ? calViewYear+1 : calViewYear, calViewMonth === 12 ? 1 : calViewMonth+1, d);
-    html += `<div class="cal-day other-month" onclick="calPickSolar(${calViewMonth===12?calViewYear+1:calViewYear},${calViewMonth===12?1:calViewMonth+1},${d})">
-      ${d}<span class="cal-lunar-day">${lunarDayName(lunar.day)}</span></div>`;
-  }
-
-  html += '</div></div>';
-  document.getElementById('calBody').innerHTML = html;
-}
-
-function renderLunarCalDays() {
-  const title = document.getElementById('calTitle');
-  title.textContent = `${calViewYear}年 ${lunarMonthName(calViewMonth, false)}`;
-
-  const daysInMonth = getLunarMonthDays(calViewYear, calViewMonth);
-  // 找本农历月初一对应的公历（用于确定星期）
-  const firstSolar = lunar2solar(calViewYear, calViewMonth, 1, false);
-  const firstDow = new Date(firstSolar.year, firstSolar.month - 1, firstSolar.day).getDay();
-
-  let html = `
-    <div class="cal-grid">
-      <div class="cal-weekdays">
-        ${['日','一','二','三','四','五','六'].map(d=>`<div class="cal-weekday">${d}</div>`).join('')}
-      </div>
-      <div class="cal-days">
-  `;
-
-  // Empty cells before first day
-  for (let i = 0; i < firstDow; i++) {
-    html += `<div class="cal-day empty"></div>`;
-  }
-
-  // Get current lunar from selected solar
-  let selLunar;
-  try { selLunar = solar2lunar(selectedSolarYear, selectedSolarMonth, selectedSolarDay); } catch(e) { selLunar = {}; }
-
-  for (let d = 1; d <= daysInMonth; d++) {
-    const isSelected = selLunar.year === calViewYear && selLunar.month === calViewMonth && selLunar.day === d;
-    const solar = lunar2solar(calViewYear, calViewMonth, d, false);
-    html += `<div class="cal-day${isSelected?' selected':''}" onclick="calPickLunar(${calViewYear},${calViewMonth},${d})">
-      <span style="font-size:11px;color:var(--text-dim)">${solar.month}/${solar.day}</span>
-      <span style="font-size:14px;margin-top:2px">${lunarDayName(d)}</span></div>`;
-  }
-
-  html += '</div></div>';
-  document.getElementById('calBody').innerHTML = html;
-}
-
-function calPickSolar(y, m, d) {
-  selectedSolarYear = y; selectedSolarMonth = m; selectedSolarDay = d;
-  document.getElementById('solar-year').value = y;
-  document.getElementById('solar-month').value = m;
-  document.getElementById('solar-day').value = d;
-  onSolarInput();
-  // Update calendar view
-  calViewYear = y; calViewMonth = m;
-  closeCal();
-}
-
-function calPickLunar(ly, lm, ld) {
-  try {
-    const solar = lunar2solar(ly, lm, ld, false);
-    calPickSolar(solar.year, solar.month, solar.day);
-    // Update lunar fields
-    document.getElementById('lunar-year').value = ly;
-    document.getElementById('lunar-month').value = lm;
-    document.getElementById('lunar-day').value = ld;
-  } catch(e) {}
-  closeCal();
-}
-
-// 初始化：设置默认同步提示
-window.addEventListener('DOMContentLoaded', () => {
-  onSolarInput();
-});
-
-
-// ============================================================
-// Input panel collapse/expand
-// ============================================================
-function collapseInput(name, year, month, day) {
-  const panel = document.getElementById('inputPanel');
-  panel.classList.add('collapsed');
-  const label = name ? `命主：${name}` : `${year}年${month}月${day}日`;
-  document.getElementById('collapsedLabel').textContent = label + '　|　点击重新输入';
-}
-
-function expandInput() {
-  document.getElementById('inputPanel').classList.remove('collapsed');
-}
-
-// ==============================
-// 主流程
-// ==============================
-
-async function analyze() {
-  const name = document.getElementById('name').value;
-  const gender = document.getElementById('gender').value;
-  const year = selectedSolarYear;
-  const month = selectedSolarMonth;
-  const day = selectedSolarDay;
-  const hour = parseInt(document.getElementById('hour').value);
-  const birthplace = document.getElementById('birthplace').value;
-
-  const errEl = document.getElementById('errorMsg');
-  errEl.style.display = 'none';
-
-  if (!year || !month || !day) {
-    errEl.textContent = '请填写完整的出生年月日';
-    errEl.style.display = 'block';
-    return;
-  }
-  if (year < 1900 || year > 2100) {
-    errEl.textContent = '出生年份请填写 1900–2100 之间';
-    errEl.style.display = 'block';
-    return;
-  }
-
-  document.getElementById('analyzeBtn').disabled = true;
-  document.getElementById('loadingText').textContent = '正在推演命盘，稍候片刻…';
-  document.getElementById('results').style.display = 'none';
-  document.getElementById('loading').style.display = 'block';
-
-  // 折叠输入面板
-  collapseInput(name, year, month, day);
-
-  try {
-    // 1. 本地计算八字（用于大运/五行等后续推演）
-    const bazi = calcBazi(year, month, day, hour, gender);
-    const inputData = { name, gender, year, month, day, hour, birthplace };
-
-    // 2. 尝试用万年历API校验年/月/日柱干支（时柱本地算）
-    // API：https://api.t1qq.com/api/tool/day/time（免费，无需key）
-    // 参数: y=年 m=月 d=日 h=时辰(0-23)
-    // 早子时(hour=0)对应的日柱是前一天，API要查前一天
-    const apiDay  = (hour === 0) ? (new Date(year, month-1, day-1)).getDate()  : day;
-    const apiMonth= (hour === 0) ? (new Date(year, month-1, day-1)).getMonth()+1 : month;
-    const apiYear = (hour === 0) ? (new Date(year, month-1, day-1)).getFullYear() : year;
-    const apiHour = (hour === 23 || hour === 0) ? 23 : hour; // 子时传23
-
-    let apiVerified = false;
-    try {
-      const apiUrl = `https://api.t1qq.com/api/tool/day/time?y=${apiYear}&m=${apiMonth}&d=${apiDay}&h=${apiHour}`;
-      const resp = await Promise.race([
-        fetch(apiUrl),
-        new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 4000))
-      ]);
-      if (resp.ok) {
-        const data = await resp.json();
-        if (data && data.baizi) {
-          // API返回的四柱干支（年/月/日），用来覆盖本地计算
-          const bz = data.baizi;
-          // bz.year/month/day 格式如 "乙亥" "庚辰" "丁亥"
-          function parseGZ(s) {
-            if (!s || s.length < 2) return null;
-            const tg = s[0], dz = s[1];
-            if (TIANGAN.includes(tg) && DIZHI.includes(dz)) return { tg, dz };
-            return null;
-          }
-          const apiYear_gz  = parseGZ(bz.year);
-          const apiMonth_gz = parseGZ(bz.month);
-          const apiDay_gz   = parseGZ(bz.day);
-          if (apiYear_gz && apiMonth_gz && apiDay_gz) {
-            // 用API结果覆盖年/月/日柱的天干地支
-            bazi.pillars[0].tg = apiYear_gz.tg;  bazi.pillars[0].dz = apiYear_gz.dz;
-            bazi.pillars[1].tg = apiMonth_gz.tg; bazi.pillars[1].dz = apiMonth_gz.dz;
-            bazi.pillars[2].tg = apiDay_gz.tg;   bazi.pillars[2].dz = apiDay_gz.dz;
-            // 同步更新 dayGZ（影响十神/长生/时柱）
-            bazi.dayGZ.tg = apiDay_gz.tg;
-            bazi.dayGZ.dz = apiDay_gz.dz;
-            bazi.dayGZ.idx = TIANGAN.indexOf(apiDay_gz.tg) + (DIZHI.indexOf(apiDay_gz.dz) >= TIANGAN.indexOf(apiDay_gz.tg) % 2 ? 0 : 0);
-            // 重新计算时柱（时柱依赖日主天干）
-            const newDayTgIdx = TIANGAN.indexOf(apiDay_gz.tg);
-            const hourDzIdx = (hour === 23 || hour === 0) ? 0 : Math.floor((hour + 1) / 2) % 12;
-            const hourTgBase = (newDayTgIdx % 5) * 2;
-            bazi.pillars[3].tg = TIANGAN[(hourTgBase + hourDzIdx) % 10];
-            bazi.pillars[3].dz = DIZHI[hourDzIdx];
-            // 重新计算十神
-            bazi.pillars.forEach((p, i) => {
-              if (i !== 2) p.shishen_tg = getShishen(bazi.dayGZ.tg, p.tg);
-              else p.shishen_tg = '日主';
-              p.shishen_dz = bazi.canggan?.[0] ? getShishen(bazi.dayGZ.tg, (CANGGAN[p.dz]||[])[0]) : '';
-            });
-            apiVerified = true;
-          }
-        }
-      }
-    } catch(apiErr) {
-      console.warn('万年历API查询失败，使用本地算法：', apiErr.message);
-    }
-
-    // 标记是否经过API校验
-    inputData.apiVerified = apiVerified;
-
-    // 3. 渲染全部命盘数据
-    renderBasicInfo(bazi, inputData);
-    renderPillars(bazi.pillars);
-    renderWuxing(bazi.wuxingCount);
-    renderDayun(bazi.dayuns, year);
-
-    // 3. 隐藏 loading，先把命盘结果展示出来
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('results').style.display = 'block';
-    // Scroll to top of results after analysis
-    setTimeout(function(){ document.getElementById('tab-basic').scrollIntoView({behavior:'smooth', block:'start'}); setNavActive('basic'); }, 200);
-
-    // 4. AI 断语单独处理（不阻塞命盘显示）
-  const baziStr = bazi.pillars.map(p => `${p.label}[${p.tg}${p.dz}]`).join(' ');
-  const wxStr   = Object.entries(bazi.wuxingCount).map(([k,v]) => `${k}:${v.toFixed(1)}`).join(' ');
-  
-  // 月令分析辅助
-  const monthPillar = bazi.pillars[1];
-  const monthDzIdx = DIZHI.indexOf(monthPillar.dz);
-  const monthDzName = ['子月（冬·水令）','丑月（冬末·土令）','寅月（春·木令）','卯月（春·木令）',
-    '辰月（春末·土令）','巳月（夏·火令）','午月（夏·火令）','未月（夏末·土令）',
-    '申月（秋·金令）','酉月（秋·金令）','戌月（秋末·土令）','亥月（冬·水令）'][monthDzIdx];
-  const cangganMonth = (CANGGAN[monthPillar.dz] || []).join('、');
-  const dayGZInfo = `日主${bazi.dayGZ.tg}（${WUXING_TG[TIANGAN.indexOf(bazi.dayGZ.tg)]}·${YINYANG_TG[TIANGAN.indexOf(bazi.dayGZ.tg)]}）`;
-
-    // 滚动到结果区
-    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-    document.getElementById('aiContent').innerHTML = '<span style="color:var(--text-faint)">正在推演断语，稍候…</span>';
-    callAI({ name, gender, year, month, day, hour, birthplace, bazi, baziStr, wxStr, monthDzName, cangganMonth, dayGZInfo });
-    // 注意：callAI 不 await，让命盘立即可见，AI 内容异步填入
-
-  } catch(e) {
-    console.error(e);
-    errEl.textContent = '推演失败：' + e.message;
-    errEl.style.display = 'block';
-    expandInput();
-    document.getElementById('loading').style.display = 'none';
-  } finally {
-    document.getElementById('analyzeBtn').disabled = false;
-  }
-}
-
-async function callAI({ name, gender, year, month, day, hour, birthplace, bazi, baziStr, wxStr, monthDzName, cangganMonth, dayGZInfo }) {
-
-  const genderStr = gender === 'male' ? '男' : '女';
-  const pillarsDetail = bazi.pillars.map(p => {
-    const cgSS = (p.canggan || []).map(cg => `${cg}(${getShishen(bazi.dayGZ.tg, cg)})`).join('、');
-    return `${p.label}：${p.tg}${p.dz}　天干十神[${p.shishen_tg}]　藏干[${cgSS || '无'}]　长生[${p.cs}]`;
-  }).join('\n');
-
-  const dayunStr = bazi.dayuns.list.slice(0,8).map(d => {
-    const tgSS = getShishen(bazi.dayGZ.tg, d.tg);
-    const dzMainCG = CANGGAN[d.dz]?.[0];
-    const dzSS = dzMainCG ? getShishen(bazi.dayGZ.tg, dzMainCG) : '';
-    return `${d.startAge}岁(${d.startYear})：${d.tg}${d.dz}[干${tgSS}${dzSS?'·支'+dzSS:''}]`;
-  }).join('　');
-
-  const currentYear   = new Date().getFullYear();
-  const currentYearGZ = getYearGanzhi(currentYear);
-  
-  // 当前大运
-  const currentDayun = bazi.dayuns.list.find(d => d.startYear <= currentYear && d.startYear + 10 > currentYear) 
-    || bazi.dayuns.list[0];
-  const currentDayunSS_tg = currentDayun ? getShishen(bazi.dayGZ.tg, currentDayun.tg) : '';
-  const currentDayunMain = currentDayun ? (CANGGAN[currentDayun.dz]?.[0] || '') : '';
-  const currentDayunSS_dz = currentDayunMain ? getShishen(bazi.dayGZ.tg, currentDayunMain) : '';
-  const currentDayunStr = currentDayun ? 
-    `${currentDayun.tg}${currentDayun.dz}运（干${currentDayunSS_tg}·支${currentDayunSS_dz}，${currentDayun.startAge}至${currentDayun.startAge+9}岁）` : '未知';
-
-  const prompt = `你是一位精通子平命理的命师，深研《子平真诠》《碧渊赋》《造微论》《人鉴论》《爱憎赋》《万金赋》《挈要捷驰玄妙诀》《渊源集说》《四言独步》《五行生克赋》《论八字撮要法》《格局生死引用》等经典全书。请以月令用神为纲，逐步推断以下命造，不得以星辰神煞替代格局论断。
-
-命主资料：
-姓名：${name || '未知'}　性别：${genderStr}　出生：${year}年${month}月${day}日${hour}时
-出生地：${birthplace || '未知'}
-
-四柱：${baziStr}
-月令：${monthDzName}（藏干：${cangganMonth}）
-${dayGZInfo}
-${pillarsDetail}
-五行：${wxStr}　空亡：${bazi.kongwang}
-起运：${bazi.dayuns.qiyunAge}岁　大运列表：${dayunStr}
-当前大运：${currentDayunStr}
-当前流年：${currentYear}年${currentYearGZ.tg}${currentYearGZ.dz}（${getShishen(bazi.dayGZ.tg, currentYearGZ.tg)}）
-
-════════════════════════════════
-请依以下八节逐一推断，每节须有实质内容，不得泛言：
-
-【一·提纲用神】
-「先观气节之浅深，后看财官之向背」——先判断节气深浅（月令本气得令程度），再论财官格局走向。
-「宜向之而运背→决之贫贱；宜背之而运向→断之困穷」——用神所喜之方向与大运相背，必贫贱；与大运相顺，虽命格稍差亦可发达。
-专求月令。审月令本气、中气、余气孰当令；逐一核查四柱透干（以透干为清用，透而又会支者尤重），判断用神所取。若月令自有用神，不另立外格；若月令同气（建禄月劫），则于四柱别取财官煞食为用，说明所取之由。
-
-▸ 气候调候优先检查（碧渊赋核心法则，须于格局论断前先行验证）：
-  「丙丁生于冬月，贵乎戊己当头」——火日主生冬，水旺克火，须戊己土隔水护火，否则火熄命危。
-  「庚辛产于夏天，妙乎壬癸得局」——金日主生夏，火旺克金，须壬癸水泄火救金，方成大器。
-  「甲乙秋生，贵宜玄武（壬癸）」——木秋生金旺克木，须壬癸水印生身护木，透丙丁伤官莫作凶看（甲乙秋生透丙丁，莫作伤看）。
-  「庚辛夏长，妙用勾陈（戊己）」——金夏生火旺，须戊己土生金泄火，戊己夏产露庚辛，当为贵论。
-  「丙丁水多嫌北地，逢戊己反作贵推」——火命水多，戊己土制水护火为救神，反主贵。
-  「庚辛火旺怕南方，遇戊己反成荣断」——金命火旺，戊己土生金泄火为救神，反成荣贵。
-  「火带水多，贵行木运；土逢木旺，荣入火乡」——水多克火宜木运（木泄水生火）；木旺克土宜火运（火泄木生土）。
-  「庚逢水重，水冷金寒喜炎热；戊遇酉多，身衰气锐爱荧煌」——金水寒命喜火暖；戊土被金泄气过重，亦喜火生。
-  气候不调者，指出所缺调候字及需行何方位运补足。
-
-▸ 特殊从化格检查（优先于常规月令格，若符合则单独论断）：
-  「从象」：日主无根，四柱全从一行（从财/从官杀/从印/从食），须无一点日主根气方成；从格喜行从神旺运，最忌日主根气复生。若天干有同类字或有根，不成从格。
-  「化象」：甲己化土、乙庚化金、丙辛化水、丁壬化木、戊癸化火；须化神得时乘令，四支局全；有争合（二甲一己）或妒合（甲己旁有乙）则化不成；化真者名公巨卿，化假者孤儿异姓。「化成禄旺者生，化成禄绝者死」——化格命主，化神所在之长生旺地运则发，化神处绝地运则危。
-  「五行专旺格」（碧渊赋）：亥卯未逢甲乙曲直格；寅午戌遇丙丁炎上格；巳酉丑庚辛从革格；申子辰壬癸润下格；辰戌丑未戊己稼穡格。此类格局喜行旺运，忌克泄太过；「太过无克制者贫贱，不及无生扶者夭折」。
-  若以上皆不符合，则依常规月令取用神。
-
-【二·格局定位与成败】
-点明格局名称（正官格／财格／印格／食神格／七杀格／伤官格／阳刃格／建禄月劫格，或特殊变格）。
-依成格条件逐一验证：
-
-▸ 特殊外格检查（若符合则优先单独论断，不套常规八格）：
-  归禄格（日禄居时，无官星）：「青云得路，专禄带食伤权掌閫外」，生平不喜官星，喜财运助发；归禄带食伤者主掌兵权外务。「日禄归时刑冲破害，见七杀官星空亡冲刃必死」——归禄格最忌刑冲。
-  时上偏财格：别宫忌见比劫，时上偏财须孤，见兄弟则财被分夺。
-  壬骑龙背（阳水叠逢辰位）：壬日多见辰，忌见壬癸巳午；喜行财官运。
-  六乙鼠贵（阴木独遇子时）：乙日子时，喜财官，忌刑冲。
-  井栏叉（庚日全逢润下子申辰）：忌壬癸巳午，时遇子申福减半；喜西方金运。
-  六阴朝阳（六辛日逢戊子时）：嫌午未，运喜西方；季月只作印看。
-  六癸日时逢寅（刑合格）：岁月怕戊己二方。
-  拱禄拱贵：填实则凶（若命局中某字填实了所拱之位，格破）；「飞天拱禄嫌填实，最怕绊神来犯干」。
-  若不符以上外格，则依八格常规论断：
-▸ 官杀清浊辨（万金赋核心法则，须于格局定位前先行检验）：
-  「官杀混杂当寿夭」——官杀双透而无法制化，主寿元有损，贫贱之命。
-  「去官留杀」：命中官杀混杂，以合去或冲去正官而留七杀清格，此后「留杀去官莫逢官」——再逢官星入命则格又杂，凶。
-  「留官去杀」：以合去或冲去七杀而留正官清格，此后「留官去杀莫逢杀」——再逢七杀则官杀又混，凶。
-  「官杀受伤人必夭」：此处"受伤"非指食伤制杀（制化为吉），而指官杀星被冲破、合绊、空亡——命之主干断绝，格局全毁，主夭。
-  清格后须守其纯，岁运不得再来污格，否则祸不旋踵。
-▸ 官格：财印相辅，无伤冲，无官煞混杂则成；逢伤须佩印救之，混煞须合清则成。正官须纯一，月令得之为正，官杀混杂须行制伏（火乡制庚申混杀）方可发福；官印相生最贵，"有官无印非真官"。正官大忌刑冲破害；「正官无印，居官不显」——官印须并全方贵。
-▸ 财格：身强无重劫则成；「财多生官须身健」，身弱财多则财旺生官反克身（财旺生鬼）；正财忌官星（官盗财气）、忌比劫分夺、忌身弱；偏财为众人之财，尤怕比劫分夺，财盛身弱逢官运则双重克身；「财旺生官者，贵少而富多」——财格成局多主富而非贵；「财轻勿经劫地，频见妻灾」。
-▸ 印格：「有官无印非真官，有印无官反成其福」；官印双全最贵；月令得印最紧，时上次之；忌财破印（财伤印主破家离祖）；印绶多而身太旺，须官杀制衡方有用；「印旺官生，必作钧衡之任」——官印并旺主宰执重臣。
-▸ 食神格：食神有气胜财官；食神居先七杀居后衣禄丰厚；身强食旺财透为贵格；忌偏印（枭神/倒食）夺食，忌官星（食神不喜官），忌身弱印多；喜财相生，喜身旺，不喜印绶（印能制食）；「食神有气胜财官，只怕伤残前外截」——食神最忌被枭印夺食或刑冲破害。
-▸ 七杀格：食神制杀上也，印护杀次之；「元有制伏喜行杀旺运，元无制伏喜行制伏运」；制伏太过亦祸（制伏复行制伏，如灰烬无焰）；身旺合杀（贪合忘杀）为贵；忌财党杀，忌印去食护杀；身强有制为偏官（贵），身弱无制为七杀（凶）。「阳刃入官杀，威震边疆」——刃杀俱全主掌兵权。
-▸ 伤官格：须依五行分类断之——
-  「火土伤官」宜伤尽，最忌官星透露，见官祸百端；
-  「金水伤官」要见官，见官反为秀气，带煞尤贵；
-  「木火伤官」官有旺则可用，喜官星根深；
-  「土金伤官」官去返成官，伤官与官互相制衡；
-  「水木伤官」财官两见始为欢，须财官俱全方贵。
-  通则：伤官务要伤尽（留一点则见官即祸）；身弱伤重须佩印；伤官生财转凶为吉；伤官忌见官（金水除外）；运逢官星而无财印救，祸不可言。
-  「腊月伤官喜见官」：丑月（冬末）寒气极重，伤官见官不为祸，反借官星调候，此为特例。
-  「伤官见贵者，官高而财足」——伤官佩印见官，反主官高。
-  「伤官财印俱彰」的解法：身旺者取财为用（用财则去印）；身弱者取印为用（用印则去财）；用财去印、用印去财，方能发福。
-▸ 阳刃格：「杀无刃不显，刃无杀不威」，刃杀俱全非常人命；「劫财阳刃有官杀，台阁之臣」——刃杀俱全且有官者主台阁重臣；宜官煞制刃，财印相随尤贵；「命有刃无杀→逢杀旺运反转为福」；「命有刃有杀→岁运再逢刃杀则大祸」；忌财旺（财生杀），忌三合会刃（刃过旺），忌伤食合官。
-▸ 建禄月劫：孤官无辅不贵；须财印相随，或食伤化劫；「归禄带食伤，权掌閫外」——禄格带食伤主外任掌权。
-▸ 弃命从格（须优先于常规格局判断）：
-  弃命从财：日主无根，财星当令，四柱全从财气，须无一点比印方成；「弃命从财须要会财」——须财局成会；「从财忌杀」——从财格见杀则克身变凶。
-  弃命从杀：日主无根，七杀当令，全局从杀；「弃命从杀须要会杀」；「从杀喜财」——财生杀旺为美；「命逢根气，命殒无猜」——从格命主忌见日主根气复生，逢则必凶。
-  身弱入格：「身弱弃命要无根，官居宰辅」——身弱而从格纯粹者，反主大贵；「主衰身化得其时，位近天廷」——化格得时者同。
-  「身弱徒然入格，纵发早亡」——从格或化格若根气稍存（非真从），纵有一时发达，终主早亡。
-指出该命成格之处与败格隐患，有救应则说明救应之字。带忌者点明忌在何处。
-「格清局正，当为台阁之臣；格局驳杂，居安须虑危」——以格局纯杂定品第大方向。
-
-▸ 宝法四诀连锁验证（格局互克的关键检查）：
-  「逢官看财」：官格中，财是否在场生官？有财则官格富贵双全；无财则官孤无辅，格降一等。
-  「逢财看杀」：财格中，是否有七杀透出？有杀无制则财生杀旺，由富贵之格变贫贱之格；须见食制方解。
-  「逢杀看印」：杀格中，是否有印绶化杀？有印则杀化权贵；无印无食则杀克身，凶。
-  「逢印看官」：印格中，是否有官星生印？有官则官印相生，格局清贵；无官则印格孤立，清而不贵。
-  依上述四诀，对此命格局作一轮复验，补充初步判断的遗漏。
-
-▸ 生克连环链判断（最高层命格诊断）：
-  「富贵链」：财→生官→生印→生身，四环俱通且无冲破，富贵双全，格局最高。
-  「凶穷链」：比劫/财→党杀→攻身，三环俱动且无食制，凶穷两逼，最下格。
-  须识别此命属何种连环结构，以定命格大势。
-  「富莫富于纯粹，贫莫贫于战争；贵莫贵于秀实，贱莫贱于反伤」——以此定命格品质总纲。
-
-▸ 去官留杀 vs 去杀留官辨：
-  「去杀留官」→论福，官纯则贵；
-  「去官留杀」→有威权，以杀化权则贵（须有制/印）；
-  二者皆须看哪一方根气更强、更有制化，不可一律以官为贵、以杀为凶。
-
-▸ 合官/合杀的特殊处理：「合官非为贵取」（官被合则以官论贵须重审，合后官星失用则格降）；「合杀莫作凶推」（杀被合则杀化为闲神，凶势大减，甚至转化为「贪合忘杀」之福）。须重新定格，勿沿用合前之判断。
-
-【三·用神旺衰与喜忌】
-以月令、通根、长生帝旺综合断日主旺衰（注意：阳长生有力，阴长生稍弱；逢库为根，不必逢冲；得比肩不如通根）。明确喜用神与忌神。
-特别注意干支有别：天干动而有为（透出即用），地支静以待用（须会合透清方发动）；支中暗藏之神，逢运透干方见其验。
-
-▸ 「四柱元有病，要去病；不去病不发」：指出此命之「病」（忌神）在何处，「药」（克制忌神之字）是否已存于命，若无则需运补。「无伤不贵，有病者奇」——有病有药者反而成就非凡，无忌神则格局平淡。
-▸ 格局品质口诀（杂论）：「一格二格，非卿即相；三格四格，财官不纯，非隶卒多是九流」——格局越杂越降品。「入格清奇者富，入格不成者贫」；「源清者其流必远，本浊者所作无成」；「八字超群，不贵则当大富；五行驳杂，居安可不虑危」。
-▸ 官杀混杂判断：月令正官而时干透偏官（或反之），则混杂须清；清法：以合去一方（如乙合庚留辛，或丙合辛留庚），或以食伤制杀存官；混而不清者，降格论断。
-▸ 倒食（偏印）克食神：如甲见壬克丙食神，主有始无终、财源屡败、福浅寿薄；用食神格或财格者，须先检查是否有偏印克食之字。
-▸ 劫财辨：五阳见五阴为败财（克妻害子），五阴见五阳为劫财（破耗、防小人，不克妻）；须区分论断。
-▸ 日主强弱总诀：「天元虽旺若无依倚是常人；日主太柔纵遇财官为寒士；身旺无依不迁祖便死外地」；「衰则变官为鬼，旺则化鬼为官」——日主旺衰直接决定官星性质。「日干旺而灾咎寡，财命衰而惆怅多」；「太过宜脱剥，不及喜生扶」。
-▸ 五行生克精义（五行生克赋）：死木宜活水濡；顽金喜火煅；火隔水不能熔金（水多隔绝，金不受克）；金沉水岂能克木（金沉于水，失克木之力）；活木忌埋根之铁（根被金克则折）；水寒不流，木寒不发，土寒不生，火寒不烈，金寒不熔——须调候温养。北金恋水沉形（水多金沉无用）；南木飞灰脱体（火旺木焚失根）；东水旺木以枯源（木盛水缩失生）；西土实金虚己（金多土散）；火因土晦（土多火埋）。五行贵在中和，须以此精义辨别五行质量，而非单以数量多寡论强弱。
-▸ 四言独步要诀（格局精要）：月令见禄不住祖屋，一见财官自然发福；财官临库不冲不发；提纲有用最怕刑冲，冲运则缓冲用则凶；「先财后印反成其福，先印后财反成其辱」——财印在柱中出现的先后顺序决定吉凶方向；「印绶根轻旺中显达，印绶根深旺中不发」——印绶深根反碍发达，须细辨。
-▸ 特殊日柱检查（若适用则注明）：
-  日贵（丁酉、丁亥、癸巳、癸卯）：忌刑冲破害、空亡；主仁德纯粹；刑冲则贵人生怒反祸。
-  日德（甲寅、戊辰、丙辰、庚辰、壬戌）：忌财官、刑冲、魁罡；主慈善福厚；「日德见魁罡，遇刑冲贫寒之士」。
-  魁罡（壬辰、庚戌、戊戌、庚辰）：叠见掌大权；忌财官（一见祸至）；「魁罡见财星，总得地禄食之人」。
-  金神（癸酉、己巳、乙丑时）：「金神入火逢刃杀，贵而无疑」；喜火制入火乡为贵；忌水乡。
-  坐财日（乙巳、戊辰、庚午、辛未、丙子、丁丑、戊寅、己卯、辛巳、壬午、甲申、乙酉等）：日坐财官，妻贤多助，富贵有基。
-
-【四·调候参验】
-结合生月气候审五行寒燥，以「既济」为贵：
-▸ 冬木：冻水不生木，喜火调候；身印两旺透食尤为秀气；透官难必贵。「壬癸路经南域，主健财贵堪图」——水命行南方火运，财贵可期。
-▸ 夏木：木火通明，不利见官；伤官佩印其秀百倍；燥土不灵。「甲乙运入西方，身旺功名可许」——木命行西方金运，身旺则功名有望。
-▸ 三冬水冷金寒：得火相扶，莫作等闲；壬日午位号「禄马同乡」，癸日巳宫乃「财官双美」。「庚逢水重，水冷金寒喜炎热」——金水寒命，火运为救。
-▸ 南方火炎无水：利入北方水运；北方水寒无火：利入南方火运；东方木多：宜西方金运；西方金旺：宜东方木运。
-▸ 夏日火土多：得水相济方贵中和（「水火既济」）；「金坚爱水之相涵，文学堪夸」——金水相逢文学显达。「木旺宜火之光辉，秋闱可试」——木旺透食伤化秀，主文采科名。
-▸ 金水伤官：见官反为秀气，带煞尤贵；调候须辨是否需丙丁暖金。
-▸ 土命夏生火土多：喜水济；冬生水冷：喜火暖。「戊遇酉多，身衰气锐爱荧煌」——戊土被金泄气过旺，需火生土。
-是否需调候字？命中有无？若无，说明缺憾及需行何方位运补足。
-
-【五·大运推断（重点）】
-取运之法：以运之干支配命中八字逐字审其喜忌。须辨：
-① 行干不行支 vs 行支不行干（干动支静，冲年月急、冲日时缓）
-  ▸ 「运贵在于支取」：大运吉凶主要看地支（地支静以待用，支气持久10年）；「岁重向乎干求」：流年吉凶主要看天干（天干动而有为，透出即现）。
-  ▸ 枭印克食神危局：「年时月令有偏印，大运流年逢食神（寿星），灾殃立至」——偏印在命中潜伏，逢运年透出食神时偏印当场克之，食神既去则财无所生，且枭印乘旺，主贫、夭、或乞化。须专项检查此命是否有偏印伏藏。
-② 运逢成格变格：运助用神透干会支则成格，运透忌神出支中伏藏则变格破局。
-③ 美运认定标准（依格局）：
-   官格：运喜印旺身旺，官轻则助官；忌伤食，忌合官，忌重官。
-   财格：财旺生官喜印身旺，忌伤食；财用食生喜财食，忌官印；财带煞喜食伤身旺。
-   印格：印用官喜财，印用伤食喜财，印用煞忌财，印遇财喜劫地。
-   食神格：食生财重则喜帮身；食用煞印喜印旺忌财；食太旺带印喜财忌印官煞。
-   七杀格：元有制伏→喜行杀旺运；元无制伏→喜行制伏运；制伏太过→喜行杀旺补足；食制煞忌印夺食忌财党煞；印护煞喜伤食身旺忌财；煞带官喜制伏清格。
-   伤官格：伤用财财重则喜印比；佩印喜官煞忌财；兼财印财多喜印，印多喜财；用煞印喜印忌财。
-   阳刃：用官喜助官忌伤合；用煞喜助煞，煞重喜身旺印；官煞并出喜制伏。
-   建禄月劫：用官喜印财，忌合官忌煞；用财带食喜财食，逢煞无伤，遇官非福；用煞食制喜助食或助煞。
-
-④ 继善篇救克法则（流年大运互动须检验）：
-   庚辛克甲乙→须丙丁先见方无危；丙丁被庚辛克→壬癸遇之不畏；戊己遇甲乙→须庚辛制之；壬癸克戊己→须甲乙在场有救；壬克丙→须戊字当头；癸克丁→须己来相制；甲以乙妹妻庚（乙合庚）→凶化吉兆；庚得壬男制丙→夭作长年。
-   ▸ 凡流年大运出现上述相克组合，须核查是否有救神在场，有救则减轻，无救则凶必应。
-
-⑤ 群兴论——一生兴衰格局类型判断：
-   「当兴」：日主专旺，用神得令不杂，运步步吉，源清流洁，保始终享福。
-   「崛起」：用神成格而日主无力，早年偃蹇；待运扶日主，用神得力，忽然勃兴。「根甘裔苦，贾谊屈于长沙；源浊流清，太公兴于渭水」——早年根基好晚年反败，或早年困顿晚年得运，均属此类。
-   「聚兴」：日主与杀俱旺，命中无制；待制杀运到，杀化为权，功名显达（出类超群）。
-   「中兴/末兴」：早年穷困，中晚年逢财官旺运或制煞运而崛起；「末兴」尤指用神平生无气，至晚运方成。「运行老而得时，优游晚景」——晚运得势者属此。
-   依此命格局类型，判断属何种兴衰模式，并指出转折关键运。
-   「先强后弱→必先吉后凶；始弱终强→亦始凶终吉」——据此判断此命为顺型还是逆型。
-
-具体推断：
-- 当前大运${currentDayunStr}：此运干支与命局用神忌神关系如何？成格还是变格？是美运还是凶运？理由。
-- 当前流年${currentYear}${currentYearGZ.tg}${currentYearGZ.dz}：流年透何神？对格局用神的冲助合害？近一年吉凶走向。
-- 「生杀坏印」危局检查：若命或运中出现「财克印绶」的组合，须警示——财星克去印绶护身之神，七杀得以无制直攻日主，此为命理中最危险的祸机之一，须明确点出。
-- 「印不逢财人不死」（万金赋至要法则）：印绶为护身之神，只要印绶不被财星克去，纵有凶运亦有缓冲；「若是逢财来害印，堕崖落水恶中亡；为官在任他乡死，作客逢之死路傍」——凶应极速，须专项检查此命印绶是否有被财克的隐患。
-- 「命逢杀运逢财凶而可决；命逢财运逢杀吉亦堪陈」：命有七杀再行财运→财生杀旺必凶；命有财而运逢杀→格局尚有可为。
-- 「财多身弱行财运，此处方知下九台」：日主已弱而财星已多，再行财运→财愈旺而身愈衰，必主衰败落魄。须检查此命是否有此危局。
-- 岁运互动三法则（爱憎赋）：①「岁宜生运，运喜生身；三位相生，一年称意」——流年生大运、大运生日主三者顺生为吉年；②「大运凶而生百祸，流年吉而除千殃」——运凶为主，流年虽吉亦难逆转；③「岁克运凶无气而人离散」——流年克大运，加之无气，主离散破败。
-- 近五至十年整体运势研判（点明何运为关键转折，用群兴论框架定性）。
-- 格局生死引用——逐一检查以下致死危局是否存在于此命：
-  ①「印绶见财，行财运又兼死绝，必入黄泉；如柱有比肩，庶几有解」——印绶被财克而行财运，遇死绝地，极凶；有比肩可稍解。
-  ②「正官见杀及伤官刑冲破害，岁运相并必死」——正官格遭杀混伤冲，岁运同来，主死。
-  ③「正财偏财，见比肩分夺劫财阳刃，又见岁运冲合必死」——财格遭劫刃，岁运冲合，主死。
-  ④「伤官格财旺身弱官杀重见混杂冲刃，岁运又见必死；活则残伤」。
-  ⑤「金多夭折，水盛飘流，木旺则夭，土多痴呆，火多顽愚」——五行太过直接对应体质凶险。
-  若检查到以上危局，须在【大运流年】节明确点出，说明化解之道（比肩、食制、印护等救神是否存在）。
-
-【六·六亲参断】
-宫分：年为祖上，月为父母兄弟门户，日为妻妾己身，时为子孙。
-用神配六亲对应（男命）：正印=母（偏印=偏母/祖父），偏财=父，正财=妻，偏财=妾，比肩=兄姊，劫财=弟妹，七杀=子，正官=女，食神=男孙，伤官=女孙/祖母。
-女命取法：正官=夫，七杀=偏夫，食神=子，伤官=女。
-
-▸ 父（偏财）：偏财临生旺贵人丙丁生助→父贵得力；偏财临死绝杀宫→早岁父亡（父死他乡）；偏财衰墓→父平常无靠；偏财逢败地→父主风流；「财临杀地→父死不归家」；「月中归禄无财官，父丧他邦；年逢禄马被冲破，公亡外郡」——月令归禄无财官者，父早丧他乡。
-▸ 母（正印）：印逢财克→克母（幼岁母离）；「财多印死」→幼年母离祖；印临桃花沐浴→母有外情；印长生→母慈寿长；印临阳刃杀地或绝墓→母不贤或有疾；印绶旺而子少息稀（印多克食神→克子）；「印绶被伤，母年早丧」。
-▸ 妻（正财）：日支妻宫坐财官→妻贤内助；比肩分夺财、财临沐浴桃花→妻妾私通；财多身弱→妻反胜夫；官杀重见→妻招干蛊；财衰败墓绝→妻有疾不贤；日坐空亡→难为妻妾；偏财得位→妾胜于妻；「妻星入墓→必定刑妻」；「暗合财星→妻妾众」；「日逢财时逢劫，妻妾产亡」；「正财偏财见合，妻妾奸淫」；「财星得位，因妻致富成家」。
-▸ 子（七杀/官星）：七杀为男，正官为女；阳日阳时先男，阴日阴时先女；时支七杀（官）所处长生位定子数（长生四子、帝旺五子、衰二子、病一子、死无子、墓夭）；时干配格局喜忌断子贵贱。八字一杀一子、二杀二子、无杀无子。「正官重见，多生女子少生男」；「出现偏财，少爱正妻偏爱妾」；「时值孤虚，其子多饶不肖」。
-▸ 兄弟：「兄多逢弟（比劫旺），宜嗟范子之贫」——比劫多则兄弟分财；「太岁值杀月值伤，弟兄不睦」；「日时禄马长生，妻贤子贵」。
-▸ 女命特诊（命主为女时展开，为男时略）：
-  官为夫（正官），七杀为偏夫；官只喜一位，多则克夫；官杀混杂→夫多或淫贱。
-  伤官见官→克夫再嫁，身心劳役；伤官太重→妨夫，性急多忧；比劫重→姊妹争夫（贪合忘官）。
-  官被合（如乙合庚）→夫不正，招偏房；官星死绝空亡孤寡→孤克之命。
-  「女逢财旺生官，夫权必夺」——女命财旺生官，夫权被夺；「女命伤官定克夫；女遇伤官，归禄得之极贵」——女命伤官归禄格反主极贵。
-  命有天月德→无产厄血光，无淫滥之气；满盘印绶→损子；食神生旺→子嗣宜。
-  依此为女命择其最主要贵格/贱格特征，点明夫星得失及子嗣情况。
-
-简断此命六亲得失要点（父母、妻子各一句，命主为女则专论夫星）。
-
-【七·体质性情与疾病倾向】
-依五行太过不及断体质与易感疾患（以《渊海子平》脏腑对应为据）：
-▸ 天干内腑：甲肝乙胆，丙小肠丁心，戊胃己脾，庚大肠辛肺，壬膀胱癸肾。
-▸ 地支外体：子疝气，丑肚腹，寅臂肢，卯目手，辰背胸，巳面齿，午心腹，未脾胸，申咳疾，酉肝肺，戌背肺，亥头肝。
-▸ 五行克伤致病规律（含金玉赋细化）：
-  木旺金克→肝胆病，筋骨疼痛，头眩目暗，痰喘；木被金克→腰胁之灾；
-  火旺水克→心小肠病，颠哑口疮，潮热发狂，眼暗失明；火被水伤→眼目之疾；
-  土旺木克→脾胃病，膈食翻胃，蛊胀泄泻，痿黄；土木战克→脾胃损伤；
-  金旺火克→大肠肺病，咳嗽喘吐，肠风痔漏，劳怯；金火相刑→心肺喘满；
-  水旺土克→膀胱肾病，遗精白浊，腰疼肾气，伤寒感冒；
-  「支水干头有火遭水克」→腹痞心蒙（支藏水，天干火被水克）；
-  「支火干头有水遇火旺」→内障睛盲（支藏火，天干水受火灼）；
-  「火土烦焦蒸四曜」→发秃眼昏；
-  「身临沐浴之年」→恐愁水厄（沐浴为败地，主水患溺厄）；
-  「生入斗克之年（岁运交战激烈）」→必逢火灾。
-▸ 五行太过亦病（金多水浊、水多木漂、木多火炽、火多土焦、土多金埋）。「木繁而无金断削，纵荣而末岁孤穷；火炎而无水淘溶，纵发而早年夭折」——五行过旺无制，虽有一时之发，终有败象。
-▸ 性情（十神性格核心）：
-  官星→恺悌仁慈、声音和畅、丰姿美秀；印绶→多智慧、丰身慈心；食神→善饮食、体厚讴歌；
-  七杀→势压争斗、急躁如风、爱轩昂扶弱欺强；枭印→始勤终惰、多学少成；
-  伤官伤尽→多艺傲物、颧高眼大、心机深；日德→慈善稳厚；魁罡→严有操持、聪敏；
-  金神→刚断明敏、无欺瞒之心；木盛多仁；土薄寡信；水旺多智；金坚主义；金水聪明好色；水土混杂多愚。
-▸ 五行体象性情（造微论、爱憎赋综合）：
-  「胸襟澄澈」→水济江湖，水旺之命主深沉；「学问渊源」→水居壬癸，主智慧深邃。
-  「慈祥恺悌」→木乘甲乙之乡，甲乙日主木旺者性善仁厚；「眊燥炎阳」→火盛丙丁，急躁偏激。
-  「名高禄重」→乾金早会庚辛，庚辛旺者有魄力威重；「贯朽粟陈」→镇土重亲戊己，土厚者保守积蓄。
-  「甲乙顺而仁慈大量；庚辛亏而果断气刚」——甲乙日主仁厚，庚辛日主刚断。
-  「四柱斗乱则不仁不义，五行相生则为孝为忠；刑战者愚顽，安静者贤俊」——格局纯杂直接决定品性。
-  「心高者魁罡为祸，性顺者六合为祥」——魁罡日主性傲易招祸，六合多者性平和。
-
-依此命五行偏胜，推断：① 脏腑最弱之处，② 一生易感何类疾患，③ 性格主导倾向（结合日干体象）。
-
-【八·格局品第与综合总评】
-以文言命理语句综述：
-① 此命格局属何品第（上上/上/中上/中/中下/下）？
-  判断标准——「八字超群，不贵则当大富」；「五行驳杂，居安可不虑危」；「源清者其流必远，本浊者所作无成」；「三命冠群，不贵即当大富；九宫弱陷，怕凶运大忌凶年」——格局纯粹者高，杂者低；根源浅薄，逢生旺而不荣。
-② 一生大势：何运发达，何运蹇滞，命中关键转折岁运？（群兴论定性：当兴/崛起/聚兴/中兴/末兴）
-  「先强后弱→必先吉后凶；始弱终强→亦始凶终吉」——据此命早年/晚年运程，定性为顺型或逆型兴衰模式。
-  「行运背禄，昔日富而今日贫；命遇旺身，昨日悲而今日笑」——运程背禄则由富转贫，命主旺则由悲转喜。
-③ 富贵贫贱之大略：以成败救应定论，不作泛言。点明属何种连环链结构（富贵链/凶穷链）。
-  「无伤不贵，有病者奇」——无忌神则格局平淡，有病有药者反而成就非凡。点明此命之「病」与「药」各是何字。
-  「财旺生官者贵少而富多；伤官见贵者官高而财足」——按此命格局定性富贵类型。
-④ 最高命格辨：「大贵者用财而不用官」（财生官而以财为主干）；「当权者用杀而不用印」（杀重身强以杀化权）；「劫财阳刃有官杀→台阁之臣；身旺有杀行印绶→权断之官；归禄无官逢食伤→荣而有权」；若此命符合，注明之。
-⑤ 「身旺者宜泄宜伤，身衰者喜扶喜助」——一语点出此命日主调候方向。「不及喜生扶，太过宜脱剥」。
-⑥ 论八字撮要法核对：「用官不可伤；用财不可劫；用印不可破；用食神不可破；用禄不可冲」——以此五条逐一验证此命用神是否受损，受损者降格，无损者升格。
-⑦ 以一句话点出此命最核心的命理特征，并依《造微论》《爱憎赋》性情一语（结合日干体象与十神配合）收束全评。
-语言精炼，约300字，仿古命理文风，有理有据。`;
-
-
-  // ── 通过 Cloudflare Worker 代理调用（服务端请求，无 CORS 问题）────────────
-  const WORKER_URL = "https://bazi.zy94807.workers.dev";
-
-  try {
-    const response = await fetch(WORKER_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt })
-    });
-
-    if (!response.ok) {
-      const err = await response.text();
-      throw new Error("Worker 返回错误: " + err);
-    }
-
-    const data = await response.json();
-    if (!data.result) throw new Error(data.error || "Worker 返回空内容");
-
-    renderAiContent(data.result);
-    // 不改变导航高亮，保持用户当前浏览位置
-
-  } catch(e) {
-    document.getElementById("aiContent").innerHTML =
-      "<div style=\"color:#c08080;line-height:1.8\"><b>断语推演失败</b><br>" + e.message + "</div>";
-  }
-}
-
-
-// ===== SIDEBAR NAV + SCROLL SYNC =====
-// Click nav button → smooth scroll to that section
-function switchTab(name) {
-  const el = document.getElementById('tab-' + name);
-  if (el) {
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-  // Also update active state immediately
-  setNavActive(name);
-}
-
-function setNavActive(name) {
-  document.querySelectorAll('.side-nav-btn').forEach(b => b.classList.remove('active'));
-  const btn = document.querySelector('.side-nav-btn[data-target="tab-' + name + '"]');
-  if (btn) btn.classList.add('active');
-}
-
-// Wire up nav button clicks
-document.addEventListener('DOMContentLoaded', function() {
-  document.querySelectorAll('.side-nav-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      const target = btn.getAttribute('data-target');
-      const name = target.replace('tab-', '');
-      switchTab(name);
-    });
-  });
-});
-
-// Scroll sync: observe which section is in view and highlight nav
-(function() {
-  var observer;
-  function initScrollSync() {
-    const sections = ['tab-basic', 'tab-dayun', 'tab-ai'];
-    const navBtns = {};
-    sections.forEach(function(id) {
-      navBtns[id] = document.querySelector('.side-nav-btn[data-target="' + id + '"]');
-    });
-
-    if (observer) observer.disconnect();
-    observer = new IntersectionObserver(function(entries) {
-      // Find the topmost visible section
-      var best = null, bestY = Infinity;
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          const rect = entry.boundingClientRect;
-          if (rect.top < bestY) { bestY = rect.top; best = entry.target.id; }
-        }
-      });
-      if (best) {
-        sections.forEach(function(id) {
-          if (navBtns[id]) navBtns[id].classList.toggle('active', id === best);
-        });
-      }
-    }, { threshold: 0.15, rootMargin: '-60px 0px -40% 0px' });
-
-    sections.forEach(function(id) {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-  }
-
-  // Re-init when results become visible
-  var resultsEl = document.getElementById('results');
-  if (resultsEl) {
-    var resObs = new MutationObserver(function(muts) {
-      muts.forEach(function(m) {
-        if (m.type === 'attributes' && m.attributeName === 'style') {
-          if (resultsEl.style.display !== 'none') {
-            setTimeout(initScrollSync, 100);
-          }
-        }
-      });
-    });
-    resObs.observe(resultsEl, { attributes: true });
-  }
 })();
 
-// ── AI 断语渲染：果前因后，点击展开/收折 ─────────────────────────────────
-function renderAiContent(rawText) {
-  var el = document.getElementById('aiContent');
-  if (!rawText || !rawText.trim()) {
-    el.innerHTML = '<span style="color:var(--text-faint)">（未获得分析结果）</span>';
-    return;
+/* ══════════════════════════════════════════════════════════
+   FIREBASE INIT
+══════════════════════════════════════════════════════════ */
+let db=null, auth=null, DEMO_MODE=true, _fbInitAttempted=false;
+
+function initFirebase(){
+  if(_fbInitAttempted) return;
+  _fbInitAttempted=true;
+  if(typeof firebase==='undefined'){console.warn('Firebase SDK 未加载，启用演示模式');return;}
+  try{
+    try{firebase.app();}catch(_){firebase.initializeApp(FB_CFG);}
+    db=firebase.firestore(); auth=firebase.auth(); DEMO_MODE=false;
+    console.log('✅ Firebase 已连接');
+  }catch(e){console.warn('Firebase init error:',e.message);DEMO_MODE=true;}
+}
+window.addEventListener('load',()=>{_fbInitAttempted=false;initFirebase();});
+
+/* ══════════════════════════════════════════════════════════
+   GLOBAL STATE
+══════════════════════════════════════════════════════════ */
+const G={
+  patient:null, hasACC:true, schedule:null,
+  calMonth:{sa:new Date()}, selected:{sa:{date:null,time:null}},
+  bookedSlots:{}
+};
+
+/* ══════════════════════════════════════════════════════════
+   UTILITIES
+══════════════════════════════════════════════════════════ */
+function go(id){
+  // Clear registration forms whenever entering new patient flow
+  if(id==='s-new-choice'){
+    clearRegistrationForms();
   }
+  if(id==='s-book-sa'){
+    document.getElementById('book-step-phone').style.display='block';
+    document.getElementById('book-step-code').style.display='none';
+    document.getElementById('book-step-cal').style.display='none';
+    document.getElementById('book-sub-name').style.display='block';
+    document.getElementById('book-sub-phone').style.display='none';
+    document.getElementById('book-send-btn').disabled=false;
+    const bn=document.getElementById('book-name');if(bn)bn.value='';
+    ['book-dob-y','book-dob-m','book-dob-d'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+    document.getElementById('book-ph').value='';
+    document.querySelectorAll('#book-code-inputs input').forEach(i=>i.value='');
+    hideErr('book-name-err');hideErr('book-ph-err');hideErr('book-code-err');
+    _bookConfirmResult=null;
+    if(window._bookRecaptcha){try{window._bookRecaptcha.clear();}catch(_){}window._bookRecaptcha=null;}
+  }
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id)?.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
 
-  var lines = rawText.split('\n');
-  var outMain = '', outDayun = '';
-  var inDayun = false;
-  var dayunKeys = ['大运', '流年', '运程', '运势'];
-  // 去重：防止模型重复输出同一章节
-  var seenSections = {};
+function clearRegistrationForms(){
+  // Clear all personal info fields
+  ['np-fam','np-fir','np-dob','np-ph','np-addr','np-email'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.value='';
+  });
+  const g=document.getElementById('np-gender'); if(g) g.value='';
+  // Clear ACC fields
+  ['na-acc','na-doa','na-reason','na-read'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.value='';
+  });
+  hideErr('np-err'); hideErr('na-err');
+  G._newPersonal=null;
+}
 
-  for (var ri = 0; ri < lines.length; ri++) {
-    var line = lines[ri].trim();
-    if (!line) continue;
+function toast(msg,ms=2800){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('on');setTimeout(()=>el.classList.remove('on'),ms);}
+function block(on){document.getElementById('blocker').classList.toggle('on',on);}
+function fmtDate(inp){let v=inp.value.replace(/\D/g,'');if(v.length>2)v=v.slice(0,2)+'/'+v.slice(2);if(v.length>5)v=v.slice(0,5)+'/'+v.slice(5);inp.value=v.slice(0,10);}
+function validACC(s){const u=(s||'').toUpperCase().trim();return/^[A-Z]{2}\d{5}$/.test(u)||/^\d{5}[A-Z]{2}$/.test(u);}
+function normaliseACC(s){return(s||'').toUpperCase().trim();}
+function validDt(s){return/^\d{2}\/\d{2}\/\d{4}$/.test(s);}
+function isoDate(d){return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+function showErr(boxId,msgId,msg){const b=document.getElementById(boxId);if(msgId)document.getElementById(msgId).textContent=msg;b.style.display='flex';}
+function hideErr(id){const el=document.getElementById(id);if(el)el.style.display='none';}
+function showOK(icon,title,msg,details,autoHome){
+  document.getElementById('ok-icon').textContent=icon;
+  document.getElementById('ok-title').textContent=title;
+  document.getElementById('ok-msg').textContent=msg;
+  const det=document.getElementById('ok-detail');
+  if(details){det.style.display='block';det.innerHTML=Object.entries(details).map(([k,v])=>`<div class="ibr"><span class="l">${k}</span><span class="v">${v}</span></div>`).join('');}
+  else det.style.display='none';
+  go('s-ok');
+  if(autoHome) setTimeout(()=>go('s-welcome'),3000);
+}
 
-    var hm = line.match(/^「(.+?)」(.*)$/);  // unused
-    var hm2 = line.match(/^【(.+?)】(.*)$/);
-    if (hm2) {
-      var title = hm2[1];
-      if (seenSections[title]) continue;
-      seenSections[title] = true;
-      inDayun = dayunKeys.some(function(k){ return title.indexOf(k) >= 0; });
-      var titleHtml = '<div class="ai-section-title">' + title + '</div>';
-      var restHtml = hm2[2].trim() ? (buildItem(hm2[2].trim()) || '') : '';
-      if (inDayun) { outDayun += titleHtml + restHtml; }
-      else         { outMain  += titleHtml + restHtml; }
-      continue;
+/* ══════════════════════════════════════════════════════════
+   NEW PATIENT FLOW
+   多个 ACC 号码设计说明：
+   - 每个 ACC 号码对应一个独立文档（doc ID = ACC号码）
+   - 同一个人可拥有多个 ACC，每次新增 ACC 时重新走首次就诊流程
+   - 通过 ACC 号码去重，不通过姓名/生日去重（允许同一人多条记录）
+   - 无 ACC 患者以手机号为 doc ID，同一手机号只能登记一次
+══════════════════════════════════════════════════════════ */
+function startNewWithACC(){
+  G.hasACC=true;
+  clearRegistrationForms();
+  go('s-new-personal');
+  document.getElementById('personal-sub').textContent=T('personal-sub-acc');
+}
+function startNewNoACC(){
+  G.hasACC=false;
+  clearRegistrationForms();
+  go('s-new-personal');
+  document.getElementById('personal-sub').textContent=T('personal-sub-noACC');
+}
+
+async function personalNext(){
+  hideErr('np-err');
+  const fam=document.getElementById('np-fam').value.trim();
+  const fir=document.getElementById('np-fir').value.trim();
+  const gender=document.getElementById('np-gender').value;
+  const dob=document.getElementById('np-dob').value.trim();
+  const ph=document.getElementById('np-ph').value.trim();
+  const addr=document.getElementById('np-addr').value.trim();
+  const email=document.getElementById('np-email').value.trim();
+  if(!fam){showErr('np-err','np-err-t',curLang==='zh'?'请填写姓（Family Name）':'Please enter your Family Name');return;}
+  if(!fir){showErr('np-err','np-err-t',curLang==='zh'?'请填写名（First Name）':'Please enter your First Name');return;}
+  if(!gender){showErr('np-err','np-err-t',curLang==='zh'?'请选择性别':'Please select your gender');return;}
+  if(!validDt(dob)){showErr('np-err','np-err-t',curLang==='zh'?'出生日期格式错误，应为 DD/MM/YYYY':'Date of birth must be DD/MM/YYYY');return;}
+  if(!ph){showErr('np-err','np-err-t',curLang==='zh'?'请填写联系电话':'Please enter your phone number');return;}
+  if(email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showErr('np-err','np-err-t',curLang==='zh'?'邮箱格式不正确':'Invalid email format');return;}
+
+  G._newPersonal={familyName:fam,firstName:fir,gender,dob,phone:ph,address:addr,email};
+
+  // For no-ACC: check for duplicate before proceeding
+  if(!G.hasACC){
+    if(!DEMO_MODE && db){
+      block(true);
+      try{
+        const docId='NOACCPH_'+ph.replace(/[\s\+\-]/g,'');
+        const snap=await db.collection('patients').doc(docId).get();
+        if(snap.exists){
+          showErr('np-err','np-err-t',curLang==='zh'?'您已经登记过了，请返回上一步':'You have already registered. Please go back.');
+          block(false); return;
+        }
+      }catch(e){
+        // If permission denied, proceed anyway — duplicate check is best-effort
+        console.warn('Duplicate check error:',e.code);
+      }finally{block(false);}
     }
-    var itemHtml = buildItem(line);
-    if (!itemHtml) continue;
-    if (inDayun) { outDayun += itemHtml; }
-    else         { outMain  += itemHtml; }
+    submitNoACC();
+  } else {
+    go('s-new-acc');
   }
+}
 
-  el.innerHTML = outMain;
+async function submitNoACC(){
+  const p=G._newPersonal;
+  block(true);
+  const data={...p,accNumber:null,hasACC:false,createdAt:new Date().toISOString(),source:'patient_portal'};
+  try{
+    if(!DEMO_MODE&&db){
+      const docId='NOACCPH_'+p.phone.replace(/[\s\+\-]/g,'');
+      await Promise.race([
+        db.collection('patients').doc(docId).set(data),
+        new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),10000))
+      ]);
+    }
+    G.patient=data;
+    const name=`${p.firstName} ${p.familyName}`;
+    showOK('✅',
+      T('reg-success-title'),
+      T('reg-success-body-prefix')+name+T('reg-success-body-suffix'),
+      {[T('lbl-name')]:name,[T('lbl-phone2')]:p.phone},
+      true  // auto-redirect home after 3s
+    );
+  }catch(e){
+    if(e.message==='timeout') showErr('np-err','np-err-t',curLang==='zh'?'提交超时，请检查网络':'Submission timed out. Check your connection.');
+    else if(e.code==='permission-denied') showErr('np-err','np-err-t',curLang==='zh'?'您已经登记过了，请返回上一步':'You have already registered. Please go back.');
+    else showErr('np-err','np-err-t',curLang==='zh'?'提交失败（'+e.code+'）':'Submission failed ('+e.code+')');
+  }finally{block(false);}
+}
 
-  var dayunEl  = document.getElementById('aiDayunContent');
-  var dayunSec = document.getElementById('aiDayunSection');
-  if (dayunEl && outDayun) {
-    dayunEl.innerHTML = outDayun;
-    if (dayunSec) dayunSec.style.display = 'block';
-    dayunEl.querySelectorAll('.ai-item.has-yin .ai-guo').forEach(function(g){
-      g.addEventListener('click', function(){ g.closest('.ai-item').classList.toggle('open'); });
+async function submitNew(){
+  hideErr('na-err');
+  const acc=normaliseACC(document.getElementById('na-acc').value||'');
+  const doa=document.getElementById('na-doa').value.trim();
+  const reason=document.getElementById('na-reason').value.trim();
+  const read=document.getElementById('na-read').value.trim();
+  if(!validACC(acc)){showErr('na-err','na-err-t',curLang==='zh'?'ACC号码格式不正确（应为 AA12345 或 12345AA）':'Invalid ACC number format (e.g. AA12345)');return;}
+  if(!validDt(doa)){showErr('na-err','na-err-t',curLang==='zh'?'受伤日期格式错误，请使用 DD/MM/YYYY':'Date of accident must be DD/MM/YYYY');return;}
+  if(!reason){showErr('na-err','na-err-t',curLang==='zh'?'请填写受伤原因':'Please enter reason for injury');return;}
+  if(!read){showErr('na-err','na-err-t',curLang==='zh'?'请填写 Read Code（例：S572）':'Please enter Read Code (e.g. S572)');return;}
+  const btn=document.getElementById('na-sub-btn');
+  btn.disabled=true;block(true);
+  const p=G._newPersonal||{};
+  const data={...p,accNumber:acc,doa,reason,readCode:read,hasACC:true,createdAt:new Date().toISOString(),source:'patient_portal'};
+  try{
+    if(!DEMO_MODE&&db){
+      // Check duplicate ACC number first
+      const existing=await db.collection('patients').doc(acc).get();
+      if(existing.exists){
+        showErr('na-err','na-err-t',curLang==='zh'?'该 ACC 号码已登记过，如需修改请联系诊所':'This ACC number is already registered. Contact the clinic to update.');
+        btn.disabled=false;block(false);return;
+      }
+      await Promise.race([
+        db.collection('patients').doc(acc).set(data),
+        new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),10000))
+      ]);
+    }
+    G.patient=data;
+    const name=`${p.firstName} ${p.familyName}`;
+    showOK('✅',
+      T('reg-success-title'),
+      T('reg-success-body-prefix')+name+T('reg-success-body-suffix'),
+      {[T('lbl-acc')]:acc,[T('lbl-name')]:name,[T('lbl-doa2')]:doa},
+      true  // auto-redirect home after 3s
+    );
+  }catch(e){
+    if(e.message==='timeout') showErr('na-err','na-err-t',curLang==='zh'?'提交超时，请检查网络':'Submission timed out.');
+    else if(e.code==='permission-denied') showErr('na-err','na-err-t',curLang==='zh'?'该 ACC 号码已登记过，如需修改请联系诊所':'This ACC number is already registered.');
+    else showErr('na-err','na-err-t',curLang==='zh'?'提交失败（'+e.code+'）':'Submission failed ('+e.code+')');
+  }finally{btn.disabled=false;block(false);}
+}
+
+/* ══════════════════════════════════════════════════════════
+   BOOKING — PHONE VERIFICATION
+══════════════════════════════════════════════════════════ */
+let _bookConfirmResult=null, _bookCountdownTimer=null;
+
+function normalizeNZPhone(raw){
+  let s=(raw||'').replace(/\s/g,'');
+  if(/^0[2-9]\d{7,9}$/.test(s)) return{ok:true,e164:'+64'+s.slice(1),masked:'0'+s.slice(1,3)+'****'+s.slice(-3)};
+  if(/^\+64[2-9]\d{7,9}$/.test(s)) return{ok:true,e164:s,masked:'+64'+s.slice(3,5)+'****'+s.slice(-3)};
+  return{ok:false};
+}
+
+async function bookCheckName(){
+  hideErr('book-name-err');
+  const nameRaw=(document.getElementById('book-name').value||'').trim();
+  const y=(document.getElementById('book-dob-y').value||'').trim();
+  const m=(document.getElementById('book-dob-m').value||'').trim();
+  const d=(document.getElementById('book-dob-d').value||'').trim();
+  if(nameRaw.length<2){showErr('book-name-err','book-name-err-t',curLang==='zh'?'请输入您的姓名（至少2个字符）':'Please enter your name (at least 2 characters)');return;}
+  if(y.length!==4||!m||!d){showErr('book-name-err','book-name-err-t',curLang==='zh'?'请填写完整的出生日期':'Please enter complete date of birth');return;}
+  const dob=`${d.padStart(2,'0')}/${m.padStart(2,'0')}/${y}`;
+  const btn=document.getElementById('book-name-btn');
+  btn.disabled=true;block(true);
+  try{
+    if(DEMO_MODE){
+      document.getElementById('book-sub-name').style.display='none';
+      document.getElementById('book-sub-phone').style.display='block';
+      block(false);btn.disabled=false;return;
+    }
+    const snap=await db.collection('patients').where('dob','==',dob).get();
+    if(snap.empty){
+      showErr('book-name-err','book-name-err-t',curLang==='zh'?'您未登记，请返回主页，点击首次就诊':'You are not registered. Please return to the home page and click New Patient.');
+      btn.disabled=false;block(false);return;
+    }
+    const inputNorm=nameRaw.replace(/\s/g,'').toLowerCase();
+    let matched=false;
+    snap.forEach(doc=>{
+      const d2=doc.data();
+      // Support both "FirstLast" and "LastFirst" (Chinese style)
+      const dbNorm1=((d2.firstName||'')+(d2.familyName||'')).replace(/\s/g,'').toLowerCase();
+      const dbNorm2=((d2.familyName||'')+(d2.firstName||'')).replace(/\s/g,'').toLowerCase();
+      if(inputNorm===dbNorm1||inputNorm===dbNorm2) matched=true;
     });
+    if(!matched){
+      showErr('book-name-err','book-name-err-t',curLang==='zh'?'姓名或出生日期不匹配，请检查后重试':'Name or date of birth does not match. Please check and retry.');
+      btn.disabled=false;block(false);return;
+    }
+    document.getElementById('book-sub-name').style.display='none';
+    document.getElementById('book-sub-phone').style.display='block';
+  }catch(e){
+    console.error('bookCheckName:',e);
+    if(e.code==='permission-denied') showErr('book-name-err','book-name-err-t',curLang==='zh'?'数据库权限不足，请联系诊所':'Database permission error. Please contact the clinic.');
+    else showErr('book-name-err','book-name-err-t',curLang==='zh'?'查询失败（'+e.code+'），请重试':'Query failed ('+e.code+'). Please retry.');
+  }finally{btn.disabled=false;block(false);}
+}
+
+async function bookSendSMS(){
+  hideErr('book-ph-err');
+  const raw=(document.getElementById('book-ph').value||'').trim();
+  const nz=normalizeNZPhone(raw);
+  if(!nz.ok){showErr('book-ph-err','book-ph-err-t',curLang==='zh'?'请输入正确的新西兰手机号（如 021 xxx xxxx）':'Please enter a valid NZ mobile number');return;}
+  const btn=document.getElementById('book-send-btn');
+  btn.disabled=true;block(true);
+  try{
+    if(DEMO_MODE){
+      _bookConfirmResult=null;
+      document.getElementById('book-phone-disp').textContent=nz.masked;
+      document.getElementById('book-step-phone').style.display='none';
+      document.getElementById('book-step-code').style.display='block';
+      bookStartCountdown(); block(false); return;
+    }
+    if(window._bookRecaptcha){try{window._bookRecaptcha.clear();}catch(_){}window._bookRecaptcha=null;}
+    const rcWrap=document.getElementById('recaptcha-book');
+    rcWrap.innerHTML='';
+    const rcFreshDiv=document.createElement('div');
+    rcWrap.appendChild(rcFreshDiv);
+    window._bookRecaptcha=new firebase.auth.RecaptchaVerifier(rcFreshDiv,{
+      size:'invisible',callback:()=>{},
+      'expired-callback':()=>{if(window._bookRecaptcha){try{window._bookRecaptcha.clear();}catch(_){}}window._bookRecaptcha=null;}
+    });
+    await window._bookRecaptcha.render();
+    _bookConfirmResult=await auth.signInWithPhoneNumber(nz.e164,window._bookRecaptcha);
+    document.getElementById('book-phone-disp').textContent=nz.masked;
+    document.getElementById('book-step-phone').style.display='none';
+    document.getElementById('book-step-code').style.display='block';
+    bookStartCountdown();
+  }catch(e){
+    console.error('bookSendSMS:',e.code,e.message);
+    let msg=curLang==='zh'?'发送失败（'+(e.code||'未知')+'），请重试':'Send failed ('+(e.code||'unknown')+'), please retry';
+    if(e.code==='auth/invalid-phone-number') msg=curLang==='zh'?'手机号格式不正确':'Invalid phone number format';
+    if(e.code==='auth/captcha-check-failed') msg=curLang==='zh'?'安全验证失败，请刷新页面':'Security check failed, please refresh';
+    if(e.code==='auth/operation-not-allowed') msg=curLang==='zh'?'手机验证未启用，请联系管理员':'Phone auth not enabled. Contact admin.';
+    showErr('book-ph-err','book-ph-err-t',msg);
+    btn.disabled=false;
+    if(window._bookRecaptcha){try{window._bookRecaptcha.clear();}catch(_){}}window._bookRecaptcha=null;
+  }finally{block(false);}
+}
+
+function bookStartCountdown(){
+  clearInterval(_bookCountdownTimer);
+  const resend=document.getElementById('book-resend-btn');
+  const txt=document.getElementById('book-countdown');
+  resend.disabled=true;let sec=60;
+  txt.textContent=`60 ${T('countdown-suffix')}`;
+  _bookCountdownTimer=setInterval(()=>{
+    sec--;
+    if(sec<=0){clearInterval(_bookCountdownTimer);resend.disabled=false;txt.textContent='';}
+    else txt.textContent=`${sec} ${T('countdown-suffix')}`;
+  },1000);
+}
+
+function bookResend(){
+  clearInterval(_bookCountdownTimer);
+  document.getElementById('book-step-code').style.display='none';
+  document.getElementById('book-step-phone').style.display='block';
+  document.getElementById('book-send-btn').disabled=false;
+  document.getElementById('book-ph').value='';
+  hideErr('book-ph-err');hideErr('book-code-err');
+  document.querySelectorAll('#book-code-inputs input').forEach(i=>i.value='');
+  _bookConfirmResult=null;
+  if(window._bookRecaptcha){try{window._bookRecaptcha.clear();}catch(_){}window._bookRecaptcha=null;}
+}
+
+function bookCodeInput(inp,idx){
+  inp.value=inp.value.replace(/\D/g,'');
+  if(inp.value&&idx<5) document.querySelectorAll('#book-code-inputs input')[idx+1].focus();
+  if([...document.querySelectorAll('#book-code-inputs input')].every(i=>i.value)) bookVerify();
+}
+function bookCodeBk(inp,idx,e){if(e.key==='Backspace'&&!inp.value&&idx>0) document.querySelectorAll('#book-code-inputs input')[idx-1].focus();}
+function bookGetCode(){return[...document.querySelectorAll('#book-code-inputs input')].map(i=>i.value).join('');}
+
+async function bookVerify(){
+  hideErr('book-code-err');
+  const code=bookGetCode();
+  if(code.length<6){showErr('book-code-err','book-code-err-t',curLang==='zh'?'请输入完整的6位验证码':'Please enter the complete 6-digit code');return;}
+  const btn=document.getElementById('book-verify-btn');
+  btn.disabled=true;block(true);
+  try{
+    let patientData=null;
+    if(DEMO_MODE){
+      if(code!=='123456'){showErr('book-code-err','book-code-err-t','Demo code: 123456');btn.disabled=false;block(false);return;}
+    }else{
+      const result=await _bookConfirmResult.confirm(code);
+      const rawPh=(document.getElementById('book-ph').value||'').trim();
+      try{
+        const snap=await db.collection('patients').where('phone','==',rawPh).limit(1).get();
+        if(!snap.empty) patientData=snap.docs[0].data();
+      }catch(_){}
+    }
+    document.getElementById('book-step-code').style.display='none';
+    document.getElementById('book-step-cal').style.display='block';
+    const welcome=document.getElementById('book-welcome-name');
+    welcome.textContent=patientData
+      ?T('verified-ok')+` ${patientData.firstName} ${patientData.familyName}`
+      :(curLang==='zh'?'✅ 验证成功':'✅ Verified');
+    G._bookPatient=patientData;
+    initCal('sa');
+  }catch(e){
+    console.error('bookVerify:',e);
+    showErr('book-code-err','book-code-err-t',curLang==='zh'?'验证码不正确，请重试':'Incorrect code, please try again');
+  }finally{btn.disabled=false;block(false);}
+}
+
+/* ══════════════════════════════════════════════════════════
+   GOOGLE CALENDAR / FIRESTORE SLOTS
+══════════════════════════════════════════════════════════ */
+async function fetchTakenSlots(iso){
+  if(DEMO_MODE||!db) return [];
+  const taken=new Set();
+  // Source 1: calendar-authoritative slots (updated by Apps Script every 5 min)
+  try{
+    const snap=await db.collection('bookedSlots').doc(iso).get();
+    if(snap.exists)(snap.data().times||[]).forEach(t=>taken.add(t));
+  }catch(e){console.warn('bookedSlots read:',e);}
+  // Source 2: portal appointments already confirmed by calendar sync
+  // (belt-and-suspenders; user is phone-authenticated at this point)
+  try{
+    const aSnap=await db.collection('appointments').where('date','==',iso).get();
+    aSnap.forEach(doc=>{const d=doc.data();if(d.syncedToCalendar===true&&d.time)taken.add(d.time);});
+  }catch(e){/* may fail if unauthenticated, that's ok */}
+  return [...taken].sort();
+}
+
+/* ══════════════════════════════════════════════════════════
+   CALENDAR
+══════════════════════════════════════════════════════════ */
+function initCal(key){
+  G.calMonth[key]=new Date();G.selected[key]={date:null,time:null};renderCal(key);
+}
+function calShift(key,dir){
+  const m=G.calMonth[key];
+  G.calMonth[key]=new Date(m.getFullYear(),m.getMonth()+dir,1);
+  G.selected[key].date=null;G.selected[key].time=null;
+  document.getElementById('slot-card-sa').style.display='none';
+  document.getElementById('book-btn-sa').style.display='none';
+  renderCal(key);
+}
+function renderCal(key){
+  const sched=G.schedule||DEFAULT_SCHEDULE;
+  const m=G.calMonth[key];
+  const months=T('months');
+  document.getElementById('cal-label-'+key).textContent=`${m.getFullYear()} ${months[m.getMonth()]}`;
+  const today=new Date();today.setHours(0,0,0,0);
+  const maxD=new Date(today);maxD.setDate(maxD.getDate()+sched.maxDaysAhead);
+  const first=new Date(m.getFullYear(),m.getMonth(),1);
+  const last=new Date(m.getFullYear(),m.getMonth()+1,0);
+  const grid=document.getElementById('cal-'+key);
+  grid.innerHTML='';
+  const startDow=first.getDay();
+  for(let i=0;i<startDow;i++){const e=document.createElement('div');e.className='cd other';grid.appendChild(e);}
+  for(let d=1;d<=last.getDate();d++){
+    const dt=new Date(m.getFullYear(),m.getMonth(),d);
+    const el=document.createElement('div');el.textContent=d;
+    const isPast=dt<today,isFuture=dt>maxD,dow=dt.getDay();
+    const isWorkday=sched.weeklySlots.some(s=>s.dayOfWeek===dow);
+    if(isPast||isFuture||!isWorkday) el.className='cd past';
+    else{
+      el.className='cd avail';
+      const iso=isoDate(dt);
+      if(G.selected[key].date===iso) el.classList.add('sel');
+      el.onclick=()=>selectDate(key,iso,el);
+    }
+    grid.appendChild(el);
   }
-  el.querySelectorAll('.ai-item.has-yin .ai-guo').forEach(function(guo) {
-    guo.addEventListener('click', function() {
-      guo.closest('.ai-item').classList.toggle('open');
-    });
+}
+async function selectDate(key,iso,el){
+  document.querySelectorAll('#cal-'+key+' .cd').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+  G.selected[key].date=iso;G.selected[key].time=null;
+  const slotCard=document.getElementById('slot-card-'+key);
+  const slotGrid=document.getElementById('slot-grid-'+key);
+  const slotHd=document.getElementById('slot-hd-'+key);
+  slotCard.style.display='block';
+  slotHd.textContent=`${iso}`;
+  slotGrid.innerHTML=`<div style="text-align:center;padding:16px;color:var(--ink-s);font-size:13px"><div class="spin" style="margin:0 auto 8px"></div>${curLang==='zh'?'加载中...':'Loading...'}</div>`;
+  document.getElementById('book-btn-'+key).style.display='none';
+  const taken=await fetchTakenSlots(iso);
+  G.bookedSlots[iso]=taken;
+  renderSlots(key,iso);
+}
+function renderSlots(key,iso){
+  const sched=G.schedule||DEFAULT_SCHEDULE;
+  const dt=new Date(iso);const dow=dt.getDay();
+  const ws=sched.weeklySlots.find(s=>s.dayOfWeek===dow);
+  const slotCard=document.getElementById('slot-card-'+key);
+  const slotGrid=document.getElementById('slot-grid-'+key);
+  const slotHd=document.getElementById('slot-hd-'+key);
+  const btnRow=document.getElementById('book-btn-'+key);
+  slotCard.style.display='block';
+  slotHd.textContent=`${iso} — ${T('slot-hd')}`;
+  slotGrid.innerHTML='';btnRow.style.display='none';
+  if(!ws){slotGrid.innerHTML=`<div style="color:var(--ink-s);font-size:13px">${T('no-slots')}</div>`;return;}
+  const slots=[];
+  for(let h=ws.startHour;h<=ws.endHour;h++){slots.push(`${String(h).padStart(2,'0')}:00`);if(h<ws.endHour)slots.push(`${String(h).padStart(2,'0')}:30`);}
+  const taken=G.bookedSlots?.[iso]||[];
+  slots.forEach(t=>{
+    const el=document.createElement('div');
+    if(taken.includes(t)){el.className='slot taken';el.textContent=T('slot-taken');}
+    else{
+      el.className='slot';el.textContent=t;
+      el.onclick=()=>{
+        document.querySelectorAll('#slot-grid-'+key+' .slot').forEach(s=>s.classList.remove('sel'));
+        el.classList.add('sel');G.selected[key].time=t;btnRow.style.display='block';
+      };
+    }
+    slotGrid.appendChild(el);
   });
 }
-
-function buildItem(line) {
-  // 过滤废话（无实质内容的断语）
-  var stripped = line.replace(/[（(][^）)]*[）)]/g, '');
-  var uselessPatterns = [
-    '没有特别值得注意','没有特别需要注意','没有特别突出',
-    '比较平淡，没有','无特殊从化','没有明显特点','没有特别',
-    '无需特别','无特别关注'
-  ];
-  for (var i = 0; i < uselessPatterns.length; i++) {
-    if (stripped.indexOf(uselessPatterns[i]) >= 0) return '';
+async function doBook(key){
+  hideErr('sa-err');
+  const sel=G.selected[key];
+  if(!sel.date||!sel.time){showErr('sa-err','sa-err-t',curLang==='zh'?'请选择日期和时段':'Please select a date and time slot');return;}
+  block(true);
+  // Smart name: if familyName contains Chinese chars, use 姓名 order (no space); else First Last
+  function buildDisplayName(p){
+    if(!p) return curLang==='zh'?'未知':'Unknown';
+    const isChinese=/[一-鿿]/.test(p.familyName||'');
+    return isChinese?(p.familyName||'')+(p.firstName||''):(p.firstName+' '+p.familyName).trim();
   }
-
-  // 找第一个全角（或半角( — 括号前是黑字结论，括号内到最后一个）是灰字依据
-  var idxFull = line.indexOf('\uff08');
-  var idxHalf = line.indexOf('(');
-  var endFull = line.lastIndexOf('\uff09');
-  var endHalf = line.lastIndexOf(')');
-
-  // 选最早出现的开括号
-  var idx = -1, end = -1;
-  if (idxFull >= 0 && (idxHalf < 0 || idxFull <= idxHalf)) {
-    idx = idxFull; end = endFull;
-  } else if (idxHalf >= 0) {
-    idx = idxHalf; end = endHalf;
-  }
-
-  if (idx > 0 && end > idx) {
-    // guo = 括号前 + 括号后（尾部补充文字也留在黑字）
-    var before = line.slice(0, idx).replace(/[。，、；：\s]+$/, '');
-    var after  = line.slice(end + 1).replace(/^[，、；：\s]+/, '');
-    var guo = before + (after ? after : '');
-    var yin = line.slice(idx + 1, end).trim();
-    if (guo && yin) {
-      return '<div class="ai-item has-yin">' +
-        '<div class="ai-guo"><span class="ai-arrow">&#9658;</span><span>' + guo + '</span></div>' +
-        '<div class="ai-yin">' + yin + '</div>' +
-        '</div>';
+  const patientName=buildDisplayName(G._bookPatient);
+  const phone=(document.getElementById('book-ph').value||'').trim();
+  const data={date:sel.date,time:sel.time,patientName,phone,source:'patient_portal',syncedToCalendar:false,createdAt:new Date().toISOString()};
+  try{
+    if(!DEMO_MODE&&db){
+      // Real-time conflict check: re-fetch latest booked slots from Firestore
+      const freshSnap=await db.collection('bookedSlots').doc(sel.date).get();
+      const freshTaken=freshSnap.exists?(freshSnap.data().times||[]):[];
+      if(freshTaken.includes(sel.time)){
+        // Refresh display and reject
+        G.bookedSlots[sel.date]=freshTaken;
+        renderSlots(key,sel.date);
+        G.selected[key].time=null;
+        document.getElementById('book-btn-'+key).style.display='none';
+        showErr('sa-err','sa-err-t',curLang==='zh'?'该时段刚被预约，请重新选择时间':'This slot was just booked. Please choose another time.');
+        block(false);return;
+      }
+      await db.collection('appointments').add(data);
+      const slotRef=db.collection('bookedSlots').doc(sel.date);
+      await db.runTransaction(async tx=>{
+        const snap=await tx.get(slotRef);
+        const existing=snap.exists?(snap.data().times||[]):[];
+        if(!existing.includes(sel.time)) tx.set(slotRef,{times:[...existing,sel.time],lastUpdated:new Date().toISOString()});
+      });
+      if(!G.bookedSlots[sel.date]) G.bookedSlots[sel.date]=[];
+      G.bookedSlots[sel.date].push(sel.time);
     }
-  }
-  // 无括号：清理残余括号后直接显示
-  var cleaned = line.replace(/[（(][^）)]*[）)]/g, '').replace(/[。，、；\s]+$/, '');
-  if (!cleaned) return '';
-  return '<div class="ai-item"><div class="ai-guo">' +
-    '<span style="display:inline-block;width:16px;flex-shrink:0"></span>' +
-    '<span>' + cleaned + '</span></div></div>';
+    showOK('📅',T('book-success-title'),T('book-success-body'),{[T('lbl-date')]:sel.date,[T('lbl-time')]:sel.time,[T('lbl-name')]:patientName});
+  }catch(e){
+    console.error('doBook:',e);
+    showErr('sa-err','sa-err-t',curLang==='zh'?'预约失败，请重试':'Booking failed, please try again');
+  }finally{block(false);}
 }
 
+/* ══════════════════════════════════════════════════════════
+   PRICING TABS
+══════════════════════════════════════════════════════════ */
+function prTab(idx){
+  document.querySelectorAll('.pr-tab').forEach((t,i)=>t.classList.toggle('active',i===idx));
+  document.querySelectorAll('.pr-panel').forEach((p,i)=>p.classList.toggle('active',i===idx));
+}
+
+/* ══════════════════════════════════════════════════════════
+   CHANGE PHONE FLOW
+══════════════════════════════════════════════════════════ */
+let _cpMatchedDocId=null, _cpConfirmResult=null;
+
+async function cpVerifyIdentity(){
+  hideErr('cp-verify-err');
+  const nameInput=(document.getElementById('cp-name').value||'').trim();
+  const last4=(document.getElementById('cp-last4').value||'').trim();
+  if(!nameInput){showErr('cp-verify-err','cp-verify-err-t',curLang==='zh'?'请输入您的姓名':'Please enter your name');return;}
+  if(!/^\d{4}$/.test(last4)){showErr('cp-verify-err','cp-verify-err-t',curLang==='zh'?'请输入旧手机号的最后4位数字':'Please enter the last 4 digits of your old number');return;}
+  const btn=document.getElementById('cp-verify-btn');
+  btn.disabled=true;block(true);
+  try{
+    if(DEMO_MODE){_cpMatchedDocId='DEMO';document.getElementById('cp-step-verify').style.display='none';document.getElementById('cp-step-newphone').style.display='block';block(false);return;}
+    const snap=await db.collection('patients').get();
+    let matched=null;
+    snap.forEach(doc=>{
+      const d=doc.data();
+      const fullName=((d.firstName||'')+(d.familyName||'')).replace(/\s/g,'').toLowerCase();
+      const inputName=nameInput.replace(/\s/g,'').toLowerCase();
+      const phoneEnd=(d.phone||'').replace(/\s/g,'').slice(-4);
+      if((fullName.includes(inputName)||inputName.includes(fullName))&&phoneEnd===last4) matched={id:doc.id,data:d};
+    });
+    if(!matched){showErr('cp-verify-err','cp-verify-err-t',curLang==='zh'?'姓名或手机号后四位不匹配，请检查后重试':'Name or last 4 digits do not match. Please check and retry.');btn.disabled=false;block(false);return;}
+    _cpMatchedDocId=matched.id;
+    document.getElementById('cp-step-verify').style.display='none';
+    document.getElementById('cp-step-newphone').style.display='block';
+  }catch(e){
+    showErr('cp-verify-err','cp-verify-err-t',curLang==='zh'?'查询失败，请检查网络后重试':'Query failed. Please check your connection.');
+    console.error('cpVerifyIdentity:',e);
+  }finally{btn.disabled=false;block(false);}
+}
+
+async function cpSendSMS(){
+  hideErr('cp-newph-err');
+  const raw=(document.getElementById('cp-newph').value||'').trim();
+  const nz=normalizeNZPhone(raw);
+  if(!nz.ok){showErr('cp-newph-err','cp-newph-err-t',curLang==='zh'?'请输入正确的新西兰手机号':'Please enter a valid NZ mobile number');return;}
+  const btn=document.getElementById('cp-send-btn');
+  btn.disabled=true;block(true);
+  try{
+    if(DEMO_MODE){_cpConfirmResult=null;document.getElementById('cp-phone-disp').textContent=nz.masked;document.getElementById('cp-step-newphone').style.display='none';document.getElementById('cp-step-code').style.display='block';block(false);return;}
+    if(window._cpRecaptcha){try{window._cpRecaptcha.clear();}catch(_){}window._cpRecaptcha=null;}
+    document.getElementById('recaptcha-cp').innerHTML='';
+    window._cpRecaptcha=new firebase.auth.RecaptchaVerifier('recaptcha-cp',{size:'invisible',callback:()=>{},'expired-callback':()=>{if(window._cpRecaptcha){try{window._cpRecaptcha.clear();}catch(_){}}window._cpRecaptcha=null;}});
+    await window._cpRecaptcha.render();
+    _cpConfirmResult=await auth.signInWithPhoneNumber(nz.e164,window._cpRecaptcha);
+    document.getElementById('cp-phone-disp').textContent=nz.masked;
+    document.getElementById('cp-step-newphone').style.display='none';
+    document.getElementById('cp-step-code').style.display='block';
+  }catch(e){
+    console.error('cpSendSMS:',e.code,e.message);
+    showErr('cp-newph-err','cp-newph-err-t',curLang==='zh'?'发送失败（'+(e.code||'未知')+'），请重试':'Send failed ('+(e.code||'unknown')+')');
+    btn.disabled=false;
+    if(window._cpRecaptcha){try{window._cpRecaptcha.clear();}catch(_){}}window._cpRecaptcha=null;
+  }finally{block(false);}
+}
+
+function cpCodeInput(inp,idx){
+  inp.value=inp.value.replace(/\D/g,'');
+  if(inp.value&&idx<5) document.querySelectorAll('#cp-code-inputs input')[idx+1].focus();
+  if([...document.querySelectorAll('#cp-code-inputs input')].every(i=>i.value)) cpConfirmCode();
+}
+function cpCodeBk(inp,idx,e){if(e.key==='Backspace'&&!inp.value&&idx>0) document.querySelectorAll('#cp-code-inputs input')[idx-1].focus();}
+
+async function cpConfirmCode(){
+  hideErr('cp-code-err');
+  const code=[...document.querySelectorAll('#cp-code-inputs input')].map(i=>i.value).join('');
+  if(code.length<6){showErr('cp-code-err','cp-code-err-t',curLang==='zh'?'请输入完整的6位验证码':'Please enter the complete 6-digit code');return;}
+  const btn=document.getElementById('cp-confirm-btn');
+  btn.disabled=true;block(true);
+  try{
+    const newPhone=(document.getElementById('cp-newph').value||'').trim();
+    if(DEMO_MODE){
+      if(code!=='123456'){showErr('cp-code-err','cp-code-err-t','Demo code: 123456');btn.disabled=false;block(false);return;}
+    }else{
+      await _cpConfirmResult.confirm(code);
+      await db.collection('patients').doc(_cpMatchedDocId).update({phone:newPhone});
+    }
+    toast(T('phone-updated'));
+    document.getElementById('book-ph').value=newPhone;
+    document.getElementById('cp-step-verify').style.display='block';
+    document.getElementById('cp-step-newphone').style.display='none';
+    document.getElementById('cp-step-code').style.display='none';
+    document.getElementById('cp-name').value='';document.getElementById('cp-last4').value='';
+    document.querySelectorAll('#cp-code-inputs input').forEach(i=>i.value='');
+    _cpMatchedDocId=null;_cpConfirmResult=null;
+    setTimeout(()=>{
+      document.getElementById('book-welcome-name').textContent=T('ph-updated-welcome');
+      document.getElementById('book-step-phone').style.display='none';
+      document.getElementById('book-step-code').style.display='none';
+      document.getElementById('book-step-cal').style.display='block';
+      go('s-book-sa');initCal('sa');
+    },800);
+  }catch(e){
+    console.error('cpConfirmCode:',e);
+    showErr('cp-code-err','cp-code-err-t',curLang==='zh'?'验证码不正确，请重试':'Incorrect code, please try again');
+  }finally{btn.disabled=false;block(false);}
+}
+
+/* ══════════════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', applyLang);
 </script>
 </body>
 </html>
