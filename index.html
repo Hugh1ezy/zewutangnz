@@ -227,10 +227,11 @@ body{
 .pr-consult-sep{width:1px;background:var(--border);flex-shrink:0;}
 
 /* ── 预约通知 ── */
-.book-notice{background:linear-gradient(135deg,#f0f8f8,#e8f5f0);border:1.5px solid var(--teal-l);border-radius:14px;padding:18px 18px 14px;margin-bottom:18px;display:flex;flex-direction:column;gap:0;}
-.book-notice-icon{font-size:28px;margin-bottom:10px;}
-.book-notice p{font-size:14px;color:var(--ink-m);line-height:1.75;}
-.book-notice-en{font-size:12px;color:var(--ink-s);font-style:italic;}
+.book-notice{background:linear-gradient(135deg,#f0f8f8,#e8f5f0);border:1.5px solid var(--teal-l);border-radius:14px;padding:18px 18px 16px;margin-bottom:18px;}
+.bn-zh{font-size:14px;font-weight:600;color:var(--ink-m);line-height:1.7;}
+.bn-en{font-size:12px;color:var(--ink-s);line-height:1.6;margin-top:2px;}
+.bn-link{color:#1a3a6b;text-decoration:underline;font-size:14px;font-weight:600;cursor:pointer;}
+.bn-link-en{color:#1a3a6b;text-decoration:underline;font-size:12px;cursor:pointer;}
 .book-welcome{background:var(--teal-d);color:#fff;border-radius:12px;padding:12px 16px;font-size:15px;font-weight:600;margin-bottom:16px;text-align:center;}
 
 /* ── reCAPTCHA container ── */
@@ -396,11 +397,12 @@ body{
     <!-- Step 1: Phone -->
     <div id="book-step-phone">
       <div class="book-notice">
-        <div class="book-notice-icon">📋</div>
-        <p>请先确认您已在本系统中登记了您的个人信息。<br>
-        <span class="book-notice-en">Please ensure you have registered your personal information in this system.</span></p>
-        <p style="margin-top:10px">如果您已登记，请输入手机号接收验证码，进行验证登录。<br>
-        <span class="book-notice-en">If registered, enter your mobile number to receive a verification code.</span></p>
+        <p class="bn-zh">请先确认您已在本系统中登记了您的个人信息。</p>
+        <p class="bn-en">Please ensure you have registered your personal information in this system.</p>
+        <p class="bn-zh" style="margin-top:10px">请在下面输入您在个人信息中填写的手机号，进行验证登录。</p>
+        <p class="bn-en">Enter the mobile number you used when registering to receive a verification code.</p>
+        <p class="bn-zh" style="margin-top:10px">如果您新换了手机号，<a href="javascript:void(0)" onclick="go('s-change-phone')" class="bn-link">请点击此处</a></p>
+        <p class="bn-en">If you have a new mobile number, <a href="javascript:void(0)" onclick="go('s-change-phone')" class="bn-link-en">click here</a></p>
       </div>
       <div class="card">
         <div class="fg">
@@ -465,6 +467,72 @@ body{
       <div class="ebox" id="sa-err"><span>⚠️</span><span id="sa-err-t"></span></div>
       <div class="btn-row" id="book-btn-sa" style="display:none">
         <button class="btn btn-p" onclick="doBook('sa')">确认预约 · Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- S-CHANGE-PHONE -->
+  <div class="screen" id="s-change-phone">
+    <button class="back" onclick="go('s-book-sa')">‹ 返回</button>
+    <div class="stitle">更换手机号</div>
+    <div class="ssub">请先验证您的身份，再绑定新手机号</div>
+
+    <!-- Step A: identity verify -->
+    <div id="cp-step-verify">
+      <div class="card">
+        <div class="card-label">身份验证 Identity Verification</div>
+        <div class="fg">
+          <label>您的姓名 Full Name *</label>
+          <input id="cp-name" type="text" placeholder="请输入登记时填写的姓名">
+        </div>
+        <div class="fg">
+          <label>旧手机号后四位 Last 4 digits of old number *</label>
+          <input id="cp-last4" type="tel" maxlength="4" placeholder="例：5678">
+        </div>
+        <div class="ebox" id="cp-verify-err"><span>⚠️</span><span id="cp-verify-err-t"></span></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-p" id="cp-verify-btn" onclick="cpVerifyIdentity()">验证身份 · Verify</button>
+      </div>
+    </div>
+
+    <!-- Step B: enter new phone + send code -->
+    <div id="cp-step-newphone" style="display:none">
+      <div style="background:#edfaf3;border:1.5px solid #27ae60;border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:14px;color:#1a6b3a;font-weight:600">
+        ✅ 身份验证成功，请输入您的新手机号码
+      </div>
+      <div class="card">
+        <div class="fg">
+          <label>新手机号码 New Mobile Number *</label>
+          <input id="cp-newph" type="tel" placeholder="021 xxx xxxx">
+          <small>新西兰手机号 · NZ mobile number</small>
+        </div>
+        <div id="recaptcha-cp"></div>
+        <div class="ebox" id="cp-newph-err"><span>⚠️</span><span id="cp-newph-err-t"></span></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-p" id="cp-send-btn" onclick="cpSendSMS()">发送验证码 · Send Code</button>
+      </div>
+    </div>
+
+    <!-- Step C: enter code -->
+    <div id="cp-step-code" style="display:none">
+      <div class="phone-wrap"><div class="big-icon">💬</div></div>
+      <div class="stitle" style="margin-bottom:6px">输入验证码</div>
+      <div class="ssub">验证码已发送至 <strong id="cp-phone-disp"></strong></div>
+      <div class="card">
+        <div class="code-inputs" id="cp-code-inputs">
+          <input type="tel" maxlength="1" oninput="cpCodeInput(this,0)" onkeydown="cpCodeBk(this,0,event)">
+          <input type="tel" maxlength="1" oninput="cpCodeInput(this,1)" onkeydown="cpCodeBk(this,1,event)">
+          <input type="tel" maxlength="1" oninput="cpCodeInput(this,2)" onkeydown="cpCodeBk(this,2,event)">
+          <input type="tel" maxlength="1" oninput="cpCodeInput(this,3)" onkeydown="cpCodeBk(this,3,event)">
+          <input type="tel" maxlength="1" oninput="cpCodeInput(this,4)" onkeydown="cpCodeBk(this,4,event)">
+          <input type="tel" maxlength="1" oninput="cpCodeInput(this,5)" onkeydown="cpCodeBk(this,5,event)">
+        </div>
+        <div class="ebox" id="cp-code-err"><span>⚠️</span><span id="cp-code-err-t"></span></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-p" id="cp-confirm-btn" onclick="cpConfirmCode()">确认验证码 · Confirm</button>
       </div>
     </div>
   </div>
@@ -712,7 +780,7 @@ function initFirebase() {
   }
 }
 
-// Try immediately, then again after window load
+// 同步脚本已加载完毕，直接初始化；window.load 作为保险重试
 initFirebase();
 window.addEventListener('load', () => {
   if(DEMO_MODE) { _fbInitAttempted = false; initFirebase(); }
@@ -872,6 +940,31 @@ async function bookSendSMS(){
   btn.disabled=true;block(true);
 
   try{
+    // ── 步骤1：验证手机号是否已在数据库中登记 ──
+    // 演示模式跳过此检查
+    if(!DEMO_MODE && db){
+      const phoneRaw = raw.replace(/\s/g,'');
+      // 同时搜索带空格和不带空格的格式
+      const snap = await db.collection('patients')
+        .where('phone','==', raw)
+        .limit(1).get();
+      // 如果第一种格式没找到，再试不带空格的
+      let found = !snap.empty;
+      if(!found){
+        const snap2 = await db.collection('patients')
+          .where('phone','==', phoneRaw)
+          .limit(1).get();
+        found = !snap2.empty;
+      }
+      if(!found){
+        showErr('book-ph-err','book-ph-err-t',
+          '该手机号码未在系统中登记。请先完成"首次就诊"登记，再预约时间。');
+        btn.disabled=false;
+        block(false);
+        return;
+      }
+    }
+
     if(DEMO_MODE){
       // 演示模式：跳过真实 SMS
       _bookConfirmResult=null;
@@ -883,13 +976,11 @@ async function bookSendSMS(){
       return;
     }
 
-    // ── 真实 Firebase Phone Auth ──
-    // 每次都重新创建 RecaptchaVerifier，避免"已使用/已过期"错误
+    // ── 步骤2：发送验证码 ──
     if(window._bookRecaptcha){
       try{window._bookRecaptcha.clear();}catch(_){}
       window._bookRecaptcha=null;
     }
-    // 确保容器是空的
     const rcDiv=document.getElementById('recaptcha-book');
     rcDiv.innerHTML='';
 
@@ -902,7 +993,6 @@ async function bookSendSMS(){
       }
     });
 
-    // render() 先渲染，再发送
     await window._bookRecaptcha.render();
     _bookConfirmResult=await auth.signInWithPhoneNumber(nz.e164,window._bookRecaptcha);
 
@@ -913,15 +1003,14 @@ async function bookSendSMS(){
 
   }catch(e){
     console.error('bookSendSMS error:',e.code,e.message);
-    let msg='发送失败，请检查手机号后重试';
-    if(e.code==='auth/too-many-requests') msg='发送次数过多，请稍后再试（约1小时后重置）';
-    else if(e.code==='auth/invalid-phone-number') msg='手机号格式不正确，请重新输入';
-    else if(e.code==='auth/captcha-check-failed') msg='安全验证失败，请刷新页面后重试';
-    else if(e.code==='auth/quota-exceeded') msg='今日短信配额已用完，请明天再试';
-    else if(e.code==='auth/operation-not-allowed') msg='手机验证未在 Firebase 后台启用，请联系管理员';
+    // 调试阶段：显示原始错误码，方便排查
+    // 正式上线后可改回友好提示并加次数限制
+    let msg='发送失败（' + (e.code||'未知错误') + '），请重试';
+    if(e.code==='auth/invalid-phone-number') msg='手机号格式不正确，请重新输入';
+    if(e.code==='auth/captcha-check-failed') msg='安全验证失败，请刷新页面后重试';
+    if(e.code==='auth/operation-not-allowed') msg='手机验证未在 Firebase 后台启用，请联系管理员';
     showErr('book-ph-err','book-ph-err-t',msg);
     btn.disabled=false;
-    // 重置 reCAPTCHA
     if(window._bookRecaptcha){try{window._bookRecaptcha.clear();}catch(_){}}
     window._bookRecaptcha=null;
   }finally{block(false);}
@@ -1171,6 +1260,166 @@ async function doBook(key){
 function prTab(idx){
   document.querySelectorAll('.pr-tab').forEach((t,i)=>t.classList.toggle('active',i===idx));
   document.querySelectorAll('.pr-panel').forEach((p,i)=>p.classList.toggle('active',i===idx));
+}
+
+/* ══════════════════════════════════════════════════════════
+   换手机号流程 (s-change-phone)
+══════════════════════════════════════════════════════════ */
+let _cpMatchedDocId = null;   // 匹配到的患者文档ID
+let _cpConfirmResult = null;  // Firebase phone auth result
+
+/* Step A：验证姓名 + 旧手机后四位 */
+async function cpVerifyIdentity() {
+  hideErr('cp-verify-err');
+  const nameInput  = (document.getElementById('cp-name').value||'').trim();
+  const last4      = (document.getElementById('cp-last4').value||'').trim();
+  if(!nameInput)          { showErr('cp-verify-err','cp-verify-err-t','请输入您的姓名'); return; }
+  if(!/^\d{4}$/.test(last4)) { showErr('cp-verify-err','cp-verify-err-t','请输入旧手机号的最后4位数字'); return; }
+
+  const btn = document.getElementById('cp-verify-btn');
+  btn.disabled = true; block(true);
+
+  try {
+    if(DEMO_MODE) {
+      // 演示模式：任意输入均通过
+      _cpMatchedDocId = 'DEMO';
+      document.getElementById('cp-step-verify').style.display   = 'none';
+      document.getElementById('cp-step-newphone').style.display = 'block';
+      block(false); return;
+    }
+
+    // 查询 patients 集合，匹配姓名（firstName 或 familyName + firstName）
+    const snap = await db.collection('patients').get();
+    let matched = null;
+    snap.forEach(doc => {
+      const d = doc.data();
+      // 拼接全名进行比较（忽略大小写和空格）
+      const fullName = ((d.firstName||'') + (d.familyName||'')).replace(/\s/g,'').toLowerCase();
+      const inputName = nameInput.replace(/\s/g,'').toLowerCase();
+      const phoneEnd  = (d.phone||'').replace(/\s/g,'').slice(-4);
+      if((fullName.includes(inputName) || inputName.includes(fullName)) && phoneEnd === last4) {
+        matched = { id: doc.id, data: d };
+      }
+    });
+
+    if(!matched) {
+      showErr('cp-verify-err','cp-verify-err-t','姓名或手机号后四位不匹配，请检查后重试');
+      btn.disabled = false; block(false); return;
+    }
+
+    _cpMatchedDocId = matched.id;
+    document.getElementById('cp-step-verify').style.display   = 'none';
+    document.getElementById('cp-step-newphone').style.display = 'block';
+
+  } catch(e) {
+    showErr('cp-verify-err','cp-verify-err-t','查询失败，请检查网络后重试');
+    console.error('cpVerifyIdentity:', e);
+  } finally {
+    btn.disabled = false; block(false);
+  }
+}
+
+/* Step B：发送验证码到新手机号 */
+async function cpSendSMS() {
+  hideErr('cp-newph-err');
+  const raw = (document.getElementById('cp-newph').value||'').trim();
+  const nz  = normalizeNZPhone(raw);
+  if(!nz.ok) { showErr('cp-newph-err','cp-newph-err-t','请输入正确的新西兰手机号'); return; }
+
+  const btn = document.getElementById('cp-send-btn');
+  btn.disabled = true; block(true);
+
+  try {
+    if(DEMO_MODE) {
+      _cpConfirmResult = null;
+      document.getElementById('cp-phone-disp').textContent        = nz.masked;
+      document.getElementById('cp-step-newphone').style.display   = 'none';
+      document.getElementById('cp-step-code').style.display       = 'block';
+      block(false); return;
+    }
+
+    if(window._cpRecaptcha) { try{window._cpRecaptcha.clear();}catch(_){} window._cpRecaptcha = null; }
+    document.getElementById('recaptcha-cp').innerHTML = '';
+    window._cpRecaptcha = new firebase.auth.RecaptchaVerifier('recaptcha-cp', {
+      size: 'invisible', callback: ()=>{},
+      'expired-callback': ()=>{ if(window._cpRecaptcha){try{window._cpRecaptcha.clear();}catch(_){}} window._cpRecaptcha=null; }
+    });
+    await window._cpRecaptcha.render();
+    _cpConfirmResult = await auth.signInWithPhoneNumber(nz.e164, window._cpRecaptcha);
+
+    document.getElementById('cp-phone-disp').textContent        = nz.masked;
+    document.getElementById('cp-step-newphone').style.display   = 'none';
+    document.getElementById('cp-step-code').style.display       = 'block';
+
+  } catch(e) {
+    console.error('cpSendSMS:', e.code, e.message);
+    showErr('cp-newph-err','cp-newph-err-t','发送失败（' + (e.code||'未知') + '），请重试');
+    btn.disabled = false;
+    if(window._cpRecaptcha){try{window._cpRecaptcha.clear();}catch(_){}} window._cpRecaptcha=null;
+  } finally { block(false); }
+}
+
+/* Step C：验证码 input 处理 */
+function cpCodeInput(inp, idx) {
+  inp.value = inp.value.replace(/\D/g,'');
+  if(inp.value && idx < 5) document.querySelectorAll('#cp-code-inputs input')[idx+1].focus();
+  if([...document.querySelectorAll('#cp-code-inputs input')].every(i=>i.value)) cpConfirmCode();
+}
+function cpCodeBk(inp, idx, e) {
+  if(e.key==='Backspace' && !inp.value && idx>0) document.querySelectorAll('#cp-code-inputs input')[idx-1].focus();
+}
+
+/* Step C：确认验证码 → 更新手机号 → 登录进入预约 */
+async function cpConfirmCode() {
+  hideErr('cp-code-err');
+  const code = [...document.querySelectorAll('#cp-code-inputs input')].map(i=>i.value).join('');
+  if(code.length < 6) { showErr('cp-code-err','cp-code-err-t','请输入完整的6位验证码'); return; }
+
+  const btn = document.getElementById('cp-confirm-btn');
+  btn.disabled = true; block(true);
+
+  try {
+    const newPhone = (document.getElementById('cp-newph').value||'').trim();
+
+    if(DEMO_MODE) {
+      if(code !== '123456') { showErr('cp-code-err','cp-code-err-t','演示模式验证码为 123456'); btn.disabled=false; block(false); return; }
+    } else {
+      // 验证验证码
+      await _cpConfirmResult.confirm(code);
+
+      // 更新 Firestore 患者记录中的手机号
+      await db.collection('patients').doc(_cpMatchedDocId).update({ phone: newPhone });
+    }
+
+    // 视为登录成功，进入预约日历
+    toast('✅ 手机号已更新，正在进入预约页面...');
+    // 把新手机号填入预约输入框，方便后续流程
+    document.getElementById('book-ph').value = newPhone;
+
+    // 重置换号页面状态
+    document.getElementById('cp-step-verify').style.display   = 'block';
+    document.getElementById('cp-step-newphone').style.display = 'none';
+    document.getElementById('cp-step-code').style.display     = 'none';
+    document.getElementById('cp-name').value  = '';
+    document.getElementById('cp-last4').value = '';
+    document.querySelectorAll('#cp-code-inputs input').forEach(i=>i.value='');
+    _cpMatchedDocId = null; _cpConfirmResult = null;
+
+    // 直接跳到日历（已验证，无需再发验证码）
+    setTimeout(() => {
+      const welcomeEl = document.getElementById('book-welcome-name');
+      welcomeEl.textContent = '✅ 验证成功 · 手机号已更新';
+      document.getElementById('book-step-phone').style.display = 'none';
+      document.getElementById('book-step-code').style.display  = 'none';
+      document.getElementById('book-step-cal').style.display   = 'block';
+      go('s-book-sa');
+      initCal('sa');
+    }, 800);
+
+  } catch(e) {
+    console.error('cpConfirmCode:', e);
+    showErr('cp-code-err','cp-code-err-t','验证码不正确，请重试');
+  } finally { btn.disabled=false; block(false); }
 }
 </script>
 </body>
