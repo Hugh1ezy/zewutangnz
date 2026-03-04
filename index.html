@@ -1077,40 +1077,10 @@ body{
   </div>
 </div>
 
-<!-- Firebase loaded dynamically with CDN fallback -->
-<script>
-(function loadFirebase() {
-  const PKGS = ['firebase-app-compat', 'firebase-firestore-compat', 'firebase-auth-compat'];
-  const CDN1 = 'https://www.gstatic.com/firebasejs/10.7.1/';
-  const CDN2 = 'https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/';
-  let loaded = 0;
-  const total = PKGS.length;
-
-  function tryLoad(pkg, cdnBase, onSuccess, onFail) {
-    const s = document.createElement('script');
-    s.src = cdnBase + pkg + '.min.js';
-    s.onload  = onSuccess;
-    s.onerror = onFail;
-    document.head.appendChild(s);
-  }
-
-  function loadOne(idx, cdnBase) {
-    if (idx >= total) { window._fbReady = true; return; }
-    tryLoad(PKGS[idx], cdnBase, () => loadOne(idx + 1, cdnBase), () => {
-      // Primary CDN failed for this pkg — try fallback CDN
-      if (cdnBase === CDN1) {
-        tryLoad(PKGS[idx], CDN2, () => loadOne(idx + 1, CDN2), () => {
-          window._fbFailed = true; // Both CDNs failed
-        });
-      } else {
-        window._fbFailed = true;
-      }
-    });
-  }
-
-  loadOne(0, CDN1);
-})();
-</script>
+<!-- Firebase SDKs — gstatic CDN (synchronous, CSP-approved) -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
 <script>
 /* ╔══════════════════════════════════════════════════════════╗
@@ -1200,12 +1170,9 @@ function initFirebase() {
   return false;
 }
 
-// 动态加载完成后初始化（用 window.load 确保所有动态脚本都已就绪）
-let _fbWarnShown = false;  // 只显示一次警告
-window.addEventListener('load', function() {
-  // 给动态脚本额外200ms完成执行
-  setTimeout(initFirebase, 200);
-});
+// 同步 SDK 加载完毕后直接初始化
+let _fbWarnShown = false;
+initFirebase();
 
 
 
@@ -1225,10 +1192,22 @@ const MO_EN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov'
 
 /* ══════════════════════ UTILITIES ══════════════════════ */
 function go(id) {
+  // Reset booking steps when returning to booking screen
+  if(id === 's-book-sa') {
+    const ph   = document.getElementById('book-step-phone');
+    const code = document.getElementById('book-step-code');
+    const cal  = document.getElementById('book-step-cal');
+    if(ph)   ph.style.display   = 'block';
+    if(code) code.style.display = 'none';
+    if(cal)  cal.style.display  = 'none';
+    const sendBtn = document.getElementById('book-send-btn');
+    if(sendBtn) sendBtn.disabled = false;
+    document.querySelectorAll('#book-code-inputs input').forEach(i => i.value='');
+    hideErr('book-ph-err'); hideErr('book-code-err');
+  }
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id)?.classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
-  // initCal('sa') is called after phone verification in bookVerify()
 }
 
 
@@ -1568,24 +1547,7 @@ async function bookVerify() {
   } finally { btn.disabled=false; block(false); }
 }
 
-// Reset booking steps when navigating to s-book-sa
-const _origGo = go;
-function go(id) {
-  if(id === 's-book-sa') {
-    // Reset to step 1
-    const ph   = document.getElementById('book-step-phone');
-    const code = document.getElementById('book-step-code');
-    const cal  = document.getElementById('book-step-cal');
-    if(ph)   ph.style.display   = 'block';
-    if(code) code.style.display = 'none';
-    if(cal)  cal.style.display  = 'none';
-    const sendBtn = document.getElementById('book-send-btn');
-    if(sendBtn) sendBtn.disabled = false;
-    document.querySelectorAll('#book-code-inputs input').forEach(i => i.value='');
-    hideErr('book-ph-err'); hideErr('book-code-err');
-  }
-  _origGo(id);
-}
+
 
 /* ══════════════════════ DEMO NOTICE ══════════════════════ */
 // Demo banner handled by initFirebase() above
