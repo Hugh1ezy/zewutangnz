@@ -897,10 +897,39 @@ const DEFAULT_SCHEDULE = {
 (function detectWeChat(){
   if(!/MicroMessenger/i.test(navigator.userAgent||'')) return;
   document.addEventListener('DOMContentLoaded',()=>{
-    const b=document.createElement('div');
-    b.style.cssText='background:#fff1f0;border-bottom:3px solid #e00;text-align:center;padding:14px 16px;font-size:18px;font-weight:700;line-height:1.7;color:#cc0000;position:fixed;top:0;left:0;right:0;z-index:9999;box-shadow:0 3px 12px rgba(200,0,0,0.15)';
-    b.innerHTML='⚠️ 请点击右上角 <span style="font-size:22px;color:#e00">···</span> → <span style="color:#e00">在浏览器中打开</span><br><span style="font-size:14px;font-weight:400;color:#a00">方可正常使用本页面的登录功能</span>';
-    document.body.insertBefore(b,document.body.firstChild);
+    // 全页遮罩
+    const overlay=document.createElement('div');
+    overlay.style.cssText='position:fixed;inset:0;background:#fff;z-index:999999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 28px;text-align:center;';
+
+    // 手写风箭头SVG（指向右上角）
+    const arrowSvg='<svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:absolute;top:-30px;right:-18px;transform:rotate(-20deg);pointer-events:none;">'
+      +'<path d="M8 64 C18 48, 30 20, 58 10" stroke="#cc0000" stroke-width="3.2" stroke-linecap="round" fill="none" stroke-dasharray="4 2"/>'
+      +'<path d="M52 6 C54 10, 58 10, 62 8" stroke="#cc0000" stroke-width="3.2" stroke-linecap="round" fill="none"/>'
+      +'<path d="M58 10 C58 6, 60 4, 62 8" stroke="#cc0000" stroke-width="3.2" stroke-linecap="round" fill="none"/>'
+      +'</svg>';
+
+    overlay.innerHTML=
+      // 图标
+      '<div style="font-size:56px;margin-bottom:24px;">📱</div>'
+      // 中文主提示
+      +'<div style="font-size:22px;font-weight:800;color:#111;line-height:1.7;margin-bottom:6px;">'
+      +'请点击右上角 <span style="font-size:26px;color:#cc0000;font-weight:900">···</span> →'
+      +'<br>在浏览器中<span style="color:#cc0000;position:relative;display:inline-block;">'
+      +'打开'+arrowSvg
+      +'</span>'
+      +'</div>'
+      // 中文副文字
+      +'<div style="font-size:14px;color:#888;margin-bottom:28px;line-height:1.6;">方可正常使用本页面的登录功能</div>'
+      // 分割线
+      +'<div style="width:48px;height:2px;background:#eee;margin-bottom:24px;border-radius:2px;"></div>'
+      // 英文翻译
+      +'<div style="font-size:16px;font-weight:700;color:#333;line-height:1.7;margin-bottom:6px;">'
+      +'Tap <span style="font-size:20px;color:#cc0000;font-weight:900">···</span> in the top-right corner'
+      +'<br>→ <span style="color:#cc0000;">Open in Browser</span>'
+      +'</div>'
+      +'<div style="font-size:13px;color:#aaa;line-height:1.6;">Required to use the login feature on this page</div>';
+
+    document.body.insertBefore(overlay,document.body.firstChild);
   });
 })();
 
