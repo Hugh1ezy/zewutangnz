@@ -780,10 +780,11 @@ function initFirebase() {
   }
 }
 
-// 同步脚本已加载完毕，直接初始化；window.load 作为保险重试
-initFirebase();
+// Try immediately, then again after window load
+// Init Firebase only after all scripts have loaded
 window.addEventListener('load', () => {
-  if(DEMO_MODE) { _fbInitAttempted = false; initFirebase(); }
+  _fbInitAttempted = false;
+  initFirebase();
 });
 
 /* ══════════════════════════════════════════════════════════
