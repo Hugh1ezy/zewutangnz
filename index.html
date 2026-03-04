@@ -991,6 +991,50 @@ async function bookVerify(){
 }
 
 /* ══════════════════════════════════════════════════════════
+   GOOGLE CALENDAR SYNC
+   通过 Firestore 中间层读取日历占用情况（由 Apps Script 同步写入）
+   Apps Script 设置见：使用说明.md
+══════════════════════════════════════════════════════════ */
+
+// 从 Firestore 读取指定日期的已占用时段（包含日历手动预约 + 系统预约）
+async function fetchTakenSlots(iso) {
+  if(DEMO_MODE || !db) return [];
+  try {
+    const snap = await db.collection('bookedSlots').doc(iso).get();
+    if(snap.exists) {
+      const d = snap.data();
+      return d.times || [];
+    }
+    return [];
+  } catch(e) {
+    console.warn('fetchTakenSlots error:', e);
+    return [];
+  }
+}
+
+// 选择日期后异步加载该日已占用时段
+async function selectDate(key, iso, el) {
+  document.querySelectorAll('#cal-'+key+' .cd').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+  G.selected[key].date = iso;
+  G.selected[key].time = null;
+
+  // 显示加载中
+  const slotCard = document.getElementById('slot-card-'+key);
+  const slotGrid = document.getElementById('slot-grid-'+key);
+  const slotHd   = document.getElementById('slot-hd-'+key);
+  slotCard.style.display = 'block';
+  slotHd.textContent = `${iso} 可用时段`;
+  slotGrid.innerHTML = '<div style="text-align:center;padding:16px;color:var(--ink-s);font-size:13px"><div class="spin" style="margin:0 auto 8px"></div>加载中...</div>';
+  document.getElementById('book-btn-'+key).style.display = 'none';
+
+  // 从 Firestore 读取该日已占用时段（含日历同步数据）
+  const taken = await fetchTakenSlots(iso);
+  G.bookedSlots[iso] = taken;
+  renderSlots(key, iso);
+}
+
+/* ══════════════════════════════════════════════════════════
    CALENDAR
 ══════════════════════════════════════════════════════════ */
 function initCal(key){
@@ -1062,6 +1106,7 @@ function renderSlots(key,iso){
     slots.push(`${String(h).padStart(2,'0')}:00`);
     slots.push(`${String(h).padStart(2,'0')}:30`);
   }
+  // 合并 Firestore 预约 + 日历同步数据
   const taken=G.bookedSlots?.[iso]||[];
   slots.forEach(t=>{
     const el=document.createElement('div');
@@ -1079,24 +1124,43 @@ function renderSlots(key,iso){
 }
 
 async function doBook(key){
-  hideErr(key==='sa'?'sa-err':'sa-err');
+  hideErr('sa-err');
   const sel=G.selected[key];
   if(!sel.date||!sel.time){showErr('sa-err','sa-err-t','请选择日期和时段');return;}
   block(true);
+  const patientName=G._bookPatient?`${G._bookPatient.firstName} ${G._bookPatient.familyName}`:'未知';
+  const phone=(document.getElementById('book-ph').value||'').trim();
   const data={
-    date:sel.date,time:sel.time,
-    patientName:G._bookPatient?`${G._bookPatient.firstName} ${G._bookPatient.familyName}`:'未知',
-    phone:(document.getElementById('book-ph').value||'').trim(),
+    date:sel.date, time:sel.time,
+    patientName, phone,
+    source:'patient_portal',
+    syncedToCalendar:false,          // Apps Script 看到此字段后创建日历事件并改为 true
     createdAt:new Date().toISOString()
   };
   try{
     if(!DEMO_MODE&&db){
+      // 1. 写入 appointments 集合（主记录）
       await db.collection('appointments').add(data);
+
+      // 2. 更新 bookedSlots 集合（供前端读取占用状态，也供日历同步使用）
+      const slotRef=db.collection('bookedSlots').doc(sel.date);
+      await db.runTransaction(async tx=>{
+        const snap=await tx.get(slotRef);
+        const existing=snap.exists?(snap.data().times||[]):[];
+        if(!existing.includes(sel.time)){
+          tx.set(slotRef,{times:[...existing,sel.time],lastUpdated:new Date().toISOString()});
+        }
+      });
+
+      // 本地缓存更新
       if(!G.bookedSlots[sel.date]) G.bookedSlots[sel.date]=[];
       G.bookedSlots[sel.date].push(sel.time);
     }
-    showOK('📅','预约成功！','您的预约已确认。',{'日期':sel.date,'时间':sel.time,'姓名':data.patientName});
+    showOK('📅','预约成功！','您的预约已确认，诊所会在日历中看到。',{
+      '日期':sel.date,'时间':sel.time,'姓名':patientName
+    });
   }catch(e){
+    console.error('doBook error:',e);
     showErr('sa-err','sa-err-t','预约失败，请重试');
   }finally{block(false);}
 }
