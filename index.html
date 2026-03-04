@@ -506,6 +506,32 @@ body{
   flex-shrink: 0;
 }
 
+/* ── 预约页通知框 ── */
+.book-notice {
+  background: linear-gradient(135deg,#f0f8f8,#e8f5f0);
+  border: 1.5px solid var(--teal-l);
+  border-radius: 14px;
+  padding: 18px 18px 14px;
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.book-notice-icon { font-size: 28px; margin-bottom: 10px; }
+.book-notice p { font-size: 14px; color: var(--ink-m); line-height: 1.75; }
+.book-notice-en { font-size: 12px; color: var(--ink-s); font-style: italic; }
+.book-welcome {
+  background: var(--teal-d);
+  color: #fff;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  text-align: center;
+}
+.resend-row { display:flex;align-items:center;gap:10px;margin-top:12px; }
+
 </style>
 </head>
 <body>
@@ -673,42 +699,89 @@ body{
 
 
   <!-- ═══════════════════════════════════════
-       S-BOOK-SA · 预约（无需登录）
+       S-BOOK-SA · 预约 — 第一步：手机验证
   ═══════════════════════════════════════ -->
   <div class="screen" id="s-book-sa">
     <button class="back" onclick="go('s-welcome')">‹ 返回</button>
     <div class="stitle">预约时间</div>
-    <div class="card">
-      <div class="card-label">您的信息</div>
-      <div class="fg">
-        <label>ACC45 No. *</label>
-        <input id="sa-acc" type="text" placeholder="例: AA12345 或 12345AA"
-          maxlength="7" oninput="this.value=this.value.toUpperCase()">
+
+    <!-- ── 步骤一：手机验证 ── -->
+    <div id="book-step-phone">
+      <div class="book-notice">
+        <div class="book-notice-icon">📋</div>
+        <p>
+          请先确认您已在本系统中登记了您的个人信息。<br>
+          <span class="book-notice-en">Please ensure you have registered your personal information in this system.</span>
+        </p>
+        <p style="margin-top:10px">
+          如果您已登记，请输入手机号接收验证码，进行验证登录。<br>
+          <span class="book-notice-en">If registered, enter your mobile number to receive a verification code.</span>
+        </p>
       </div>
-      <div class="fg">
-        <label>姓名 Full Name *</label>
-        <input id="sa-name" type="text" placeholder="First + Family Name">
+
+      <div class="card">
+        <div class="fg">
+          <label>手机号码 Mobile Number *</label>
+          <input id="book-ph" type="tel" placeholder="021 xxx xxxx"
+            onkeydown="if(event.key==='Enter')bookSendSMS()">
+          <small>请输入登记时使用的新西兰手机号 · NZ mobile number used at registration</small>
+        </div>
+        <div id="recaptcha-book"></div>
+        <div class="ebox" id="book-ph-err"><span>⚠️</span><span id="book-ph-err-t"></span></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-p" id="book-send-btn" onclick="bookSendSMS()">发送验证码 · Send Code</button>
       </div>
     </div>
-    <div class="card">
-      <div class="cal-nav">
-        <button class="cnb" onclick="calShift('sa',-1)">‹</button>
-        <h3 id="cal-label-sa">...</h3>
-        <button class="cnb" onclick="calShift('sa',1)">›</button>
+
+    <!-- ── 步骤二：输入验证码 ── -->
+    <div id="book-step-code" style="display:none">
+      <div class="phone-wrap"><div class="big-icon">💬</div></div>
+      <div class="stitle" style="margin-bottom:6px">输入验证码</div>
+      <div class="ssub" id="book-sms-sub">验证码已发送至 <strong id="book-phone-disp"></strong></div>
+      <div class="card">
+        <div class="code-inputs" id="book-code-inputs">
+          <input type="tel" maxlength="1" oninput="bookCodeInput(this,0)" onkeydown="bookCodeBk(this,0,event)">
+          <input type="tel" maxlength="1" oninput="bookCodeInput(this,1)" onkeydown="bookCodeBk(this,1,event)">
+          <input type="tel" maxlength="1" oninput="bookCodeInput(this,2)" onkeydown="bookCodeBk(this,2,event)">
+          <input type="tel" maxlength="1" oninput="bookCodeInput(this,3)" onkeydown="bookCodeBk(this,3,event)">
+          <input type="tel" maxlength="1" oninput="bookCodeInput(this,4)" onkeydown="bookCodeBk(this,4,event)">
+          <input type="tel" maxlength="1" oninput="bookCodeInput(this,5)" onkeydown="bookCodeBk(this,5,event)">
+        </div>
+        <div class="ebox" id="book-code-err"><span>⚠️</span><span id="book-code-err-t"></span></div>
+        <div class="resend-row">
+          <button class="resend-btn" id="book-resend-btn" onclick="bookResend()" disabled>重新发送</button>
+          <div class="countdown" id="book-countdown">60 秒后可重新发送</div>
+        </div>
       </div>
-      <div class="cal-heads">
-        <div class="ch">日</div><div class="ch">一</div><div class="ch">二</div>
-        <div class="ch">三</div><div class="ch">四</div><div class="ch">五</div><div class="ch">六</div>
+      <div class="btn-row">
+        <button class="btn btn-p" id="book-verify-btn" onclick="bookVerify()">验证 · Verify</button>
       </div>
-      <div class="cal-days" id="cal-sa"></div>
     </div>
-    <div class="card" id="slot-card-sa" style="display:none">
-      <div class="slots-hd" id="slot-hd-sa">选择时段</div>
-      <div class="slots" id="slot-grid-sa"></div>
-    </div>
-    <div class="ebox" id="sa-err"><span>⚠️</span><span id="sa-err-t"></span></div>
-    <div class="btn-row" id="book-btn-sa" style="display:none">
-      <button class="btn btn-p" onclick="doBook('sa')">确认预约 · Confirm</button>
+
+    <!-- ── 步骤三：选择日期时段 ── -->
+    <div id="book-step-cal" style="display:none">
+      <div class="book-welcome" id="book-welcome-name"></div>
+      <div class="card">
+        <div class="cal-nav">
+          <button class="cnb" onclick="calShift('sa',-1)">‹</button>
+          <h3 id="cal-label-sa">...</h3>
+          <button class="cnb" onclick="calShift('sa',1)">›</button>
+        </div>
+        <div class="cal-heads">
+          <div class="ch">日</div><div class="ch">一</div><div class="ch">二</div>
+          <div class="ch">三</div><div class="ch">四</div><div class="ch">五</div><div class="ch">六</div>
+        </div>
+        <div class="cal-days" id="cal-sa"></div>
+      </div>
+      <div class="card" id="slot-card-sa" style="display:none">
+        <div class="slots-hd" id="slot-hd-sa">选择时段</div>
+        <div class="slots" id="slot-grid-sa"></div>
+      </div>
+      <div class="ebox" id="sa-err"><span>⚠️</span><span id="sa-err-t"></span></div>
+      <div class="btn-row" id="book-btn-sa" style="display:none">
+        <button class="btn btn-p" onclick="doBook('sa')">确认预约 · Confirm</button>
+      </div>
     </div>
   </div>
 
@@ -1155,7 +1228,7 @@ function go(id) {
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id)?.classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
-  if (id==='s-book-sa') initCal('sa');
+  // initCal('sa') is called after phone verification in bookVerify()
 }
 
 
@@ -1343,6 +1416,175 @@ async function submitNew() {
       showErr('na-err','na-err-t','提交失败，请检查网络后重试');
     }
   } finally { btn.disabled=false; block(false); }
+}
+
+/* ══════════════════════════════════════════
+   BOOKING PAGE — PHONE VERIFICATION
+══════════════════════════════════════════ */
+let _bookConfirmResult = null;
+let _bookCountdownTimer = null;
+
+function normalizeNZPhone(raw) {
+  let s = (raw||'').replace(/\s/g,'');
+  if(/^0[2-9]\d{7,9}$/.test(s)) return {ok:true, e164:'+64'+s.slice(1), masked:'0'+s.slice(1,3)+'****'+s.slice(-3)};
+  if(/^\+64[2-9]\d{7,9}$/.test(s)) return {ok:true, e164:s, masked:'+64'+s.slice(3,5)+'****'+s.slice(-3)};
+  return {ok:false};
+}
+
+async function bookSendSMS() {
+  hideErr('book-ph-err');
+  const raw = (document.getElementById('book-ph').value||'').trim();
+  const nz  = normalizeNZPhone(raw);
+  if(!nz.ok) { showErr('book-ph-err','book-ph-err-t','请输入正确的新西兰手机号（如 021 xxx xxxx）'); return; }
+
+  if(location.protocol === 'file:') {
+    showErr('book-ph-err','book-ph-err-t','请通过 zewutangnz.pages.dev 打开本页');
+    return;
+  }
+
+  const btn = document.getElementById('book-send-btn');
+  btn.disabled = true; block(true);
+
+  try {
+    if(DEMO_MODE) {
+      // Demo: skip real SMS
+      _bookConfirmResult = null;
+      document.getElementById('book-phone-disp').textContent = nz.masked;
+      document.getElementById('book-step-phone').style.display = 'none';
+      document.getElementById('book-step-code').style.display  = 'block';
+      bookStartCountdown();
+    } else {
+      if(!window._bookRecaptcha) {
+        window._bookRecaptcha = new firebase.auth.RecaptchaVerifier('recaptcha-book', {size:'invisible'});
+      }
+      _bookConfirmResult = await auth.signInWithPhoneNumber(nz.e164, window._bookRecaptcha);
+      document.getElementById('book-phone-disp').textContent = nz.masked;
+      document.getElementById('book-step-phone').style.display = 'none';
+      document.getElementById('book-step-code').style.display  = 'block';
+      bookStartCountdown();
+    }
+  } catch(e) {
+    console.error('bookSendSMS:', e);
+    const msg = e.code === 'auth/too-many-requests'
+      ? '发送次数过多，请稍后再试'
+      : '发送失败，请检查手机号后重试';
+    showErr('book-ph-err','book-ph-err-t', msg);
+    btn.disabled = false;
+  } finally { block(false); }
+}
+
+function bookStartCountdown() {
+  clearInterval(_bookCountdownTimer);
+  const resend = document.getElementById('book-resend-btn');
+  const txt    = document.getElementById('book-countdown');
+  resend.disabled = true;
+  let sec = 60;
+  txt.textContent = `${sec} 秒后可重新发送`;
+  _bookCountdownTimer = setInterval(() => {
+    sec--;
+    if(sec <= 0) {
+      clearInterval(_bookCountdownTimer);
+      resend.disabled = false;
+      txt.textContent = '';
+    } else {
+      txt.textContent = `${sec} 秒后可重新发送`;
+    }
+  }, 1000);
+}
+
+function bookResend() {
+  document.getElementById('book-step-code').style.display  = 'none';
+  document.getElementById('book-step-phone').style.display = 'block';
+  document.getElementById('book-send-btn').disabled = false;
+  document.getElementById('book-ph').value = '';
+  hideErr('book-ph-err');
+  hideErr('book-code-err');
+  // Clear code inputs
+  document.querySelectorAll('#book-code-inputs input').forEach(i => i.value='');
+}
+
+function bookCodeInput(inp, idx) {
+  inp.value = inp.value.replace(/\D/g,'');
+  if(inp.value && idx < 5) {
+    document.querySelectorAll('#book-code-inputs input')[idx+1].focus();
+  }
+  if(document.querySelectorAll('#book-code-inputs input').length &&
+     [...document.querySelectorAll('#book-code-inputs input')].every(i => i.value)) {
+    bookVerify();
+  }
+}
+
+function bookCodeBk(inp, idx, e) {
+  if(e.key==='Backspace' && !inp.value && idx > 0) {
+    document.querySelectorAll('#book-code-inputs input')[idx-1].focus();
+  }
+}
+
+function bookGetCode() {
+  return [...document.querySelectorAll('#book-code-inputs input')].map(i=>i.value).join('');
+}
+
+async function bookVerify() {
+  hideErr('book-code-err');
+  const code = bookGetCode();
+  if(code.length < 6) { showErr('book-code-err','book-code-err-t','请输入完整的6位验证码'); return; }
+
+  const btn = document.getElementById('book-verify-btn');
+  btn.disabled = true; block(true);
+
+  try {
+    let patientData = null;
+    if(DEMO_MODE) {
+      if(code !== '123456') {
+        showErr('book-code-err','book-code-err-t','演示模式验证码为 123456');
+        btn.disabled = false; block(false); return;
+      }
+    } else {
+      const result = await _bookConfirmResult.confirm(code);
+      const phone  = result.user.phoneNumber;
+      // Look up patient by phone
+      try {
+        const snap = await db.collection('patients')
+          .where('phone','==', (document.getElementById('book-ph').value||'').trim())
+          .limit(1).get();
+        if(!snap.empty) patientData = snap.docs[0].data();
+      } catch(_) {}
+    }
+
+    // Show calendar step
+    document.getElementById('book-step-code').style.display = 'none';
+    document.getElementById('book-step-cal').style.display  = 'block';
+    const welcome = document.getElementById('book-welcome-name');
+    if(patientData) {
+      welcome.textContent = `✅ 验证成功 · 欢迎，${patientData.firstName} ${patientData.familyName}`;
+      G._bookPatient = patientData;
+    } else {
+      welcome.textContent = '✅ 验证成功 · Verified';
+    }
+    initCal('sa');
+  } catch(e) {
+    console.error('bookVerify:', e);
+    showErr('book-code-err','book-code-err-t','验证码不正确，请重试');
+  } finally { btn.disabled=false; block(false); }
+}
+
+// Reset booking steps when navigating to s-book-sa
+const _origGo = go;
+function go(id) {
+  if(id === 's-book-sa') {
+    // Reset to step 1
+    const ph   = document.getElementById('book-step-phone');
+    const code = document.getElementById('book-step-code');
+    const cal  = document.getElementById('book-step-cal');
+    if(ph)   ph.style.display   = 'block';
+    if(code) code.style.display = 'none';
+    if(cal)  cal.style.display  = 'none';
+    const sendBtn = document.getElementById('book-send-btn');
+    if(sendBtn) sendBtn.disabled = false;
+    document.querySelectorAll('#book-code-inputs input').forEach(i => i.value='');
+    hideErr('book-ph-err'); hideErr('book-code-err');
+  }
+  _origGo(id);
 }
 
 /* ══════════════════════ DEMO NOTICE ══════════════════════ */
