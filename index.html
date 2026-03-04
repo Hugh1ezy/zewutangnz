@@ -142,6 +142,11 @@ body{font-family:'DM Sans',-apple-system,'PingFang SC','Microsoft YaHei',sans-se
 .bn-link{color:#1a3a6b;text-decoration:underline;font-size:12px;font-weight:600;cursor:pointer;}
 .book-welcome{background:var(--teal-d);color:#fff;border-radius:12px;padding:12px 16px;font-size:15px;font-weight:600;margin-bottom:16px;text-align:center;}
 #recaptcha-book,#recaptcha-cp{margin:8px 0;min-height:0;}
+.dob-row{display:flex;gap:10px;}
+.dob-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.dob-col input{width:100%;padding:8px 6px;font-size:15px;font-weight:600;text-align:center;border:2px solid var(--border);border-radius:10px;background:var(--white);color:var(--ink);transition:border .2s;}
+.dob-col input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(42,124,124,0.1);}
+.dob-lbl{font-size:11px;color:var(--ink-s);font-weight:600;letter-spacing:.5px;}
 /* PAGE TITLES */
 .pg-title{text-align:center;margin-bottom:20px}
 .pg-title-main{font-size:24px;font-weight:700;color:var(--gold);letter-spacing:2px;font-family:'Noto Serif SC',serif}
@@ -318,25 +323,61 @@ body{font-family:'DM Sans',-apple-system,'PingFang SC','Microsoft YaHei',sans-se
       <div class="pg-title-sub" data-i18n="book-title-en">BOOK APPOINTMENT</div>
     </div>
 
-    <!-- Step 1: Phone -->
+    <!-- Step 1: Name+DOB then Phone -->
     <div id="book-step-phone">
       <div class="book-notice">
         <p class="bn-zh" data-i18n="book-notice-1">请先确认您已在本系统中登记了您的个人信息。</p>
-        <p class="bn-zh" style="margin-top:8px" data-i18n="book-notice-2">请输入您的手机号进行验证登录。</p>
+        <p class="bn-zh" style="margin-top:8px" data-i18n="book-notice-2">请输入您的姓名和出生日期进行验证。</p>
         <p class="bn-zh" style="margin-top:8px"><span data-i18n="book-notice-3">如果您新换了手机号，</span><a href="javascript:void(0)" onclick="go('s-change-phone')" class="bn-link" data-i18n="book-notice-link">请点击此处</a></p>
       </div>
-      <div class="card">
-        <div class="fg">
-          <label data-i18n="lbl-mobile">手机号码</label>
-          <input id="book-ph" type="tel" data-i18n-ph="ph-mobile" placeholder="021 xxx xxxx"
-            onkeydown="if(event.key==='Enter')bookSendSMS()">
-          <small data-i18n="mobile-hint">请输入登记时使用的新西兰手机号</small>
+
+      <!-- Sub-step A: Name + DOB -->
+      <div id="book-sub-name">
+        <div class="card">
+          <div class="fg" style="margin-bottom:14px">
+            <label style="font-size:14px" data-i18n="lbl-your-full-name">您的姓名</label>
+            <input id="book-name" type="text" data-i18n-ph="ph-book-name" placeholder="例：San Zhang（名 姓）" style="font-size:15px">
+            <small data-i18n="book-name-hint">例如：张三，请输入 "San Zhang"</small>
+          </div>
+          <div class="fg" style="margin-bottom:0">
+            <label style="font-size:14px" data-i18n="lbl-dob-verify">出生日期</label>
+            <div class="dob-row" style="margin-top:4px">
+              <div class="dob-col">
+                <input id="book-dob-y" type="tel" maxlength="4" placeholder="" oninput="if(this.value.length===4)document.getElementById('book-dob-m').focus()">
+                <span class="dob-lbl" data-i18n="dob-year">年</span>
+              </div>
+              <div class="dob-col">
+                <input id="book-dob-m" type="tel" maxlength="2" placeholder="" oninput="if(this.value.length===2)document.getElementById('book-dob-d').focus()">
+                <span class="dob-lbl" data-i18n="dob-month">月</span>
+              </div>
+              <div class="dob-col">
+                <input id="book-dob-d" type="tel" maxlength="2" placeholder="">
+                <span class="dob-lbl" data-i18n="dob-day">日</span>
+              </div>
+            </div>
+          </div>
         </div>
-        <div id="recaptcha-book"></div>
-        <div class="ebox" id="book-ph-err"><span>⚠️</span><span id="book-ph-err-t"></span></div>
+        <div class="ebox" id="book-name-err"><span>⚠️</span><span id="book-name-err-t"></span></div>
+        <div class="btn-row">
+          <button class="btn btn-p" id="book-name-btn" onclick="bookCheckName()" data-i18n="btn-next">下一步</button>
+        </div>
       </div>
-      <div class="btn-row">
-        <button class="btn btn-p" id="book-send-btn" onclick="bookSendSMS()" data-i18n="btn-send-code">发送验证码</button>
+
+      <!-- Sub-step B: Phone + SMS -->
+      <div id="book-sub-phone" style="display:none">
+        <div class="card">
+          <div class="fg">
+            <label data-i18n="lbl-mobile">手机号码</label>
+            <input id="book-ph" type="tel" data-i18n-ph="ph-mobile" placeholder="021 xxx xxxx"
+              onkeydown="if(event.key==='Enter')bookSendSMS()">
+            <small data-i18n="mobile-hint">请输入登记时使用的新西兰手机号</small>
+          </div>
+          <div id="recaptcha-book"></div>
+          <div class="ebox" id="book-ph-err"><span>⚠️</span><span id="book-ph-err-t"></span></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-p" id="book-send-btn" onclick="bookSendSMS()" data-i18n="btn-send-code">发送验证码</button>
+        </div>
       </div>
     </div>
 
@@ -669,8 +710,9 @@ const STRINGS = {
     'btn-submit':'提交登记',
     'book-title':'预约时间','book-title-en':'BOOK APPOINTMENT',
     'book-notice-1':'请先确认您已在本系统中登记了您的个人信息。',
-    'book-notice-2':'请输入您的手机号进行验证登录。',
+    'book-notice-2':'请输入您的姓名和出生日期进行验证。',
     'book-notice-3':'如果您新换了手机号，','book-notice-link':'请点击此处',
+    'lbl-your-full-name':'您的姓名','ph-book-name':'例：San Zhang（名 姓）','book-name-hint':'例如：张三，请输入 "San Zhang"','lbl-dob-verify':'出生日期','dob-year':'年','dob-month':'月','dob-day':'日',
     'lbl-mobile':'手机号码','mobile-hint':'请输入登记时使用的新西兰手机号',
     'btn-send-code':'发送验证码',
     'verify-title':'输入验证码','verify-sub-prefix':'验证码已发送至',
@@ -741,8 +783,9 @@ const STRINGS = {
     'btn-submit':'Submit Registration',
     'book-title':'Book Appointment','book-title-en':'BOOK APPOINTMENT',
     'book-notice-1':'Please ensure you have registered your personal information in this system.',
-    'book-notice-2':'Enter your mobile number to verify and log in.',
+    'book-notice-2':'Enter your name and date of birth to verify.',
     'book-notice-3':'If you have a new mobile number, ','book-notice-link':'click here',
+    'lbl-your-full-name':'Your Name','ph-book-name':'e.g. San Zhang (First Last)','book-name-hint':'e.g. John Smith','lbl-dob-verify':'Date of Birth','dob-year':'Year','dob-month':'Month','dob-day':'Day',
     'lbl-mobile':'Mobile Number','mobile-hint':'NZ mobile number used at registration',
     'btn-send-code':'Send Code',
     'verify-title':'Enter Verification Code','verify-sub-prefix':'Code sent to',
@@ -890,16 +933,21 @@ const G={
 ══════════════════════════════════════════════════════════ */
 function go(id){
   // Clear registration forms whenever entering new patient flow
-  if(id==='s-new-choice' || id==='s-new-personal'){
+  if(id==='s-new-choice'){
     clearRegistrationForms();
   }
   if(id==='s-book-sa'){
     document.getElementById('book-step-phone').style.display='block';
     document.getElementById('book-step-code').style.display='none';
     document.getElementById('book-step-cal').style.display='none';
+    document.getElementById('book-sub-name').style.display='block';
+    document.getElementById('book-sub-phone').style.display='none';
     document.getElementById('book-send-btn').disabled=false;
+    const bn=document.getElementById('book-name');if(bn)bn.value='';
+    ['book-dob-y','book-dob-m','book-dob-d'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+    document.getElementById('book-ph').value='';
     document.querySelectorAll('#book-code-inputs input').forEach(i=>i.value='');
-    hideErr('book-ph-err');hideErr('book-code-err');
+    hideErr('book-name-err');hideErr('book-ph-err');hideErr('book-code-err');
     _bookConfirmResult=null;
     if(window._bookRecaptcha){try{window._bookRecaptcha.clear();}catch(_){}window._bookRecaptcha=null;}
   }
@@ -952,11 +1000,13 @@ function showOK(icon,title,msg,details,autoHome){
 ══════════════════════════════════════════════════════════ */
 function startNewWithACC(){
   G.hasACC=true;
+  clearRegistrationForms();
   go('s-new-personal');
   document.getElementById('personal-sub').textContent=T('personal-sub-acc');
 }
 function startNewNoACC(){
   G.hasACC=false;
+  clearRegistrationForms();
   go('s-new-personal');
   document.getElementById('personal-sub').textContent=T('personal-sub-noACC');
 }
@@ -1025,7 +1075,6 @@ async function submitNoACC(){
     if(e.message==='timeout') showErr('np-err','np-err-t',curLang==='zh'?'提交超时，请检查网络':'Submission timed out. Check your connection.');
     else if(e.code==='permission-denied') showErr('np-err','np-err-t',curLang==='zh'?'您已经登记过了，请返回上一步':'You have already registered. Please go back.');
     else showErr('np-err','np-err-t',curLang==='zh'?'提交失败（'+e.code+'）':'Submission failed ('+e.code+')');
-    go('s-new-personal');
   }finally{block(false);}
 }
 
@@ -1081,6 +1130,49 @@ function normalizeNZPhone(raw){
   if(/^0[2-9]\d{7,9}$/.test(s)) return{ok:true,e164:'+64'+s.slice(1),masked:'0'+s.slice(1,3)+'****'+s.slice(-3)};
   if(/^\+64[2-9]\d{7,9}$/.test(s)) return{ok:true,e164:s,masked:'+64'+s.slice(3,5)+'****'+s.slice(-3)};
   return{ok:false};
+}
+
+async function bookCheckName(){
+  hideErr('book-name-err');
+  const nameRaw=(document.getElementById('book-name').value||'').trim();
+  const y=(document.getElementById('book-dob-y').value||'').trim();
+  const m=(document.getElementById('book-dob-m').value||'').trim();
+  const d=(document.getElementById('book-dob-d').value||'').trim();
+  const parts=nameRaw.split(/\s+/);
+  if(parts.length<2){showErr('book-name-err','book-name-err-t',curLang==='zh'?'请输入名和姓，例如：San Zhang':'Please enter first and last name, e.g. San Zhang');return;}
+  if(y.length!==4||!m||!d){showErr('book-name-err','book-name-err-t',curLang==='zh'?'请填写完整的出生日期':'Please enter complete date of birth');return;}
+  const dob=`${d.padStart(2,'0')}/${m.padStart(2,'0')}/${y}`;
+  const btn=document.getElementById('book-name-btn');
+  btn.disabled=true;block(true);
+  try{
+    if(DEMO_MODE){
+      document.getElementById('book-sub-name').style.display='none';
+      document.getElementById('book-sub-phone').style.display='block';
+      block(false);btn.disabled=false;return;
+    }
+    const snap=await db.collection('patients').where('dob','==',dob).get();
+    if(snap.empty){
+      showErr('book-name-err','book-name-err-t',curLang==='zh'?'未找到您的登记信息，请先完成首次就诊登记':'No record found. Please complete new patient registration first.');
+      btn.disabled=false;block(false);return;
+    }
+    const inputNorm=nameRaw.replace(/\s/g,'').toLowerCase();
+    let matched=false;
+    snap.forEach(doc=>{
+      const d2=doc.data();
+      const dbNorm=((d2.firstName||'')+(d2.familyName||'')).replace(/\s/g,'').toLowerCase();
+      if(inputNorm===dbNorm) matched=true;
+    });
+    if(!matched){
+      showErr('book-name-err','book-name-err-t',curLang==='zh'?'姓名或出生日期不匹配，请检查后重试':'Name or date of birth does not match. Please check and retry.');
+      btn.disabled=false;block(false);return;
+    }
+    document.getElementById('book-sub-name').style.display='none';
+    document.getElementById('book-sub-phone').style.display='block';
+  }catch(e){
+    console.error('bookCheckName:',e);
+    if(e.code==='permission-denied') showErr('book-name-err','book-name-err-t',curLang==='zh'?'数据库权限不足，请联系诊所':'Database permission error. Please contact the clinic.');
+    else showErr('book-name-err','book-name-err-t',curLang==='zh'?'查询失败（'+e.code+'），请重试':'Query failed ('+e.code+'). Please retry.');
+  }finally{btn.disabled=false;block(false);}
 }
 
 async function bookSendSMS(){
