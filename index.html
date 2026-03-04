@@ -697,10 +697,10 @@ body{
   </div>
 </div>
 
-<!-- Firebase SDKs (Firestore + Auth for Phone) -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<!-- Firebase SDKs — defer so page renders & buttons work immediately -->
+<script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
 <script>
 /* ╔══════════════════════════════════════════════════════════╗
@@ -728,16 +728,73 @@ const DEFAULT_SCHEDULE = {
 const SESSION_MS   = 10 * 60 * 1000;  // 10分钟
 const MAX_SESSIONS = 12;               // 最多12次治疗（与acc.html一致）
 
-/* ══════════════════════ INIT ══════════════════════ */
-let db = null, auth = null, DEMO_MODE = false;
-try {
-  firebase.initializeApp(FB_CFG);
-  db   = firebase.firestore();
-  auth = firebase.auth();
-} catch(e) {
-  DEMO_MODE = true;
-  console.warn("Firebase未配置，演示模式:", e.message);
+/* ══════════════════════════════════════════════════════════
+   WECHAT BROWSER DETECTION
+   微信内置浏览器不支持 Firebase Phone Auth（reCAPTCHA被屏蔽）
+   检测到微信时，提示用户用外部浏览器打开
+══════════════════════════════════════════════════════════ */
+(function detectWeChat() {
+  const ua = navigator.userAgent || '';
+  const isWeChat = /MicroMessenger/i.test(ua);
+  if (!isWeChat) return;
+
+  // 在微信内 — 显示提示横幅
+  document.addEventListener('DOMContentLoaded', () => {
+    const banner = document.createElement('div');
+    banner.id = 'wechat-banner';
+    banner.style.cssText = [
+      'background:#07c160;color:#fff;text-align:center',
+      'padding:10px 16px;font-size:13px;line-height:1.6',
+      'position:fixed;top:0;left:0;right:0;z-index:9999',
+      'box-shadow:0 2px 8px rgba(0,0,0,0.2)'
+    ].join(';');
+    banner.innerHTML = '请点击右上角 <strong>···</strong> → <strong>在浏览器中打开</strong>，以完成登录验证';
+    document.body.insertBefore(banner, document.body.firstChild);
+
+    // Also nudge the page content down so banner doesn't overlap
+    const page = document.querySelector('.page');
+    if (page) page.style.paddingTop = '60px';
+    const appBar = document.querySelector('.app-bar');
+    if (appBar) appBar.style.top = '40px';
+  });
+})();
+
+/* ══════════════════════ FIREBASE INIT ══════════════════════
+   使用 window.onload 确保 defer 脚本全部加载完毕后再初始化
+   这样按钮点击完全不依赖 Firebase 是否加载
+══════════════════════════════════════════════════════════ */
+let db = null, auth = null, DEMO_MODE = true;  // 默认演示模式，Firebase 加载后切换
+
+function initFirebase() {
+  try {
+    if (typeof firebase === 'undefined') throw new Error('SDK未加载');
+    try { firebase.app(); } catch(_) { firebase.initializeApp(FB_CFG); }
+    db   = firebase.firestore();
+    auth = firebase.auth();
+    DEMO_MODE = false;
+    console.log('✅ Firebase 已连接');
+    const b = document.getElementById('demo-banner');
+    if (b) b.remove();
+  } catch(e) {
+    DEMO_MODE = true;
+    console.warn('Firebase 演示模式:', e.message);
+  }
 }
+
+// defer 脚本在 DOMContentLoaded 之后、window.onload 之前完成
+// 所以在 window.onload 里初始化是最可靠的时机
+window.addEventListener('load', () => {
+  initFirebase();
+  // 如果仍然失败（网络慢），再重试两次
+  if (DEMO_MODE) {
+    let tries = 0;
+    const t = setInterval(() => {
+      tries++;
+      initFirebase();
+      if (!DEMO_MODE || tries >= 2) clearInterval(t);
+    }, 1500);
+  }
+});
 
 /* ══════════════════════════════════════════
    SESSION MANAGEMENT (10分钟免重新验证)
@@ -1652,12 +1709,7 @@ async function loadAppts() {
 }
 
 /* ══════════════════════ DEMO NOTICE ══════════════════════ */
-if(DEMO_MODE) {
-  const n=document.createElement('div');
-  n.style.cssText='background:#fff3cd;color:#856404;text-align:center;font-size:12px;padding:6px 12px;border-bottom:1px solid #ffc107';
-  n.textContent='⚠️ 演示模式 — Firebase 未配置，数据不会被保存 | 验证码使用 123456';
-  document.body.insertBefore(n,document.body.firstChild);
-}
+// Demo banner handled by initFirebase() above
 
 /* ══════════════════════ SESSION RESTORE ON LOAD ══════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
