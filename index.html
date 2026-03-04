@@ -336,7 +336,7 @@ body{font-family:'DM Sans',-apple-system,'PingFang SC','Microsoft YaHei',sans-se
         <div class="card">
           <div class="fg" style="margin-bottom:14px">
             <label style="font-size:14px" data-i18n="lbl-your-full-name">您的姓名</label>
-            <input id="book-name" type="text" data-i18n-ph="ph-book-name" placeholder="例：San Zhang（名 姓）" style="font-size:15px">
+            <input id="book-name" type="text" data-i18n-ph="ph-book-name" placeholder="例：张三 或 San Zhang" style="font-size:15px">
             <small data-i18n="book-name-hint">例如：张三，请输入 "San Zhang"</small>
           </div>
           <div class="fg" style="margin-bottom:0">
@@ -712,7 +712,7 @@ const STRINGS = {
     'book-notice-1':'请先确认您已在本系统中登记了您的个人信息。',
     'book-notice-2':'请输入您的姓名和出生日期进行验证。',
     'book-notice-3':'如果您新换了手机号，','book-notice-link':'请点击此处',
-    'lbl-your-full-name':'您的姓名','ph-book-name':'例：San Zhang（名 姓）','book-name-hint':'例如：张三，请输入 "San Zhang"','lbl-dob-verify':'出生日期','dob-year':'年','dob-month':'月','dob-day':'日',
+    'lbl-your-full-name':'您的姓名','ph-book-name':'例：张三 或 San Zhang','book-name-hint':'请直接输入您的姓名（中文或英文均可）','lbl-dob-verify':'出生日期','dob-year':'年','dob-month':'月','dob-day':'日',
     'lbl-mobile':'手机号码','mobile-hint':'请输入登记时使用的新西兰手机号',
     'btn-send-code':'发送验证码',
     'verify-title':'输入验证码','verify-sub-prefix':'验证码已发送至',
@@ -785,7 +785,7 @@ const STRINGS = {
     'book-notice-1':'Please ensure you have registered your personal information in this system.',
     'book-notice-2':'Enter your name and date of birth to verify.',
     'book-notice-3':'If you have a new mobile number, ','book-notice-link':'click here',
-    'lbl-your-full-name':'Your Name','ph-book-name':'e.g. San Zhang (First Last)','book-name-hint':'e.g. John Smith','lbl-dob-verify':'Date of Birth','dob-year':'Year','dob-month':'Month','dob-day':'Day',
+    'lbl-your-full-name':'Your Name','ph-book-name':'e.g. Zhang San or John Smith','book-name-hint':'Enter your name in Chinese or English','lbl-dob-verify':'Date of Birth','dob-year':'Year','dob-month':'Month','dob-day':'Day',
     'lbl-mobile':'Mobile Number','mobile-hint':'NZ mobile number used at registration',
     'btn-send-code':'Send Code',
     'verify-title':'Enter Verification Code','verify-sub-prefix':'Code sent to',
@@ -1138,8 +1138,7 @@ async function bookCheckName(){
   const y=(document.getElementById('book-dob-y').value||'').trim();
   const m=(document.getElementById('book-dob-m').value||'').trim();
   const d=(document.getElementById('book-dob-d').value||'').trim();
-  const parts=nameRaw.split(/\s+/);
-  if(parts.length<2){showErr('book-name-err','book-name-err-t',curLang==='zh'?'请输入名和姓，例如：San Zhang':'Please enter first and last name, e.g. San Zhang');return;}
+  if(nameRaw.length<2){showErr('book-name-err','book-name-err-t',curLang==='zh'?'请输入您的姓名（至少2个字符）':'Please enter your name (at least 2 characters)');return;}
   if(y.length!==4||!m||!d){showErr('book-name-err','book-name-err-t',curLang==='zh'?'请填写完整的出生日期':'Please enter complete date of birth');return;}
   const dob=`${d.padStart(2,'0')}/${m.padStart(2,'0')}/${y}`;
   const btn=document.getElementById('book-name-btn');
@@ -1159,8 +1158,10 @@ async function bookCheckName(){
     let matched=false;
     snap.forEach(doc=>{
       const d2=doc.data();
-      const dbNorm=((d2.firstName||'')+(d2.familyName||'')).replace(/\s/g,'').toLowerCase();
-      if(inputNorm===dbNorm) matched=true;
+      // Support both "FirstLast" and "LastFirst" (Chinese style)
+      const dbNorm1=((d2.firstName||'')+(d2.familyName||'')).replace(/\s/g,'').toLowerCase();
+      const dbNorm2=((d2.familyName||'')+(d2.firstName||'')).replace(/\s/g,'').toLowerCase();
+      if(inputNorm===dbNorm1||inputNorm===dbNorm2) matched=true;
     });
     if(!matched){
       showErr('book-name-err','book-name-err-t',curLang==='zh'?'姓名或出生日期不匹配，请检查后重试':'Name or date of birth does not match. Please check and retry.');
@@ -1191,8 +1192,11 @@ async function bookSendSMS(){
       bookStartCountdown(); block(false); return;
     }
     if(window._bookRecaptcha){try{window._bookRecaptcha.clear();}catch(_){}window._bookRecaptcha=null;}
-    document.getElementById('recaptcha-book').innerHTML='';
-    window._bookRecaptcha=new firebase.auth.RecaptchaVerifier('recaptcha-book',{
+    const rcWrap=document.getElementById('recaptcha-book');
+    rcWrap.innerHTML='';
+    const rcFreshDiv=document.createElement('div');
+    rcWrap.appendChild(rcFreshDiv);
+    window._bookRecaptcha=new firebase.auth.RecaptchaVerifier(rcFreshDiv,{
       size:'invisible',callback:()=>{},
       'expired-callback':()=>{if(window._bookRecaptcha){try{window._bookRecaptcha.clear();}catch(_){}}window._bookRecaptcha=null;}
     });
@@ -1381,11 +1385,29 @@ async function doBook(key){
   const sel=G.selected[key];
   if(!sel.date||!sel.time){showErr('sa-err','sa-err-t',curLang==='zh'?'请选择日期和时段':'Please select a date and time slot');return;}
   block(true);
-  const patientName=G._bookPatient?`${G._bookPatient.firstName} ${G._bookPatient.familyName}`:(curLang==='zh'?'未知':'Unknown');
+  // Smart name: if familyName contains Chinese chars, use 姓名 order (no space); else First Last
+  function buildDisplayName(p){
+    if(!p) return curLang==='zh'?'未知':'Unknown';
+    const isChinese=/[一-鿿]/.test(p.familyName||'');
+    return isChinese?(p.familyName||'')+(p.firstName||''):(p.firstName+' '+p.familyName).trim();
+  }
+  const patientName=buildDisplayName(G._bookPatient);
   const phone=(document.getElementById('book-ph').value||'').trim();
   const data={date:sel.date,time:sel.time,patientName,phone,source:'patient_portal',syncedToCalendar:false,createdAt:new Date().toISOString()};
   try{
     if(!DEMO_MODE&&db){
+      // Real-time conflict check: re-fetch latest booked slots from Firestore
+      const freshSnap=await db.collection('bookedSlots').doc(sel.date).get();
+      const freshTaken=freshSnap.exists?(freshSnap.data().times||[]):[];
+      if(freshTaken.includes(sel.time)){
+        // Refresh display and reject
+        G.bookedSlots[sel.date]=freshTaken;
+        renderSlots(key,sel.date);
+        G.selected[key].time=null;
+        document.getElementById('book-btn-'+key).style.display='none';
+        showErr('sa-err','sa-err-t',curLang==='zh'?'该时段刚被预约，请重新选择时间':'This slot was just booked. Please choose another time.');
+        block(false);return;
+      }
       await db.collection('appointments').add(data);
       const slotRef=db.collection('bookedSlots').doc(sel.date);
       await db.runTransaction(async tx=>{
