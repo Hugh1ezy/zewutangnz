@@ -293,6 +293,14 @@ body{
       <p>请选择您今天需要的服务<br>Please choose a service below</p>
     </div>
     <div class="w-cards">
+      <div class="w-card" onclick="go('s-pricing')" style="border-left:4px solid var(--gold)">
+        <div class="wci" style="background:#fdf3e0">💴</div>
+        <div class="wct">
+          <h3>查看收费标准 · Pricing</h3>
+          <p>ACC 说明及各医生诊疗费用</p>
+        </div>
+        <span class="arr">›</span>
+      </div>
       <div class="w-card" onclick="go('s-new-choice')">
         <div class="wci" style="background:#e8f5f5">📋</div>
         <div class="wct">
@@ -684,6 +692,172 @@ body{
         <button class="btn btn-p" onclick="go('s-welcome')">返回首页 · Back Home</button>
         <button class="btn btn-o" id="ok-home-btn" style="display:none" onclick="go('s-home')">返回我的账户</button>
       </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════
+       S-PRICING · 收费标准
+  ═══════════════════════════════════════ -->
+  <div class="screen" id="s-pricing">
+    <button class="back" onclick="go('s-welcome')">‹ 返回</button>
+    <div class="stitle">收费标准</div>
+
+    <!-- ACC 说明 -->
+    <div class="acc-notice">
+      <h4>📋 ACC 保险说明</h4>
+      <p>
+        我们可以使用 ACC，但<strong>无法为您开具 ACC</strong>，需要您向家庭医生申请开具。<br><br>
+        当您第一次成功使用 ACC 后，从当日起 <span class="acc-highlight">12 周</span> 内这张 ACC 均有效，
+        且总共可使用 <span class="acc-highlight">12 次</span>。
+      </p>
+    </div>
+
+    <!-- 医生标签栏 -->
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab(0)">张传生医生</button>
+      <button class="tab-btn"        onclick="switchTab(1)">张超医生</button>
+      <button class="tab-btn"        onclick="switchTab(2)">张宇医生</button>
+    </div>
+
+    <div class="tab-body">
+
+      <!-- 张传生医生 -->
+      <div class="tab-pane active" id="tab-0">
+        <div class="fee-row">
+          <div class="fee-label">
+            初诊诊费
+            <small>自费，不计入 ACC</small>
+          </div>
+          <div class="fee-amt">
+            <div class="price">¥150</div>
+            <div class="price-sub">自费</div>
+          </div>
+        </div>
+        <div class="fee-row">
+          <div class="fee-label">
+            针灸
+            <small>有 ACC：签字 + 自费部分</small>
+          </div>
+          <div class="fee-amt">
+            <div class="price">¥85 <span style="font-size:12px;font-weight:400">无ACC</span></div>
+            <div class="price-sub">有ACC：¥20 自费</div>
+          </div>
+        </div>
+        <div class="fee-row">
+          <div class="fee-label">
+            手法
+            <small>有 ACC：签字 + 自费部分</small>
+          </div>
+          <div class="fee-amt">
+            <div class="price">¥80 <span style="font-size:12px;font-weight:400">无ACC</span></div>
+            <div class="price-sub">有ACC：¥15 自费</div>
+          </div>
+        </div>
+        <div class="fee-row">
+          <div class="fee-label">
+            中药
+            <small>自费，不计入 ACC</small>
+          </div>
+          <div class="fee-amt">
+            <div class="price" style="font-size:13px">按方计费</div>
+            <div class="price-sub">自费</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 张超医生 -->
+      <div class="tab-pane" id="tab-1">
+        <div class="fee-row">
+          <div class="fee-label">
+            初诊诊费
+            <small>自费，不计入 ACC</small>
+          </div>
+          <div class="fee-amt">
+            <div class="price">¥50</div>
+            <div class="price-sub">自费</div>
+          </div>
+        </div>
+        <div class="fee-row">
+          <div class="fee-label">
+            针灸
+            <small>有 ACC：签字 + 自费部分</small>
+          </div>
+          <div class="fee-amt">
+            <div class="price">¥85 <span style="font-size:12px;font-weight:400">无ACC</span></div>
+            <div class="price-sub">有ACC：¥20 自费</div>
+          </div>
+        </div>
+        <div class="fee-row">
+          <div class="fee-label">
+            手法
+            <small>有 ACC：签字 + 自费部分</small>
+          </div>
+          <div class="fee-amt">
+            <div class="price">¥80 <span style="font-size:12px;font-weight:400">无ACC</span></div>
+            <div class="price-sub">有ACC：¥15 自费</div>
+          </div>
+        </div>
+        <div class="fee-row">
+          <div class="fee-label">
+            中药
+            <small>自费，不计入 ACC</small>
+          </div>
+          <div class="fee-amt">
+            <div class="price" style="font-size:13px">按方计费</div>
+            <div class="price-sub">自费</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 张宇医生 -->
+      <div class="tab-pane" id="tab-2">
+        <div class="fee-row">
+          <div class="fee-label">
+            初诊诊费
+            <small>自费，不计入 ACC</small>
+          </div>
+          <div class="fee-amt">
+            <div class="price">¥50</div>
+            <div class="price-sub">自费</div>
+          </div>
+        </div>
+        <div class="fee-row">
+          <div class="fee-label">
+            针灸
+            <small>有 ACC：签字 + 自费部分</small>
+          </div>
+          <div class="fee-amt">
+            <div class="price">¥85 <span style="font-size:12px;font-weight:400">无ACC</span></div>
+            <div class="price-sub">有ACC：¥20 自费</div>
+          </div>
+        </div>
+        <div class="fee-row">
+          <div class="fee-label">
+            手法
+            <small>有 ACC：签字 + 自费部分</small>
+          </div>
+          <div class="fee-amt">
+            <div class="price">¥80 <span style="font-size:12px;font-weight:400">无ACC</span></div>
+            <div class="price-sub">有ACC：¥15 自费</div>
+          </div>
+        </div>
+        <div class="fee-row">
+          <div class="fee-label">
+            中药
+            <small>自费，不计入 ACC</small>
+          </div>
+          <div class="fee-amt">
+            <div class="price" style="font-size:13px">按方计费</div>
+            <div class="price-sub">自费</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- .tab-body -->
+
+    <div class="btn-row">
+      <button class="btn btn-p" onclick="go('s-welcome')">返回首页</button>
     </div>
   </div>
 
@@ -1711,6 +1885,12 @@ async function loadAppts() {
 /* ══════════════════════ DEMO NOTICE ══════════════════════ */
 // Demo banner handled by initFirebase() above
 
+
+/* ══════════════════════ PRICING TAB SWITCH ══════════════════════ */
+function switchTab(idx) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
+  document.querySelectorAll('.tab-pane').forEach((p,i) => p.classList.toggle('active', i===idx));
+}
 /* ══════════════════════ SESSION RESTORE ON LOAD ══════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
   // If a valid session exists and user navigates to site,
