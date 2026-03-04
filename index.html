@@ -563,15 +563,8 @@ body{font-family:'DM Sans',-apple-system,'PingFang SC','Microsoft YaHei',sans-se
               <div class="pr-item-name" data-i18n="followup-consult">复诊诊费</div>
               <div class="pr-item-note" data-i18n="self-pay-note">自费，不被 ACC 涵盖</div>
               <div class="pr-price" style="margin-top:8px">$50</div>
+              <div class="pr-item-note" style="margin-top:6px;color:var(--gold);font-size:11px">仅在开药时收取，正骨不收复诊费</div>
             </div>
-          </div>
-        </div>
-        <div class="pr-item">
-          <div class="pr-item-name" data-i18n="acupuncture">针灸</div>
-          <div class="pr-item-dual">
-            <div class="pr-dual-col"><div class="pr-dual-label" data-i18n="without-acc">无 ACC</div><div class="pr-dual-price">$85</div></div>
-            <div class="pr-dual-sep"></div>
-            <div class="pr-dual-col acc-col"><div class="pr-dual-label" data-i18n="with-acc">有 ACC</div><div class="pr-dual-price acc-p">$20</div><div class="pr-dual-sub" data-i18n="self-sign">自费 + 签字</div></div>
           </div>
         </div>
         <div class="pr-item">
@@ -894,7 +887,7 @@ const FB_CFG = {
 };
 
 const DEFAULT_SCHEDULE = {
-  weeklySlots: [{dayOfWeek:2,startHour:9,endHour:17},{dayOfWeek:5,startHour:9,endHour:17}],
+  weeklySlots: [{dayOfWeek:2,startHour:9,endHour:17},{dayOfWeek:5,startHour:9,endHour:17}],  /* endHour=17 → slots 9:00-17:00 */
   blockedRanges: [], slotMinutes: 30, maxDaysAhead: 60
 };
 
@@ -1160,7 +1153,7 @@ async function bookCheckName(){
     }
     const snap=await db.collection('patients').where('dob','==',dob).get();
     if(snap.empty){
-      showErr('book-name-err','book-name-err-t',curLang==='zh'?'未找到您的登记信息，请先完成首次就诊登记':'No record found. Please complete new patient registration first.');
+      showErr('book-name-err','book-name-err-t',curLang==='zh'?'您未登记，请返回主页，点击首次就诊':'You are not registered. Please return to the home page and click New Patient.');
       btn.disabled=false;block(false);return;
     }
     const inputNorm=nameRaw.replace(/\s/g,'').toLowerCase();
@@ -1374,7 +1367,7 @@ function renderSlots(key,iso){
   slotGrid.innerHTML='';btnRow.style.display='none';
   if(!ws){slotGrid.innerHTML=`<div style="color:var(--ink-s);font-size:13px">${T('no-slots')}</div>`;return;}
   const slots=[];
-  for(let h=ws.startHour;h<ws.endHour;h++){slots.push(`${String(h).padStart(2,'0')}:00`);slots.push(`${String(h).padStart(2,'0')}:30`);}
+  for(let h=ws.startHour;h<=ws.endHour;h++){slots.push(`${String(h).padStart(2,'0')}:00`);if(h<ws.endHour)slots.push(`${String(h).padStart(2,'0')}:30`);}
   const taken=G.bookedSlots?.[iso]||[];
   slots.forEach(t=>{
     const el=document.createElement('div');
