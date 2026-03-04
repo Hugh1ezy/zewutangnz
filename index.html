@@ -1,149 +1,69 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" id="html-root">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>北京泽五堂中医诊所 · 患者自助服务</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
-
 <style>
-:root {
-  --teal:   #2a7c7c;
-  --teal-l: #3a9e9e;
-  --teal-d: #1a5555;
-  --gold:   #c9a84c;
-  --cream:  #f7f9f8;
-  --ink:    #1c2b2b;
-  --ink-m:  #3d5050;
-  --ink-s:  #7a9494;
-  --border: #dde8e8;
-  --red:    #c0392b;
-  --green:  #27ae60;
-  --white:  #ffffff;
-  --shadow: 0 2px 16px rgba(26,85,85,0.08);
-}
+:root{--teal:#2a7c7c;--teal-l:#3a9e9e;--teal-d:#1a5555;--gold:#c9a84c;--cream:#f7f9f8;--ink:#1c2b2b;--ink-m:#3d5050;--ink-s:#7a9494;--border:#dde8e8;--red:#c0392b;--green:#27ae60;--white:#ffffff;--shadow:0 2px 16px rgba(26,85,85,0.08);}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{font-size:16px}
-body{
-  font-family:'DM Sans',-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;
-  background:var(--cream);min-height:100vh;color:var(--ink);padding-bottom:40px;
-}
-
-/* ── App Bar ── */
-.app-bar{
-  background:var(--teal-d);padding:14px 20px;
-  display:flex;align-items:center;gap:12px;
-  position:sticky;top:0;z-index:100;
-}
-.bar-icon{
-  width:36px;height:36px;border-radius:10px;
-  background:rgba(255,255,255,0.15);
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;flex-shrink:0;
-}
+body{font-family:'DM Sans',-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--cream);min-height:100vh;color:var(--ink);padding-bottom:40px;}
+.app-bar{background:var(--teal-d);padding:14px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;}
+.bar-icon{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
 .bar-title{font-size:15px;font-weight:700;color:#fff;line-height:1.2}
 .bar-sub{font-size:11px;color:rgba(255,255,255,0.55);margin-top:1px}
-
-/* ── Layout ── */
+.bar-spacer{flex:1}
+.lang-btn{background:#ffffff;border:2px solid rgba(255,255,255,0.6);color:#ff4444;font:900 15px/1 'DM Sans',sans-serif;padding:6px 24px;border-radius:4px;cursor:pointer;transition:background .2s;white-space:nowrap;flex-shrink:0;}
+.lang-btn:hover{background:rgba(255,255,255,0.25)}
 .page{padding:20px 16px;max-width:460px;margin:0 auto}
-.screen{display:none}
-.screen.active{display:block;animation:up .28s ease}
+.screen{display:none}.screen.active{display:block;animation:up .28s ease}
 @keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-
-/* ── Back ── */
-.back{
-  display:inline-flex;align-items:center;gap:5px;
-  background:none;border:none;color:var(--teal);
-  font:700 14px/1 'DM Sans',sans-serif;cursor:pointer;
-  padding:0;margin-bottom:20px;
-}
+.back{display:inline-flex;align-items:center;gap:5px;background:none;border:none;color:var(--teal);font:700 14px/1 'DM Sans',sans-serif;cursor:pointer;padding:0;margin-bottom:20px;}
 .back:hover{color:var(--teal-l)}
-
-/* ── Titles ── */
 .stitle{font-size:22px;font-weight:700;color:var(--ink);margin-bottom:6px;line-height:1.3}
 .ssub{font-size:14px;color:var(--ink-s);margin-bottom:22px;line-height:1.5}
-
-/* ── Cards ── */
 .card{background:var(--white);border-radius:16px;padding:20px 18px;margin-bottom:14px;box-shadow:var(--shadow);}
 .card-label{font-size:11px;font-weight:700;color:var(--ink-s);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:14px;padding-bottom:10px;border-bottom:1.5px solid var(--border);}
-
-/* ── Forms ── */
 .fg{margin-bottom:16px}
 .fg label{display:block;font-size:11px;font-weight:700;color:var(--ink-m);letter-spacing:.3px;margin-bottom:7px;}
-.fg input,.fg select,.fg textarea{
-  width:100%;padding:12px 14px;font:15px/1.4 'DM Sans',sans-serif;
-  border:2px solid var(--border);border-radius:10px;
-  background:var(--white);color:var(--ink);
-  transition:border .2s,box-shadow .2s;appearance:none;
-}
+.fg input,.fg select,.fg textarea{width:100%;padding:12px 14px;font:15px/1.4 'DM Sans',sans-serif;border:2px solid var(--border);border-radius:10px;background:var(--white);color:var(--ink);transition:border .2s,box-shadow .2s;appearance:none;}
 .fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(42,124,124,0.1);}
 .fg input.err{border-color:var(--red)}
 .fg small{display:block;font-size:12px;color:var(--ink-s);margin-top:5px}
-
-/* ── Buttons ── */
 .btn-row{display:flex;flex-direction:column;gap:10px;margin-top:6px}
-.btn{
-  width:100%;padding:15px;border:none;border-radius:12px;
-  font:700 16px/1 'DM Sans',sans-serif;cursor:pointer;
-  transition:all .18s;display:flex;align-items:center;justify-content:center;gap:8px;
-}
-.btn-p{background:var(--teal);color:#fff}
-.btn-p:hover{background:var(--teal-l)}
-.btn-p:active{transform:scale(.98)}
-.btn-o{background:transparent;color:var(--teal);border:2px solid var(--teal)}
-.btn-o:hover{background:#e8f5f5}
-.btn-q{background:#f0f4f4;color:var(--ink-m);font-size:14px;padding:12px}
-.btn-q:hover{background:#e0eaea}
-
-/* ── Welcome cards ── */
+.btn{width:100%;padding:15px;border:none;border-radius:12px;font:700 16px/1 'DM Sans',sans-serif;cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-p{background:var(--teal);color:#fff}.btn-p:hover{background:var(--teal-l)}.btn-p:active{transform:scale(.98)}
+.btn-o{background:transparent;color:var(--teal);border:2px solid var(--teal)}.btn-o:hover{background:#e8f5f5}
+.btn-q{background:#f0f4f4;color:var(--ink-m);font-size:14px;padding:12px}.btn-q:hover{background:#e0eaea}
 .hero{text-align:center;padding:32px 0 24px}
 .hero-icon{font-size:52px;margin-bottom:14px}
 .hero h2{font-size:26px;font-weight:700;margin-bottom:8px}
 .hero p{font-size:15px;color:var(--ink-m);line-height:1.6}
 .w-cards{display:flex;flex-direction:column;gap:12px}
-.w-card{
-  background:var(--white);border-radius:16px;padding:18px 16px;
-  display:flex;align-items:center;gap:14px;
-  box-shadow:var(--shadow);cursor:pointer;
-  border:2px solid transparent;transition:all .2s;
-}
+.w-card{background:var(--white);border-radius:16px;padding:18px 16px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow);cursor:pointer;border:2px solid transparent;transition:all .2s;}
 .w-card:hover{border-color:var(--teal);transform:translateY(-1px)}
 .wci{width:48px;height:48px;border-radius:14px;font-size:22px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.wct{flex:1}
-.wct h3{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.wct{flex:1}.wct h3{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:3px}
 .wct p{font-size:13px;color:var(--ink-s);line-height:1.4}
 .arr{font-size:20px;color:var(--ink-s);flex-shrink:0}
-
-/* ── ACC choice cards ── */
 .choice-cards{display:flex;flex-direction:column;gap:14px;margin-top:8px}
-.choice-card{
-  background:var(--white);border-radius:16px;padding:22px 20px;
-  display:flex;align-items:center;gap:16px;
-  box-shadow:var(--shadow);cursor:pointer;
-  border:2px solid transparent;transition:all .2s;
-}
+.choice-card{background:var(--white);border-radius:16px;padding:22px 20px;display:flex;align-items:center;gap:16px;box-shadow:var(--shadow);cursor:pointer;border:2px solid transparent;transition:all .2s;}
 .choice-card:hover{border-color:var(--teal);transform:translateY(-2px);box-shadow:0 6px 24px rgba(26,85,85,0.13);}
 .choice-icon{font-size:32px;flex-shrink:0}
 .choice-text h3{font-size:17px;font-weight:700;color:var(--ink);margin-bottom:5px}
 .choice-text p{font-size:13px;color:var(--ink-s);line-height:1.5}
-
-/* ── SMS screen ── */
 .phone-wrap{text-align:center;padding:12px 0 4px}
 .phone-wrap .big-icon{font-size:48px;margin-bottom:16px}
 .code-inputs{display:flex;gap:10px;justify-content:center;margin:20px 0}
-.code-inputs input{
-  width:46px;height:56px;border:2px solid var(--border);border-radius:10px;
-  text-align:center;font:700 22px 'DM Sans',sans-serif;color:var(--ink);
-  background:var(--white);transition:border .2s;
-}
+.code-inputs input{width:46px;height:56px;border:2px solid var(--border);border-radius:10px;text-align:center;font:700 22px 'DM Sans',sans-serif;color:var(--ink);background:var(--white);transition:border .2s;}
 .code-inputs input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(42,124,124,0.1);}
 .resend-row{display:flex;align-items:center;gap:10px;margin-top:12px;}
 .resend-btn{background:none;border:none;color:var(--teal);font:600 14px 'DM Sans',sans-serif;cursor:pointer;padding:6px}
 .resend-btn:disabled{color:var(--ink-s);cursor:default}
 .countdown{font-size:13px;color:var(--ink-s);margin-top:4px}
-
-/* ── Calendar ── */
 .cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .cal-nav h3{font-size:18px;font-weight:700;color:var(--ink)}
 .cnb{width:34px;height:34px;border:2px solid var(--border);border-radius:9px;background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:border .2s;}
@@ -162,8 +82,6 @@ body{
 .slot:hover{border-color:var(--teal);color:var(--teal)}
 .slot.taken{background:#f5f5f5;color:#bbb;cursor:not-allowed;border-color:transparent;font-size:11px}
 .slot.sel{background:var(--teal);color:#fff;border-color:var(--teal)}
-
-/* ── Misc ── */
 .ebox{background:#fdf0ef;border:1.5px solid #f5c6c6;border-radius:10px;padding:12px 14px;font-size:14px;color:var(--red);display:none;align-items:flex-start;gap:8px;margin-bottom:14px;}
 .succ{text-align:center;padding:44px 16px}
 .succ .s-icon{width:68px;height:68px;border-radius:50%;background:#edfaf3;font-size:34px;display:flex;align-items:center;justify-content:center;margin:0 auto 22px;}
@@ -171,9 +89,7 @@ body{
 .succ p{font-size:15px;color:var(--ink-m);line-height:1.6}
 .ibox{background:#f5fbfb;border:1.5px solid var(--border);border-radius:12px;padding:14px;margin:18px 0;text-align:left;}
 .ibr{display:flex;justify-content:space-between;font-size:14px;padding:7px 0;border-bottom:1px solid var(--border);}
-.ibr:last-child{border-bottom:none}
-.ibr .l{color:var(--ink-s)}
-.ibr .v{font-weight:700;color:var(--ink)}
+.ibr:last-child{border-bottom:none}.ibr .l{color:var(--ink-s)}.ibr .v{font-weight:700;color:var(--ink)}
 .spin-wrap{display:flex;flex-direction:column;align-items:center;padding:48px 0;gap:14px}
 .spin{width:32px;height:32px;border-radius:50%;border:3px solid var(--border);border-top-color:var(--teal);animation:sp .8s linear infinite;}
 @keyframes sp{to{transform:rotate(360deg)}}
@@ -184,8 +100,7 @@ body{
 .blocker.on{display:flex}
 .blocker-inner{background:#fff;border-radius:16px;padding:28px 24px;text-align:center;width:260px}
 .blocker-inner p{font-size:15px;color:var(--ink-m);margin-top:12px}
-
-/* ══ PRICING ══ */
+/* PRICING */
 .pr-notice{background:linear-gradient(135deg,#f0f8f8,#e8f5f0);border:1.5px solid var(--teal-l);border-radius:14px;padding:16px 18px;margin-bottom:20px;}
 .pr-notice-title{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:var(--teal-d);margin-bottom:12px;}
 .pr-dot{width:8px;height:8px;background:var(--teal);border-radius:50%;flex-shrink:0;}
@@ -198,17 +113,13 @@ body{
 .pr-tabs{display:flex;background:var(--white);border-radius:12px 12px 0 0;border:1.5px solid var(--border);border-bottom:none;overflow:hidden;}
 .pr-tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 6px 10px;cursor:pointer;position:relative;transition:all .2s;border-right:1px solid var(--border);gap:2px;}
 .pr-tab:last-of-type{border-right:none;}
-.pr-tab-zh{font-size:13px;font-weight:700;color:var(--ink-s);transition:color .2s;white-space:nowrap;}
-.pr-tab-en{font-size:10px;color:var(--ink-s);opacity:.7;transition:color .2s;}
-.pr-tab.active .pr-tab-zh{color:var(--teal-d);}
-.pr-tab.active .pr-tab-en{color:var(--teal);opacity:1;}
+.pr-tab-name{font-size:13px;font-weight:700;color:var(--ink-s);transition:color .2s;white-space:nowrap;}
+.pr-tab.active .pr-tab-name{color:var(--teal-d);}
 .pr-tab.active::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--teal);border-radius:3px 3px 0 0;}
 .pr-panels{background:var(--white);border:1.5px solid var(--border);border-top:none;border-radius:0 0 14px 14px;padding:6px 16px 16px;margin-bottom:4px;box-shadow:var(--shadow);}
-.pr-panel{display:none;}
-.pr-panel.active{display:block;}
+.pr-panel{display:none;}.pr-panel.active{display:block;}
 .pr-item{padding:16px 0;border-bottom:1px solid var(--border);}
-.pr-item-name{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:2px;}
-.pr-item-en{font-size:11px;color:var(--ink-s);font-style:italic;margin-bottom:4px;}
+.pr-item-name{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:4px;}
 .pr-item-note{font-size:11px;color:var(--ink-s);margin-top:4px;}
 .pr-item-price{display:flex;align-items:center;gap:10px;margin-top:10px;}
 .pr-price{font-size:28px;font-weight:700;color:var(--teal-d);}
@@ -225,26 +136,16 @@ body{
 .pr-consult-col{flex:1;padding:14px 12px;background:#fafcfc;}
 .pr-consult-col:last-child{background:#f5faf8;}
 .pr-consult-sep{width:1px;background:var(--border);flex-shrink:0;}
-
-/* ── 预约通知 ── */
+/* BOOKING NOTICE */
 .book-notice{background:linear-gradient(135deg,#f0f8f8,#e8f5f0);border:1.5px solid var(--teal-l);border-radius:14px;padding:18px 18px 16px;margin-bottom:18px;}
 .bn-zh{font-size:12px;font-weight:600;color:var(--ink-m);line-height:1.7;}
-.bn-en{font-size:10px;color:var(--ink-s);line-height:1.6;margin-top:2px;}
 .bn-link{color:#1a3a6b;text-decoration:underline;font-size:12px;font-weight:600;cursor:pointer;}
-.bn-link-en{color:#1a3a6b;text-decoration:underline;font-size:10px;cursor:pointer;}
 .book-welcome{background:var(--teal-d);color:#fff;border-radius:12px;padding:12px 16px;font-size:15px;font-weight:600;margin-bottom:16px;text-align:center;}
-
-/* ── reCAPTCHA container ── */
-#recaptcha-book { margin: 8px 0; min-height: 0; }
-/* ── 出生日期三格 ── */
-.dob-row{display:flex;gap:10px;}
-.dob-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;}
-.dob-col input{width:100%;padding:8px 6px;font-size:15px;font-weight:600;text-align:center;
-  border:2px solid var(--border);border-radius:10px;background:var(--white);color:var(--ink);
-  transition:border .2s;}
-.dob-col input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(42,124,124,0.1);}
-.dob-lbl{font-size:11px;color:var(--ink-s);font-weight:600;letter-spacing:.5px;}
-
+#recaptcha-book,#recaptcha-cp{margin:8px 0;min-height:0;}
+/* PAGE TITLES */
+.pg-title{text-align:center;margin-bottom:20px}
+.pg-title-main{font-size:24px;font-weight:700;color:var(--gold);letter-spacing:2px;font-family:'Noto Serif SC',serif}
+.pg-title-sub{font-size:12px;color:var(--ink-s);margin-top:4px;letter-spacing:1px}
 </style>
 </head>
 <body>
@@ -252,9 +153,11 @@ body{
 <header class="app-bar">
   <div class="bar-icon">🏥</div>
   <div>
-    <div class="bar-title">北京泽五堂中医诊所</div>
-    <div class="bar-sub">Patient Self-Service · 患者自助服务</div>
+    <div class="bar-title" data-i18n="clinic-name">北京泽五堂中医诊所</div>
+    <div class="bar-sub" data-i18n="self-service">患者自助服务</div>
   </div>
+  <div class="bar-spacer"></div>
+  <button class="lang-btn" id="lang-btn" onclick="toggleLang()">中文/En</button>
 </header>
 
 <div class="page">
@@ -262,31 +165,31 @@ body{
   <!-- S-WELCOME -->
   <div class="screen active" id="s-welcome">
     <div class="hero">
-      <h2>欢迎 · Welcome</h2>
-      <p>请选择您今天需要的服务<br>Please choose a service below</p>
+      <h2 data-i18n="welcome-h2">欢迎</h2>
+      <p data-i18n="welcome-sub">请选择您今天需要的服务</p>
     </div>
     <div class="w-cards">
       <div class="w-card" onclick="go('s-pricing')" style="border-left:4px solid var(--gold)">
         <div class="wci" style="background:#fdf3e0">💴</div>
         <div class="wct">
-          <h3>查看收费标准 · Pricing</h3>
-          <p>ACC 说明及各医生诊疗费用</p>
+          <h3 data-i18n="pricing-card-h">查看收费标准</h3>
+          <p data-i18n="pricing-card-p">ACC 说明及各医生诊疗费用</p>
         </div>
         <span class="arr">›</span>
       </div>
       <div class="w-card" onclick="go('s-new-choice')">
         <div class="wci" style="background:#e8f5f5">📋</div>
         <div class="wct">
-          <h3>首次就诊 · New Patient</h3>
-          <p>填写您的个人信息进行登记</p>
+          <h3 data-i18n="newpt-card-h">首次就诊</h3>
+          <p data-i18n="newpt-card-p">填写您的个人信息进行登记</p>
         </div>
         <span class="arr">›</span>
       </div>
       <div class="w-card" onclick="go('s-book-sa')">
         <div class="wci" style="background:#fdf3e0">📅</div>
         <div class="wct">
-          <h3>预约时间 · Book Appointment</h3>
-          <p>查看可用时段并预约治疗</p>
+          <h3 data-i18n="book-card-h">预约时间</h3>
+          <p data-i18n="book-card-p">查看可用时段并预约治疗</p>
         </div>
         <span class="arr">›</span>
       </div>
@@ -295,23 +198,26 @@ body{
 
   <!-- S-NEW-CHOICE -->
   <div class="screen" id="s-new-choice">
-    <button class="back" onclick="go('s-welcome')">‹ 返回 <span style="font-size:11px;font-weight:400;opacity:.7">Back</span></button>
-    <div style="text-align:center;margin-bottom:20px"><div style="font-size:24px;font-weight:700;color:var(--gold);letter-spacing:2px;font-family:'Noto Serif SC',serif">首次就诊登记</div><div style="font-size:12px;color:var(--ink-s);margin-top:4px;letter-spacing:1px">NEW PATIENT REGISTRATION</div></div>
-    <div class="ssub">请选择您的情况<br>Please select your situation</div>
+    <button class="back" onclick="go('s-welcome')">‹ <span data-i18n="back">返回</span></button>
+    <div class="pg-title">
+      <div class="pg-title-main" data-i18n="newpt-title">首次就诊登记</div>
+      <div class="pg-title-sub" data-i18n="newpt-title-en">NEW PATIENT REGISTRATION</div>
+    </div>
+    <div class="ssub" data-i18n="newpt-choice-sub">请选择您的情况</div>
     <div class="choice-cards">
       <div class="choice-card" onclick="startNewWithACC()">
         <div class="choice-icon">✅</div>
         <div class="choice-text">
-          <h3>我有 ACC 保单</h3>
-          <p>我已获得 ACC 批准，有 ACC 号码<br><span style="color:var(--teal);font-weight:600">I have an ACC claim number</span></p>
+          <h3 data-i18n="acc-yes-h">我有 ACC 保单</h3>
+          <p data-i18n="acc-yes-p">我已获得 ACC 批准，有 ACC 号码</p>
         </div>
         <span class="arr">›</span>
       </div>
       <div class="choice-card" onclick="startNewNoACC()">
         <div class="choice-icon">📋</div>
         <div class="choice-text">
-          <h3>我没有 ACC 保单</h3>
-          <p>自费就诊，填写个人信息即可<br><span style="color:var(--teal);font-weight:600">Self-pay, no ACC claim</span></p>
+          <h3 data-i18n="acc-no-h">我没有 ACC 保单</h3>
+          <p data-i18n="acc-no-p">自费就诊，填写个人信息即可</p>
         </div>
         <span class="arr">›</span>
       </div>
@@ -320,72 +226,78 @@ body{
 
   <!-- S-NEW-PERSONAL -->
   <div class="screen" id="s-new-personal">
-    <button class="back" id="personal-back-btn" onclick="go('s-new-choice')">‹ 返回 <span style="font-size:11px;font-weight:400;opacity:.7">Back</span></button>
-    <div class="stitle">个人信息</div>
-    <div class="ssub" id="personal-sub">请填写您的基本信息</div>
+    <button class="back" id="personal-back-btn" onclick="go('s-new-choice')">‹ <span data-i18n="back">返回</span></button>
+    <div class="pg-title">
+      <div class="pg-title-main" data-i18n="personal-title">个人信息</div>
+      <div class="pg-title-sub" data-i18n="personal-title-en">PERSONAL INFORMATION</div>
+    </div>
+    <div class="ssub" id="personal-sub" data-i18n="personal-sub-noACC">请填写您的基本信息</div>
     <div class="card">
-      <div class="card-label">基本信息 Personal Details</div>
+      <div class="card-label" data-i18n="personal-card-label">基本信息</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
         <div class="fg" style="margin-bottom:0">
-          <label>姓 Family Name *</label>
-          <input id="np-fam" type="text" placeholder="Zhang">
+          <label data-i18n="lbl-family-name">姓</label>
+          <input id="np-fam" type="text" data-i18n-ph="ph-family-name" placeholder="Zhang">
         </div>
         <div class="fg" style="margin-bottom:0">
-          <label>名 First Name *</label>
-          <input id="np-fir" type="text" placeholder="San">
+          <label data-i18n="lbl-first-name">名</label>
+          <input id="np-fir" type="text" data-i18n-ph="ph-first-name" placeholder="San">
         </div>
       </div>
       <div class="fg" style="margin-top:14px">
-        <label>性别 Gender *</label>
+        <label data-i18n="lbl-gender">性别</label>
         <select id="np-gender">
-          <option value="">— 请选择 —</option>
-          <option value="male">男 Male</option>
-          <option value="female">女 Female</option>
+          <option value="" data-i18n-opt="opt-gender-default">— 请选择 —</option>
+          <option value="male" data-i18n-opt="opt-male">男</option>
+          <option value="female" data-i18n-opt="opt-female">女</option>
         </select>
       </div>
       <div class="fg">
-        <label>出生日期 Date of Birth * (DD/MM/YYYY)</label>
+        <label data-i18n="lbl-dob">出生日期 (DD/MM/YYYY)</label>
         <input id="np-dob" type="text" placeholder="DD/MM/YYYY" maxlength="10" oninput="fmtDate(this)">
       </div>
       <div class="fg">
-        <label>联系电话 Phone *</label>
-        <input id="np-ph" type="tel" placeholder="021 xxx xxxx">
-        <small>新西兰手机号 · NZ mobile number</small>
+        <label data-i18n="lbl-phone">联系电话</label>
+        <input id="np-ph" type="tel" data-i18n-ph="ph-mobile" placeholder="021 xxx xxxx">
+        <small data-i18n="phone-hint">新西兰手机号</small>
       </div>
       <div class="fg">
-        <label>地址 Address（选填）</label>
-        <textarea id="np-addr" rows="2" placeholder="街道地址 / Street address, Auckland"></textarea>
+        <label data-i18n="lbl-address">地址（选填）</label>
+        <textarea id="np-addr" rows="2" data-i18n-ph="ph-addr" placeholder="街道地址, Auckland"></textarea>
       </div>
       <div class="fg">
-        <label>邮箱 Email（选填）</label>
+        <label data-i18n="lbl-email">邮箱（选填）</label>
         <input id="np-email" type="email" placeholder="you@example.com">
       </div>
     </div>
     <div class="ebox" id="np-err"><span>⚠️</span><span id="np-err-t"></span></div>
     <div class="btn-row">
-      <button class="btn btn-p" onclick="personalNext()">下一步 · Next ›</button>
+      <button class="btn btn-p" onclick="personalNext()" data-i18n="btn-next">下一步</button>
     </div>
   </div>
 
   <!-- S-NEW-ACC -->
   <div class="screen" id="s-new-acc">
-    <button class="back" onclick="go('s-new-personal')">‹ 返回 <span style="font-size:11px;font-weight:400;opacity:.7">Back</span></button>
-    <div class="stitle">ACC 信息</div>
-    <div class="ssub">请填写您的 ACC 保单信息</div>
+    <button class="back" onclick="go('s-new-personal')">‹ <span data-i18n="back">返回</span></button>
+    <div class="pg-title">
+      <div class="pg-title-main" data-i18n="acc-info-title">ACC 信息</div>
+      <div class="pg-title-sub" data-i18n="acc-info-title-en">ACC CLAIM DETAILS</div>
+    </div>
+    <div class="ssub" data-i18n="acc-info-sub">请填写您的 ACC 保单信息</div>
     <div class="card">
-      <div class="card-label">ACC 保单信息</div>
+      <div class="card-label" data-i18n="acc-card-label">ACC 保单信息</div>
       <div class="fg">
         <label>ACC45 No. *</label>
-        <input id="na-acc" type="text" placeholder="例: AA12345 或 12345AA"
+        <input id="na-acc" type="text" data-i18n-ph="ph-acc45" placeholder="例: AA12345 或 12345AA"
           maxlength="7" oninput="this.value=this.value.toUpperCase()">
       </div>
       <div class="fg">
-        <label>受伤日期 Date of Accident *</label>
+        <label data-i18n="lbl-doa">受伤日期</label>
         <input id="na-doa" type="text" placeholder="DD/MM/YYYY" maxlength="10" oninput="fmtDate(this)">
       </div>
       <div class="fg">
-        <label>受伤原因 Reason for Injury *</label>
-        <input id="na-reason" type="text" placeholder="例: 跌倒、运动受伤、交通事故...">
+        <label data-i18n="lbl-reason">受伤原因</label>
+        <input id="na-reason" type="text" data-i18n-ph="ph-reason" placeholder="例: 跌倒、运动受伤、交通事故...">
       </div>
       <div class="fg">
         <label>Read Code *</label>
@@ -394,88 +306,45 @@ body{
     </div>
     <div class="ebox" id="na-err"><span>⚠️</span><span id="na-err-t"></span></div>
     <div class="btn-row">
-      <button class="btn btn-p" id="na-sub-btn" onclick="submitNew()">提交登记 · Submit</button>
+      <button class="btn btn-p" id="na-sub-btn" onclick="submitNew()" data-i18n="btn-submit">提交登记</button>
     </div>
   </div>
 
   <!-- S-BOOK-SA -->
   <div class="screen" id="s-book-sa">
-    <button class="back" onclick="go('s-welcome')">‹ 返回 <span style="font-size:11px;font-weight:400;opacity:.7">Back</span></button>
-    <div style="text-align:center;margin-bottom:20px"><div style="font-size:24px;font-weight:700;color:var(--gold);letter-spacing:2px;font-family:'Noto Serif SC',serif">预约时间</div><div style="font-size:12px;color:var(--ink-s);margin-top:4px;letter-spacing:1px">BOOK APPOINTMENT</div></div>
+    <button class="back" onclick="go('s-welcome')">‹ <span data-i18n="back">返回</span></button>
+    <div class="pg-title">
+      <div class="pg-title-main" data-i18n="book-title">预约时间</div>
+      <div class="pg-title-sub" data-i18n="book-title-en">BOOK APPOINTMENT</div>
+    </div>
 
-    <!-- Step 1: Name check -->
+    <!-- Step 1: Phone -->
     <div id="book-step-phone">
-
-      <!-- Sub-step A: Name + DOB -->
-      <div id="book-sub-name">
-        <div class="book-notice">
-          <p class="bn-zh">请先确认您已在本系统中登记了您的个人信息。</p>
-          <p class="bn-en">Please ensure you have registered your personal information in this system.</p>
-          <p class="bn-zh" style="margin-top:10px">请输入您的姓名和手机号进行验证登录。</p>
-          <p class="bn-en">Enter your name and mobile number to verify and log in.</p>
-          <p class="bn-zh" style="margin-top:10px">如果您新换了手机号，<a href="javascript:void(0)" onclick="go('s-change-phone')" class="bn-link">请点击此处</a></p>
-          <p class="bn-en">If you have a new mobile number, <a href="javascript:void(0)" onclick="go('s-change-phone')" class="bn-link-en">click here</a></p>
-        </div>
-        <div class="card">
-          <div class="fg">
-            <label style="font-size:14px">您的姓名 Your Name *</label>
-            <input id="book-name" type="text"
-              placeholder="请输入登记时填写的姓名 · Name used at registration"
-              style="font-size:13px">
-            <small>例如：张三，请输入 "San Zhang"&nbsp;&nbsp;&nbsp;e.g. John Smith</small>
-          </div>
-          <div class="fg" style="margin-top:14px">
-            <label style="font-size:14px">出生日期 Date of Birth *</label>
-            <div class="dob-row">
-              <div class="dob-col">
-                <input id="book-dob-y" type="tel" maxlength="4" placeholder=""
-                  oninput="this.value=this.value.replace(/\D/g,'');if(this.value.length===4)document.getElementById('book-dob-m').focus()">
-                <div class="dob-lbl">年 Year</div>
-              </div>
-              <div class="dob-col">
-                <input id="book-dob-m" type="tel" maxlength="2" placeholder=""
-                  oninput="this.value=this.value.replace(/\D/g,'');if(this.value.length===2)document.getElementById('book-dob-d').focus()">
-                <div class="dob-lbl">月 Month</div>
-              </div>
-              <div class="dob-col">
-                <input id="book-dob-d" type="tel" maxlength="2" placeholder=""
-                  oninput="this.value=this.value.replace(/\D/g,'');if(this.value.length===2)document.getElementById('book-next-btn').focus()">
-                <div class="dob-lbl">日 Day</div>
-              </div>
-            </div>
-          </div>
-          <div class="ebox" id="book-name-err"><span>⚠️</span><span id="book-name-err-t"></span></div>
-        </div>
-        <div class="btn-row">
-          <button class="btn btn-p" id="book-next-btn" onclick="bookCheckName()">下一步 · Next ›</button>
-        </div>
+      <div class="book-notice">
+        <p class="bn-zh" data-i18n="book-notice-1">请先确认您已在本系统中登记了您的个人信息。</p>
+        <p class="bn-zh" style="margin-top:8px" data-i18n="book-notice-2">请输入您的手机号进行验证登录。</p>
+        <p class="bn-zh" style="margin-top:8px"><span data-i18n="book-notice-3">如果您新换了手机号，</span><a href="javascript:void(0)" onclick="go('s-change-phone')" class="bn-link" data-i18n="book-notice-link">请点击此处</a></p>
       </div>
-
-      <!-- Sub-step B: Phone (shown after name verified) -->
-      <div id="book-sub-phone" style="display:none">
-        <div class="card">
-          <div class="fg">
-            <label>手机号码 Mobile Number *</label>
-            <input id="book-ph" type="tel" placeholder="021 xxx xxxx"
-              onkeydown="if(event.key==='Enter')bookSendSMS()">
-            <small>请输入登记时使用的新西兰手机号 · NZ mobile number used at registration</small>
-          </div>
-          <!-- reCAPTCHA renders here -->
-          <div id="recaptcha-book"></div>
-          <div class="ebox" id="book-ph-err"><span>⚠️</span><span id="book-ph-err-t"></span></div>
+      <div class="card">
+        <div class="fg">
+          <label data-i18n="lbl-mobile">手机号码</label>
+          <input id="book-ph" type="tel" data-i18n-ph="ph-mobile" placeholder="021 xxx xxxx"
+            onkeydown="if(event.key==='Enter')bookSendSMS()">
+          <small data-i18n="mobile-hint">请输入登记时使用的新西兰手机号</small>
         </div>
-        <div class="btn-row">
-          <button class="btn btn-p" id="book-send-btn" onclick="bookSendSMS()">发送验证码 · Send Code</button>
-        </div>
+        <div id="recaptcha-book"></div>
+        <div class="ebox" id="book-ph-err"><span>⚠️</span><span id="book-ph-err-t"></span></div>
       </div>
-
+      <div class="btn-row">
+        <button class="btn btn-p" id="book-send-btn" onclick="bookSendSMS()" data-i18n="btn-send-code">发送验证码</button>
+      </div>
     </div>
 
     <!-- Step 2: Code -->
     <div id="book-step-code" style="display:none">
       <div class="phone-wrap"><div class="big-icon">💬</div></div>
-      <div class="stitle" style="margin-bottom:6px">输入验证码</div>
-      <div class="ssub">验证码已发送至 <strong id="book-phone-disp"></strong></div>
+      <div class="stitle" style="margin-bottom:6px" data-i18n="verify-title">输入验证码</div>
+      <div class="ssub"><span data-i18n="verify-sub-prefix">验证码已发送至</span> <strong id="book-phone-disp"></strong></div>
       <div class="card">
         <div class="code-inputs" id="book-code-inputs">
           <input type="tel" maxlength="1" oninput="bookCodeInput(this,0)" onkeydown="bookCodeBk(this,0,event)">
@@ -487,12 +356,12 @@ body{
         </div>
         <div class="ebox" id="book-code-err"><span>⚠️</span><span id="book-code-err-t"></span></div>
         <div class="resend-row">
-          <button class="resend-btn" id="book-resend-btn" onclick="bookResend()" disabled>重新发送</button>
-          <div class="countdown" id="book-countdown">60 秒后可重新发送</div>
+          <button class="resend-btn" id="book-resend-btn" onclick="bookResend()" disabled data-i18n="btn-resend">重新发送</button>
+          <div class="countdown" id="book-countdown"></div>
         </div>
       </div>
       <div class="btn-row">
-        <button class="btn btn-p" id="book-verify-btn" onclick="bookVerify()">验证 · Verify</button>
+        <button class="btn btn-p" id="book-verify-btn" onclick="bookVerify()" data-i18n="btn-verify">验证</button>
       </div>
     </div>
 
@@ -505,72 +374,69 @@ body{
           <h3 id="cal-label-sa">...</h3>
           <button class="cnb" onclick="calShift('sa',1)">›</button>
         </div>
-        <div class="cal-heads">
+        <div class="cal-heads" id="cal-heads-sa">
           <div class="ch">日</div><div class="ch">一</div><div class="ch">二</div>
           <div class="ch">三</div><div class="ch">四</div><div class="ch">五</div><div class="ch">六</div>
         </div>
         <div class="cal-days" id="cal-sa"></div>
       </div>
       <div class="card" id="slot-card-sa" style="display:none">
-        <div class="slots-hd" id="slot-hd-sa">选择时段</div>
+        <div class="slots-hd" id="slot-hd-sa" data-i18n="slot-hd">选择时段</div>
         <div class="slots" id="slot-grid-sa"></div>
       </div>
       <div class="ebox" id="sa-err"><span>⚠️</span><span id="sa-err-t"></span></div>
       <div class="btn-row" id="book-btn-sa" style="display:none">
-        <button class="btn btn-p" onclick="doBook('sa')">确认预约 · Confirm</button>
+        <button class="btn btn-p" onclick="doBook('sa')" data-i18n="btn-confirm-book">确认预约</button>
       </div>
     </div>
   </div>
 
   <!-- S-CHANGE-PHONE -->
   <div class="screen" id="s-change-phone">
-    <button class="back" onclick="go('s-book-sa')">‹ 返回 <span style="font-size:11px;font-weight:400;opacity:.7">Back</span></button>
-    <div class="stitle">更换手机号</div>
-    <div class="ssub">请先验证您的身份，再绑定新手机号</div>
-
-    <!-- Step A: identity verify -->
+    <button class="back" onclick="go('s-book-sa')">‹ <span data-i18n="back">返回</span></button>
+    <div class="pg-title">
+      <div class="pg-title-main" data-i18n="change-ph-title">更换手机号</div>
+      <div class="pg-title-sub" data-i18n="change-ph-title-en">CHANGE MOBILE NUMBER</div>
+    </div>
+    <div class="ssub" data-i18n="change-ph-sub">请先验证您的身份，再绑定新手机号</div>
     <div id="cp-step-verify">
       <div class="card">
-        <div class="card-label">身份验证 Identity Verification</div>
+        <div class="card-label" data-i18n="identity-label">身份验证</div>
         <div class="fg">
-          <label>您的姓名 Full Name *</label>
-          <input id="cp-name" type="text" placeholder="请输入登记时填写的姓名">
+          <label data-i18n="lbl-your-name">您的姓名</label>
+          <input id="cp-name" type="text" data-i18n-ph="ph-your-name" placeholder="请输入登记时填写的姓名">
         </div>
         <div class="fg">
-          <label>旧手机号后四位 Last 4 digits of old number *</label>
-          <input id="cp-last4" type="tel" maxlength="4" placeholder="例：5678">
+          <label data-i18n="lbl-last4">旧手机号后四位</label>
+          <input id="cp-last4" type="tel" maxlength="4" data-i18n-ph="ph-last4" placeholder="例：5678">
         </div>
         <div class="ebox" id="cp-verify-err"><span>⚠️</span><span id="cp-verify-err-t"></span></div>
       </div>
       <div class="btn-row">
-        <button class="btn btn-p" id="cp-verify-btn" onclick="cpVerifyIdentity()">验证身份 · Verify</button>
+        <button class="btn btn-p" id="cp-verify-btn" onclick="cpVerifyIdentity()" data-i18n="btn-verify-id">验证身份</button>
       </div>
     </div>
-
-    <!-- Step B: enter new phone + send code -->
     <div id="cp-step-newphone" style="display:none">
-      <div style="background:#edfaf3;border:1.5px solid #27ae60;border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:14px;color:#1a6b3a;font-weight:600">
+      <div style="background:#edfaf3;border:1.5px solid #27ae60;border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:14px;color:#1a6b3a;font-weight:600" data-i18n="id-verified-msg">
         ✅ 身份验证成功，请输入您的新手机号码
       </div>
       <div class="card">
         <div class="fg">
-          <label>新手机号码 New Mobile Number *</label>
-          <input id="cp-newph" type="tel" placeholder="021 xxx xxxx">
-          <small>新西兰手机号 · NZ mobile number</small>
+          <label data-i18n="lbl-new-mobile">新手机号码</label>
+          <input id="cp-newph" type="tel" data-i18n-ph="ph-mobile" placeholder="021 xxx xxxx">
+          <small data-i18n="phone-hint">新西兰手机号</small>
         </div>
         <div id="recaptcha-cp"></div>
         <div class="ebox" id="cp-newph-err"><span>⚠️</span><span id="cp-newph-err-t"></span></div>
       </div>
       <div class="btn-row">
-        <button class="btn btn-p" id="cp-send-btn" onclick="cpSendSMS()">发送验证码 · Send Code</button>
+        <button class="btn btn-p" id="cp-send-btn" onclick="cpSendSMS()" data-i18n="btn-send-code">发送验证码</button>
       </div>
     </div>
-
-    <!-- Step C: enter code -->
     <div id="cp-step-code" style="display:none">
       <div class="phone-wrap"><div class="big-icon">💬</div></div>
-      <div class="stitle" style="margin-bottom:6px">输入验证码</div>
-      <div class="ssub">验证码已发送至 <strong id="cp-phone-disp"></strong></div>
+      <div class="stitle" style="margin-bottom:6px" data-i18n="verify-title">输入验证码</div>
+      <div class="ssub"><span data-i18n="verify-sub-prefix">验证码已发送至</span> <strong id="cp-phone-disp"></strong></div>
       <div class="card">
         <div class="code-inputs" id="cp-code-inputs">
           <input type="tel" maxlength="1" oninput="cpCodeInput(this,0)" onkeydown="cpCodeBk(this,0,event)">
@@ -583,7 +449,7 @@ body{
         <div class="ebox" id="cp-code-err"><span>⚠️</span><span id="cp-code-err-t"></span></div>
       </div>
       <div class="btn-row">
-        <button class="btn btn-p" id="cp-confirm-btn" onclick="cpConfirmCode()">确认验证码 · Confirm</button>
+        <button class="btn btn-p" id="cp-confirm-btn" onclick="cpConfirmCode()" data-i18n="btn-confirm-code">确认验证码</button>
       </div>
     </div>
   </div>
@@ -596,44 +462,41 @@ body{
       <p id="ok-msg">您的信息已成功提交。</p>
       <div class="ibox" id="ok-detail" style="display:none"></div>
       <div class="btn-row" style="margin-top:30px">
-        <button class="btn btn-p" onclick="go('s-welcome')">返回首页 · Back Home</button>
+        <button class="btn btn-p" onclick="go('s-welcome')" data-i18n="btn-back-home">返回首页</button>
       </div>
     </div>
   </div>
 
   <!-- S-PRICING -->
   <div class="screen" id="s-pricing">
-    <button class="back" onclick="go('s-welcome')">‹ 返回 <span style="font-size:11px;font-weight:400;opacity:.7">Back</span></button>
-    <div style="text-align:center;margin-bottom:20px">
-      <div style="font-size:24px;font-weight:700;color:var(--gold);letter-spacing:2px;font-family:'Noto Serif SC',serif">收费标准</div>
-      <div style="font-size:12px;color:var(--ink-s);margin-top:4px;letter-spacing:1px">PRICING SCHEDULE</div>
+    <button class="back" onclick="go('s-welcome')">‹ <span data-i18n="back">返回</span></button>
+    <div class="pg-title">
+      <div class="pg-title-main" data-i18n="pricing-title">收费标准</div>
+      <div class="pg-title-sub" data-i18n="pricing-title-en">PRICING SCHEDULE</div>
     </div>
     <div class="pr-notice">
       <div class="pr-notice-title">
-        <span class="pr-dot"></span>ACC 使用说明
-        <span style="font-size:11px;font-weight:400;color:var(--ink-s);margin-left:6px">ACC Information</span>
+        <span class="pr-dot"></span><span data-i18n="acc-notice-title">ACC 使用说明</span>
       </div>
       <div class="pr-notice-body">
-        <p>本诊所可接受 ACC 保险，但<strong>无法为您开具 ACC</strong>，需您先向<strong>家庭医生</strong>申请。
-        <br><span class="pr-en">We accept ACC but cannot issue ACC claims. Please obtain one from your <strong>GP</strong> first.</span></p>
+        <p data-i18n-html="acc-notice-body">本诊所可接受 ACC 保险，但<strong>无法为您开具 ACC</strong>，需您先向<strong>家庭医生</strong>申请。</p>
         <div class="pr-pills">
           <div class="pr-pill">
             <div class="pr-pill-num">12</div>
-            <div class="pr-pill-label">周内有效<br><span style="font-size:10px;font-style:italic">weeks valid</span></div>
+            <div class="pr-pill-label" data-i18n="weeks-valid">周内有效</div>
           </div>
           <div class="pr-pill">
             <div class="pr-pill-num">≤12</div>
-            <div class="pr-pill-label">最多可用次数<br><span style="font-size:10px;font-style:italic">max treatments</span></div>
+            <div class="pr-pill-label" data-i18n="max-treatments">最多可用次数</div>
           </div>
         </div>
-        <p style="font-size:12px;color:var(--ink-s);margin-top:8px;line-height:1.6">次数多少和受伤部位及受伤程度相关。<br>
-        <span class="pr-en">Number of treatments depends on injury type and severity.</span></p>
+        <p style="font-size:12px;color:var(--ink-s);margin-top:8px;line-height:1.6" data-i18n="acc-severity">次数多少和受伤部位及受伤程度相关。</p>
       </div>
     </div>
     <div class="pr-tabs">
-      <div class="pr-tab active" onclick="prTab(0)"><span class="pr-tab-zh">张传生医生</span><span class="pr-tab-en">Dr. Zhang CS</span></div>
-      <div class="pr-tab" onclick="prTab(1)"><span class="pr-tab-zh">张超医生</span><span class="pr-tab-en">Dr. Zhang C</span></div>
-      <div class="pr-tab" onclick="prTab(2)"><span class="pr-tab-zh">张宇医生</span><span class="pr-tab-en">Dr. Zhang Y</span></div>
+      <div class="pr-tab active" onclick="prTab(0)"><span class="pr-tab-name" data-i18n="dr-zhang-cs">张传生医生</span></div>
+      <div class="pr-tab" onclick="prTab(1)"><span class="pr-tab-name" data-i18n="dr-zhang-c">张超医生</span></div>
+      <div class="pr-tab" onclick="prTab(2)"><span class="pr-tab-name" data-i18n="dr-zhang-y">张宇医生</span></div>
     </div>
     <div class="pr-panels">
       <!-- Panel 0 -->
@@ -641,38 +504,38 @@ body{
         <div class="pr-item">
           <div class="pr-consult-row">
             <div class="pr-consult-col">
-              <div class="pr-item-name">初诊诊费</div><div class="pr-item-en">Initial Consultation</div>
-              <div class="pr-item-note">自费，不被 ACC 涵盖<br>Self-pay, not covered by ACC</div>
+              <div class="pr-item-name" data-i18n="initial-consult">初诊诊费</div>
+              <div class="pr-item-note" data-i18n="self-pay-note">自费，不被 ACC 涵盖</div>
               <div class="pr-price" style="margin-top:8px">$150</div>
             </div>
             <div class="pr-consult-sep"></div>
             <div class="pr-consult-col">
-              <div class="pr-item-name">复诊诊费</div><div class="pr-item-en">Follow-up Consultation</div>
-              <div class="pr-item-note">自费，不被 ACC 涵盖<br>Self-pay, not covered by ACC</div>
+              <div class="pr-item-name" data-i18n="followup-consult">复诊诊费</div>
+              <div class="pr-item-note" data-i18n="self-pay-note">自费，不被 ACC 涵盖</div>
               <div class="pr-price" style="margin-top:8px">$50</div>
             </div>
           </div>
         </div>
         <div class="pr-item">
-          <div class="pr-item-name">针灸</div><div class="pr-item-en">Acupuncture</div>
+          <div class="pr-item-name" data-i18n="acupuncture">针灸</div>
           <div class="pr-item-dual">
-            <div class="pr-dual-col"><div class="pr-dual-label">无 ACC · Without ACC</div><div class="pr-dual-price">$85</div></div>
+            <div class="pr-dual-col"><div class="pr-dual-label" data-i18n="without-acc">无 ACC</div><div class="pr-dual-price">$85</div></div>
             <div class="pr-dual-sep"></div>
-            <div class="pr-dual-col acc-col"><div class="pr-dual-label">有 ACC · With ACC</div><div class="pr-dual-price acc-p">$20</div><div class="pr-dual-sub">自费 + 签字</div></div>
+            <div class="pr-dual-col acc-col"><div class="pr-dual-label" data-i18n="with-acc">有 ACC</div><div class="pr-dual-price acc-p">$20</div><div class="pr-dual-sub" data-i18n="self-sign">自费 + 签字</div></div>
           </div>
         </div>
         <div class="pr-item">
-          <div class="pr-item-name">正骨</div><div class="pr-item-en">Bone-setting</div>
+          <div class="pr-item-name" data-i18n="bone-setting">正骨</div>
           <div class="pr-item-dual">
-            <div class="pr-dual-col"><div class="pr-dual-label">无 ACC · Without ACC</div><div class="pr-dual-price">$80</div></div>
+            <div class="pr-dual-col"><div class="pr-dual-label" data-i18n="without-acc">无 ACC</div><div class="pr-dual-price">$80</div></div>
             <div class="pr-dual-sep"></div>
-            <div class="pr-dual-col acc-col"><div class="pr-dual-label">有 ACC · With ACC</div><div class="pr-dual-price acc-p">$15</div><div class="pr-dual-sub">自费 + 签字</div></div>
+            <div class="pr-dual-col acc-col"><div class="pr-dual-label" data-i18n="with-acc">有 ACC</div><div class="pr-dual-price acc-p">$15</div><div class="pr-dual-sub" data-i18n="self-sign">自费 + 签字</div></div>
           </div>
         </div>
         <div class="pr-item" style="border-bottom:none">
-          <div class="pr-item-name">中药</div><div class="pr-item-en">Chinese Herbal Medicine</div>
-          <div class="pr-item-note">自费，不被 ACC 涵盖 · Self-pay, not covered by ACC</div>
-          <div class="pr-item-price" style="margin-top:10px"><span class="pr-price" style="font-size:20px;color:var(--ink-s)">按方计费</span><span class="pr-badge-self">自费 Self-pay</span></div>
+          <div class="pr-item-name" data-i18n="herbal">中药</div>
+          <div class="pr-item-note" data-i18n="self-pay-note">自费，不被 ACC 涵盖</div>
+          <div class="pr-item-price" style="margin-top:10px"><span class="pr-price" style="font-size:20px;color:var(--ink-s)" data-i18n="herbal-price">按方计费</span><span class="pr-badge-self" data-i18n="self-pay-badge">自费</span></div>
         </div>
       </div>
       <!-- Panel 1 -->
@@ -680,36 +543,36 @@ body{
         <div class="pr-item">
           <div class="pr-consult-row">
             <div class="pr-consult-col">
-              <div class="pr-item-name">初诊诊费</div><div class="pr-item-en">Initial Consultation</div>
-              <div class="pr-item-note">自费，不被 ACC 涵盖<br>Self-pay, not covered by ACC</div>
+              <div class="pr-item-name" data-i18n="initial-consult">初诊诊费</div>
+              <div class="pr-item-note" data-i18n="self-pay-note">自费，不被 ACC 涵盖</div>
               <div class="pr-price" style="margin-top:8px">$50</div>
             </div>
             <div class="pr-consult-sep"></div>
             <div class="pr-consult-col">
-              <div class="pr-item-name">复诊免诊费</div><div class="pr-item-en">Follow-up Free</div>
+              <div class="pr-item-name" data-i18n="followup-free">复诊免诊费</div>
             </div>
           </div>
         </div>
         <div class="pr-item">
-          <div class="pr-item-name">针灸</div><div class="pr-item-en">Acupuncture</div>
+          <div class="pr-item-name" data-i18n="acupuncture">针灸</div>
           <div class="pr-item-dual">
-            <div class="pr-dual-col"><div class="pr-dual-label">无 ACC · Without ACC</div><div class="pr-dual-price">$85</div></div>
+            <div class="pr-dual-col"><div class="pr-dual-label" data-i18n="without-acc">无 ACC</div><div class="pr-dual-price">$85</div></div>
             <div class="pr-dual-sep"></div>
-            <div class="pr-dual-col acc-col"><div class="pr-dual-label">有 ACC · With ACC</div><div class="pr-dual-price acc-p">$20</div><div class="pr-dual-sub">自费 + 签字</div></div>
+            <div class="pr-dual-col acc-col"><div class="pr-dual-label" data-i18n="with-acc">有 ACC</div><div class="pr-dual-price acc-p">$20</div><div class="pr-dual-sub" data-i18n="self-sign">自费 + 签字</div></div>
           </div>
         </div>
         <div class="pr-item">
-          <div class="pr-item-name">正骨</div><div class="pr-item-en">Bone-setting</div>
+          <div class="pr-item-name" data-i18n="bone-setting">正骨</div>
           <div class="pr-item-dual">
-            <div class="pr-dual-col"><div class="pr-dual-label">无 ACC · Without ACC</div><div class="pr-dual-price">$80</div></div>
+            <div class="pr-dual-col"><div class="pr-dual-label" data-i18n="without-acc">无 ACC</div><div class="pr-dual-price">$80</div></div>
             <div class="pr-dual-sep"></div>
-            <div class="pr-dual-col acc-col"><div class="pr-dual-label">有 ACC · With ACC</div><div class="pr-dual-price acc-p">$15</div><div class="pr-dual-sub">自费 + 签字</div></div>
+            <div class="pr-dual-col acc-col"><div class="pr-dual-label" data-i18n="with-acc">有 ACC</div><div class="pr-dual-price acc-p">$15</div><div class="pr-dual-sub" data-i18n="self-sign">自费 + 签字</div></div>
           </div>
         </div>
         <div class="pr-item" style="border-bottom:none">
-          <div class="pr-item-name">中药</div><div class="pr-item-en">Chinese Herbal Medicine</div>
-          <div class="pr-item-note">自费，不被 ACC 涵盖 · Self-pay, not covered by ACC</div>
-          <div class="pr-item-price" style="margin-top:10px"><span class="pr-price" style="font-size:20px;color:var(--ink-s)">按方计费</span><span class="pr-badge-self">自费 Self-pay</span></div>
+          <div class="pr-item-name" data-i18n="herbal">中药</div>
+          <div class="pr-item-note" data-i18n="self-pay-note">自费，不被 ACC 涵盖</div>
+          <div class="pr-item-price" style="margin-top:10px"><span class="pr-price" style="font-size:20px;color:var(--ink-s)" data-i18n="herbal-price">按方计费</span><span class="pr-badge-self" data-i18n="self-pay-badge">自费</span></div>
         </div>
       </div>
       <!-- Panel 2 -->
@@ -717,41 +580,41 @@ body{
         <div class="pr-item">
           <div class="pr-consult-row">
             <div class="pr-consult-col">
-              <div class="pr-item-name">初诊诊费</div><div class="pr-item-en">Initial Consultation</div>
-              <div class="pr-item-note">自费，不被 ACC 涵盖<br>Self-pay, not covered by ACC</div>
+              <div class="pr-item-name" data-i18n="initial-consult">初诊诊费</div>
+              <div class="pr-item-note" data-i18n="self-pay-note">自费，不被 ACC 涵盖</div>
               <div class="pr-price" style="margin-top:8px">$50</div>
             </div>
             <div class="pr-consult-sep"></div>
             <div class="pr-consult-col">
-              <div class="pr-item-name">复诊免诊费</div><div class="pr-item-en">Follow-up Free</div>
+              <div class="pr-item-name" data-i18n="followup-free">复诊免诊费</div>
             </div>
           </div>
         </div>
         <div class="pr-item">
-          <div class="pr-item-name">针灸</div><div class="pr-item-en">Acupuncture</div>
+          <div class="pr-item-name" data-i18n="acupuncture">针灸</div>
           <div class="pr-item-dual">
-            <div class="pr-dual-col"><div class="pr-dual-label">无 ACC · Without ACC</div><div class="pr-dual-price">$85</div></div>
+            <div class="pr-dual-col"><div class="pr-dual-label" data-i18n="without-acc">无 ACC</div><div class="pr-dual-price">$85</div></div>
             <div class="pr-dual-sep"></div>
-            <div class="pr-dual-col acc-col"><div class="pr-dual-label">有 ACC · With ACC</div><div class="pr-dual-price acc-p">$20</div><div class="pr-dual-sub">自费 + 签字</div></div>
+            <div class="pr-dual-col acc-col"><div class="pr-dual-label" data-i18n="with-acc">有 ACC</div><div class="pr-dual-price acc-p">$20</div><div class="pr-dual-sub" data-i18n="self-sign">自费 + 签字</div></div>
           </div>
         </div>
         <div class="pr-item">
-          <div class="pr-item-name">正骨</div><div class="pr-item-en">Bone-setting</div>
+          <div class="pr-item-name" data-i18n="bone-setting">正骨</div>
           <div class="pr-item-dual">
-            <div class="pr-dual-col"><div class="pr-dual-label">无 ACC · Without ACC</div><div class="pr-dual-price">$80</div></div>
+            <div class="pr-dual-col"><div class="pr-dual-label" data-i18n="without-acc">无 ACC</div><div class="pr-dual-price">$80</div></div>
             <div class="pr-dual-sep"></div>
-            <div class="pr-dual-col acc-col"><div class="pr-dual-label">有 ACC · With ACC</div><div class="pr-dual-price acc-p">$15</div><div class="pr-dual-sub">自费 + 签字</div></div>
+            <div class="pr-dual-col acc-col"><div class="pr-dual-label" data-i18n="with-acc">有 ACC</div><div class="pr-dual-price acc-p">$15</div><div class="pr-dual-sub" data-i18n="self-sign">自费 + 签字</div></div>
           </div>
         </div>
         <div class="pr-item" style="border-bottom:none">
-          <div class="pr-item-name">中药</div><div class="pr-item-en">Chinese Herbal Medicine</div>
-          <div class="pr-item-note">自费，不被 ACC 涵盖 · Self-pay, not covered by ACC</div>
-          <div class="pr-item-price" style="margin-top:10px"><span class="pr-price" style="font-size:20px;color:var(--ink-s)">按方计费</span><span class="pr-badge-self">自费 Self-pay</span></div>
+          <div class="pr-item-name" data-i18n="herbal">中药</div>
+          <div class="pr-item-note" data-i18n="self-pay-note">自费，不被 ACC 涵盖</div>
+          <div class="pr-item-price" style="margin-top:10px"><span class="pr-price" style="font-size:20px;color:var(--ink-s)" data-i18n="herbal-price">按方计费</span><span class="pr-badge-self" data-i18n="self-pay-badge">自费</span></div>
         </div>
       </div>
     </div>
     <div class="btn-row" style="margin-top:24px">
-      <button class="btn btn-p" onclick="go('s-welcome')">返回首页 · Back</button>
+      <button class="btn btn-p" onclick="go('s-welcome')" data-i18n="btn-back-home">返回首页</button>
     </div>
   </div>
 
@@ -761,7 +624,7 @@ body{
 <div class="blocker" id="blocker">
   <div class="blocker-inner">
     <div class="spin" style="margin:0 auto"></div>
-    <p>处理中，请稍候...</p>
+    <p data-i18n="processing">处理中，请稍候...</p>
   </div>
 </div>
 
@@ -771,6 +634,201 @@ body{
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
 <script>
+/* ══════════════════════════════════════════════════════════
+   TRANSLATIONS
+══════════════════════════════════════════════════════════ */
+const STRINGS = {
+  zh: {
+    'clinic-name':'北京泽五堂中医诊所','self-service':'患者自助服务',
+    'welcome-h2':'欢迎','welcome-sub':'请选择您今天需要的服务',
+    'pricing-card-h':'查看收费标准','pricing-card-p':'ACC 说明及各医生诊疗费用',
+    'newpt-card-h':'首次就诊','newpt-card-p':'填写您的个人信息进行登记',
+    'book-card-h':'预约时间','book-card-p':'查看可用时段并预约治疗',
+    'back':'返回',
+    'newpt-title':'首次就诊登记','newpt-title-en':'NEW PATIENT REGISTRATION',
+    'newpt-choice-sub':'请选择您的情况',
+    'acc-yes-h':'我有 ACC 保单','acc-yes-p':'我已获得 ACC 批准，有 ACC 号码',
+    'acc-no-h':'我没有 ACC 保单','acc-no-p':'自费就诊，填写个人信息即可',
+    'personal-title':'个人信息','personal-title-en':'PERSONAL INFORMATION',
+    'personal-sub-acc':'步骤 1/2：请填写您的基本信息',
+    'personal-sub-noACC':'请填写您的基本信息',
+    'personal-card-label':'基本信息',
+    'lbl-family-name':'姓','lbl-first-name':'名',
+    'lbl-gender':'性别','lbl-dob':'出生日期 (DD/MM/YYYY)',
+    'lbl-phone':'联系电话','lbl-address':'地址（选填）','lbl-email':'邮箱（选填）',
+    'ph-family-name':'Zhang','ph-first-name':'San','ph-mobile':'021 xxx xxxx',
+    'ph-addr':'街道地址, Auckland',
+    'opt-gender-default':'— 请选择 —','opt-male':'男','opt-female':'女',
+    'phone-hint':'新西兰手机号',
+    'btn-next':'下一步',
+    'acc-info-title':'ACC 信息','acc-info-title-en':'ACC CLAIM DETAILS',
+    'acc-info-sub':'请填写您的 ACC 保单信息',
+    'acc-card-label':'ACC 保单信息',
+    'lbl-doa':'受伤日期','ph-acc45':'例: AA12345 或 12345AA',
+    'lbl-reason':'受伤原因','ph-reason':'例: 跌倒、运动受伤、交通事故...',
+    'btn-submit':'提交登记',
+    'book-title':'预约时间','book-title-en':'BOOK APPOINTMENT',
+    'book-notice-1':'请先确认您已在本系统中登记了您的个人信息。',
+    'book-notice-2':'请输入您的手机号进行验证登录。',
+    'book-notice-3':'如果您新换了手机号，','book-notice-link':'请点击此处',
+    'lbl-mobile':'手机号码','mobile-hint':'请输入登记时使用的新西兰手机号',
+    'btn-send-code':'发送验证码',
+    'verify-title':'输入验证码','verify-sub-prefix':'验证码已发送至',
+    'btn-resend':'重新发送','countdown-suffix':'秒后可重新发送',
+    'btn-verify':'验证','slot-hd':'选择时段','btn-confirm-book':'确认预约',
+    'slot-taken':'已预约','no-slots':'该日无可用时段',
+    'verified-ok':'✅ 验证成功，欢迎',
+    'change-ph-title':'更换手机号','change-ph-title-en':'CHANGE MOBILE NUMBER',
+    'change-ph-sub':'请先验证您的身份，再绑定新手机号',
+    'identity-label':'身份验证',
+    'lbl-your-name':'您的姓名','ph-your-name':'请输入登记时填写的姓名',
+    'lbl-last4':'旧手机号后四位','ph-last4':'例：5678',
+    'btn-verify-id':'验证身份',
+    'id-verified-msg':'✅ 身份验证成功，请输入您的新手机号码',
+    'lbl-new-mobile':'新手机号码',
+    'btn-confirm-code':'确认验证码',
+    'btn-back-home':'返回首页',
+    'pricing-title':'收费标准','pricing-title-en':'PRICING SCHEDULE',
+    'acc-notice-title':'ACC 使用说明',
+    'acc-notice-body':'本诊所可接受 ACC 保险，但<strong>无法为您开具 ACC</strong>，需您先向<strong>家庭医生</strong>申请。',
+    'weeks-valid':'周内有效','max-treatments':'最多可用次数',
+    'acc-severity':'次数多少和受伤部位及受伤程度相关。',
+    'dr-zhang-cs':'张传生医生','dr-zhang-c':'张超医生','dr-zhang-y':'张宇医生',
+    'initial-consult':'初诊诊费','followup-consult':'复诊诊费','followup-free':'复诊免诊费',
+    'self-pay-note':'自费，不被 ACC 涵盖',
+    'acupuncture':'针灸','bone-setting':'正骨','herbal':'中药',
+    'herbal-price':'按方计费','self-pay-badge':'自费',
+    'without-acc':'无 ACC','with-acc':'有 ACC','self-sign':'自费 + 签字',
+    'processing':'处理中，请稍候...',
+    'cal-heads':['日','一','二','三','四','五','六'],
+    'months':['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'],
+    'reg-success-title':'登记成功！','reg-success-body-prefix':'欢迎，',
+    'reg-success-body-suffix':'！您的信息已提交。',
+    'book-success-title':'预约成功！','book-success-body':'您的预约已确认，诊所会在日历中看到。',
+    'lbl-name':'姓名','lbl-phone2':'电话','lbl-acc':'ACC号码','lbl-doa2':'受伤日期',
+    'lbl-date':'日期','lbl-time':'时间',
+    'phone-updated':'✅ 手机号已更新，正在进入预约页面...',
+    'ph-updated-welcome':'✅ 验证成功，手机号已更新',
+  },
+  en: {
+    'clinic-name':'Beijing Zewutang TCM Clinic','self-service':'Patient Self-Service',
+    'welcome-h2':'Welcome','welcome-sub':'Please choose a service below',
+    'pricing-card-h':'Pricing','pricing-card-p':'ACC info & consultation fees',
+    'newpt-card-h':'New Patient','newpt-card-p':'Register your personal information',
+    'book-card-h':'Book Appointment','book-card-p':'View available slots and book a visit',
+    'back':'Back',
+    'newpt-title':'New Patient Registration','newpt-title-en':'NEW PATIENT REGISTRATION',
+    'newpt-choice-sub':'Please select your situation',
+    'acc-yes-h':'I have ACC coverage','acc-yes-p':'I have an ACC-approved claim number',
+    'acc-no-h':'No ACC coverage','acc-no-p':'Self-pay visit, personal info only',
+    'personal-title':'Personal Information','personal-title-en':'PERSONAL INFORMATION',
+    'personal-sub-acc':'Step 1/2: Please fill in your basic details',
+    'personal-sub-noACC':'Please fill in your basic details',
+    'personal-card-label':'Personal Details',
+    'lbl-family-name':'Family Name','lbl-first-name':'First Name',
+    'lbl-gender':'Gender','lbl-dob':'Date of Birth (DD/MM/YYYY)',
+    'lbl-phone':'Phone','lbl-address':'Address (optional)','lbl-email':'Email (optional)',
+    'ph-family-name':'Zhang','ph-first-name':'San','ph-mobile':'021 xxx xxxx',
+    'ph-addr':'Street address, Auckland',
+    'opt-gender-default':'— Please select —','opt-male':'Male','opt-female':'Female',
+    'phone-hint':'NZ mobile number',
+    'btn-next':'Next',
+    'acc-info-title':'ACC Information','acc-info-title-en':'ACC CLAIM DETAILS',
+    'acc-info-sub':'Please fill in your ACC claim details',
+    'acc-card-label':'ACC Claim Details',
+    'lbl-doa':'Date of Accident','ph-acc45':'e.g. AA12345 or 12345AA',
+    'lbl-reason':'Reason for Injury','ph-reason':'e.g. Fall, sports injury, motor accident...',
+    'btn-submit':'Submit Registration',
+    'book-title':'Book Appointment','book-title-en':'BOOK APPOINTMENT',
+    'book-notice-1':'Please ensure you have registered your personal information in this system.',
+    'book-notice-2':'Enter your mobile number to verify and log in.',
+    'book-notice-3':'If you have a new mobile number, ','book-notice-link':'click here',
+    'lbl-mobile':'Mobile Number','mobile-hint':'NZ mobile number used at registration',
+    'btn-send-code':'Send Code',
+    'verify-title':'Enter Verification Code','verify-sub-prefix':'Code sent to',
+    'btn-resend':'Resend','countdown-suffix':'seconds until resend',
+    'btn-verify':'Verify','slot-hd':'Select a Time Slot','btn-confirm-book':'Confirm Booking',
+    'slot-taken':'Booked','no-slots':'No available slots on this day',
+    'verified-ok':'✅ Verified — Welcome,',
+    'change-ph-title':'Change Mobile Number','change-ph-title-en':'CHANGE MOBILE NUMBER',
+    'change-ph-sub':'Please verify your identity before updating your number',
+    'identity-label':'Identity Verification',
+    'lbl-your-name':'Your Name','ph-your-name':'Name used at registration',
+    'lbl-last4':'Last 4 digits of old number','ph-last4':'e.g. 5678',
+    'btn-verify-id':'Verify Identity',
+    'id-verified-msg':'✅ Identity verified. Please enter your new mobile number.',
+    'lbl-new-mobile':'New Mobile Number',
+    'btn-confirm-code':'Confirm Code',
+    'btn-back-home':'Back to Home',
+    'pricing-title':'Pricing Schedule','pricing-title-en':'PRICING SCHEDULE',
+    'acc-notice-title':'ACC Information',
+    'acc-notice-body':'We accept ACC but <strong>cannot issue ACC claims</strong>. Please obtain one from your <strong>GP</strong> first.',
+    'weeks-valid':'weeks valid','max-treatments':'max treatments',
+    'acc-severity':'Number of treatments depends on injury type and severity.',
+    'dr-zhang-cs':'Dr. Chuansheng Zhang','dr-zhang-c':'Dr. Chao Zhang','dr-zhang-y':'Dr. Yu Zhang',
+    'initial-consult':'Initial Consultation','followup-consult':'Follow-up Consultation','followup-free':'Follow-up Free',
+    'self-pay-note':'Self-pay, not covered by ACC',
+    'acupuncture':'Acupuncture','bone-setting':'Bone-setting','herbal':'Herbal Medicine',
+    'herbal-price':'Priced by prescription','self-pay-badge':'Self-pay',
+    'without-acc':'Without ACC','with-acc':'With ACC','self-sign':'Co-pay + signature',
+    'processing':'Processing, please wait...',
+    'cal-heads':['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+    'months':['January','February','March','April','May','June','July','August','September','October','November','December'],
+    'reg-success-title':'Registration Successful!','reg-success-body-prefix':'Welcome, ',
+    'reg-success-body-suffix':'! Your information has been submitted.',
+    'book-success-title':'Booking Confirmed!','book-success-body':'Your appointment has been confirmed.',
+    'lbl-name':'Name','lbl-phone2':'Phone','lbl-acc':'ACC No.','lbl-doa2':'Date of Accident',
+    'lbl-date':'Date','lbl-time':'Time',
+    'phone-updated':'✅ Number updated. Redirecting to booking...',
+    'ph-updated-welcome':'✅ Verified — number updated',
+  }
+};
+
+let curLang = 'zh';
+function T(key) { return STRINGS[curLang][key] ?? STRINGS.zh[key] ?? key; }
+
+function applyLang() {
+  // text content
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    const val = T(key);
+    if(val !== undefined) el.textContent = val;
+  });
+  // innerHTML (for bold tags etc)
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const key = el.dataset.i18nHtml;
+    const val = T(key);
+    if(val !== undefined) el.innerHTML = val;
+  });
+  // placeholders
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const key = el.dataset.i18nPh;
+    const val = T(key);
+    if(val !== undefined) el.placeholder = val;
+  });
+  // select options
+  document.querySelectorAll('[data-i18n-opt]').forEach(el => {
+    const key = el.dataset.i18nOpt;
+    const val = T(key);
+    if(val !== undefined) el.textContent = val;
+  });
+  // calendar heads
+  const heads = document.querySelectorAll('#cal-heads-sa .ch');
+  const ch = T('cal-heads');
+  if(ch && heads.length) heads.forEach((h,i) => h.textContent = ch[i]);
+  // html lang attribute
+  document.getElementById('html-root').lang = curLang === 'zh' ? 'zh-CN' : 'en';
+  // lang button
+  document.getElementById('lang-btn').textContent = '中文/En';
+}
+
+function toggleLang() {
+  curLang = curLang === 'zh' ? 'en' : 'zh';
+  applyLang();
+  // Re-render calendar if visible
+  if(G && G.calMonth && G.calMonth.sa) renderCal('sa');
+}
+
 /* ══════════════════════════════════════════════════════════
    CONFIG
 ══════════════════════════════════════════════════════════ */
@@ -784,101 +842,84 @@ const FB_CFG = {
 };
 
 const DEFAULT_SCHEDULE = {
-  weeklySlots: [
-    { dayOfWeek: 2, startHour: 9, endHour: 17 },
-    { dayOfWeek: 5, startHour: 9, endHour: 17 }
-  ],
-  blockedRanges: [],
-  slotMinutes: 30,
-  maxDaysAhead: 60
+  weeklySlots: [{dayOfWeek:2,startHour:9,endHour:17},{dayOfWeek:5,startHour:9,endHour:17}],
+  blockedRanges: [], slotMinutes: 30, maxDaysAhead: 60
 };
 
 /* ══════════════════════════════════════════════════════════
    WECHAT DETECTION
 ══════════════════════════════════════════════════════════ */
-(function detectWeChat() {
+(function detectWeChat(){
   if(!/MicroMessenger/i.test(navigator.userAgent||'')) return;
-  document.addEventListener('DOMContentLoaded', () => {
-    const banner = document.createElement('div');
-    banner.style.cssText = 'background:#fff1f0;border-bottom:3px solid #e00;text-align:center;padding:14px 16px;font-size:18px;font-weight:700;line-height:1.7;color:#cc0000;position:fixed;top:0;left:0;right:0;z-index:9999;box-shadow:0 3px 12px rgba(200,0,0,0.15)';
-    banner.innerHTML = '⚠️ 请点击右上角 <span style="font-size:22px;color:#e00">···</span> → <span style="color:#e00">在浏览器中打开</span><br><span style="font-size:14px;font-weight:400;color:#a00">方可正常使用本页面的登录功能</span>';
-    document.body.insertBefore(banner, document.body.firstChild);
+  document.addEventListener('DOMContentLoaded',()=>{
+    const b=document.createElement('div');
+    b.style.cssText='background:#fff1f0;border-bottom:3px solid #e00;text-align:center;padding:14px 16px;font-size:18px;font-weight:700;line-height:1.7;color:#cc0000;position:fixed;top:0;left:0;right:0;z-index:9999;box-shadow:0 3px 12px rgba(200,0,0,0.15)';
+    b.innerHTML='⚠️ 请点击右上角 <span style="font-size:22px;color:#e00">···</span> → <span style="color:#e00">在浏览器中打开</span><br><span style="font-size:14px;font-weight:400;color:#a00">方可正常使用本页面的登录功能</span>';
+    document.body.insertBefore(b,document.body.firstChild);
   });
 })();
 
 /* ══════════════════════════════════════════════════════════
    FIREBASE INIT
 ══════════════════════════════════════════════════════════ */
-let db = null, auth = null, DEMO_MODE = true;
-let _fbInitAttempted = false;
+let db=null, auth=null, DEMO_MODE=true, _fbInitAttempted=false;
 
-function initFirebase() {
+function initFirebase(){
   if(_fbInitAttempted) return;
-  _fbInitAttempted = true;
-  if(typeof firebase === 'undefined') {
-    console.warn('Firebase SDK 未加载，启用演示模式');
-    return;
-  }
-  try {
-    try { firebase.app(); } catch(_) { firebase.initializeApp(FB_CFG); }
-    db        = firebase.firestore();
-    auth      = firebase.auth();
-    DEMO_MODE = false;
+  _fbInitAttempted=true;
+  if(typeof firebase==='undefined'){console.warn('Firebase SDK 未加载，启用演示模式');return;}
+  try{
+    try{firebase.app();}catch(_){firebase.initializeApp(FB_CFG);}
+    db=firebase.firestore(); auth=firebase.auth(); DEMO_MODE=false;
     console.log('✅ Firebase 已连接');
-  } catch(e) {
-    console.warn('Firebase init error:', e.message);
-    DEMO_MODE = true;
-  }
+  }catch(e){console.warn('Firebase init error:',e.message);DEMO_MODE=true;}
 }
-
-// Try immediately, then again after window load
-// Init Firebase only after all scripts have loaded
-window.addEventListener('load', () => {
-  _fbInitAttempted = false;
-  initFirebase();
-});
+window.addEventListener('load',()=>{_fbInitAttempted=false;initFirebase();});
 
 /* ══════════════════════════════════════════════════════════
    GLOBAL STATE
 ══════════════════════════════════════════════════════════ */
-const G = {
-  patient:   null,
-  hasACC:    true,
-  schedule:  null,
-  calMonth:  { sa: new Date() },
-  selected:  { sa: { date:null, time:null } }
+const G={
+  patient:null, hasACC:true, schedule:null,
+  calMonth:{sa:new Date()}, selected:{sa:{date:null,time:null}},
+  bookedSlots:{}
 };
-const MO_ZH = ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
 
 /* ══════════════════════════════════════════════════════════
    UTILITIES
 ══════════════════════════════════════════════════════════ */
-function go(id) {
-  if(id === 's-book-sa') {
-    document.getElementById('book-step-phone').style.display = 'block';
-    document.getElementById('book-step-code').style.display  = 'none';
-    document.getElementById('book-step-cal').style.display   = 'none';
-    // Reset to sub-step A (name)
-    document.getElementById('book-sub-name').style.display  = 'block';
-    document.getElementById('book-sub-phone').style.display = 'none';
-    const nameInp = document.getElementById('book-name');
-    if(nameInp) nameInp.value = '';
-    ['book-dob-y','book-dob-m','book-dob-d'].forEach(id=>{
-      const el=document.getElementById(id); if(el) el.value='';
-    });
-    document.getElementById('book-send-btn').disabled = false;
+function go(id){
+  // Clear registration forms whenever entering new patient flow
+  if(id==='s-new-choice' || id==='s-new-personal'){
+    clearRegistrationForms();
+  }
+  if(id==='s-book-sa'){
+    document.getElementById('book-step-phone').style.display='block';
+    document.getElementById('book-step-code').style.display='none';
+    document.getElementById('book-step-cal').style.display='none';
+    document.getElementById('book-send-btn').disabled=false;
     document.querySelectorAll('#book-code-inputs input').forEach(i=>i.value='');
-    hideErr('book-name-err'); hideErr('book-ph-err'); hideErr('book-code-err');
-    // Reset reCAPTCHA
-    _bookConfirmResult = null;
-    if(window._bookRecaptcha) {
-      try { window._bookRecaptcha.clear(); } catch(_){}
-      window._bookRecaptcha = null;
-    }
+    hideErr('book-ph-err');hideErr('book-code-err');
+    _bookConfirmResult=null;
+    if(window._bookRecaptcha){try{window._bookRecaptcha.clear();}catch(_){}window._bookRecaptcha=null;}
   }
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id)?.classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function clearRegistrationForms(){
+  // Clear all personal info fields
+  ['np-fam','np-fir','np-dob','np-ph','np-addr','np-email'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.value='';
+  });
+  const g=document.getElementById('np-gender'); if(g) g.value='';
+  // Clear ACC fields
+  ['na-acc','na-doa','na-reason','na-read'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.value='';
+  });
+  hideErr('np-err'); hideErr('na-err');
+  G._newPersonal=null;
 }
 
 function toast(msg,ms=2800){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('on');setTimeout(()=>el.classList.remove('on'),ms);}
@@ -889,8 +930,8 @@ function normaliseACC(s){return(s||'').toUpperCase().trim();}
 function validDt(s){return/^\d{2}\/\d{2}\/\d{4}$/.test(s);}
 function isoDate(d){return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
 function showErr(boxId,msgId,msg){const b=document.getElementById(boxId);if(msgId)document.getElementById(msgId).textContent=msg;b.style.display='flex';}
-function hideErr(id){document.getElementById(id).style.display='none';}
-function showOK(icon,title,msg,details){
+function hideErr(id){const el=document.getElementById(id);if(el)el.style.display='none';}
+function showOK(icon,title,msg,details,autoHome){
   document.getElementById('ok-icon').textContent=icon;
   document.getElementById('ok-title').textContent=title;
   document.getElementById('ok-msg').textContent=msg;
@@ -898,15 +939,29 @@ function showOK(icon,title,msg,details){
   if(details){det.style.display='block';det.innerHTML=Object.entries(details).map(([k,v])=>`<div class="ibr"><span class="l">${k}</span><span class="v">${v}</span></div>`).join('');}
   else det.style.display='none';
   go('s-ok');
+  if(autoHome) setTimeout(()=>go('s-welcome'),3000);
 }
 
 /* ══════════════════════════════════════════════════════════
    NEW PATIENT FLOW
+   多个 ACC 号码设计说明：
+   - 每个 ACC 号码对应一个独立文档（doc ID = ACC号码）
+   - 同一个人可拥有多个 ACC，每次新增 ACC 时重新走首次就诊流程
+   - 通过 ACC 号码去重，不通过姓名/生日去重（允许同一人多条记录）
+   - 无 ACC 患者以手机号为 doc ID，同一手机号只能登记一次
 ══════════════════════════════════════════════════════════ */
-function startNewWithACC(){G.hasACC=true;document.getElementById('personal-sub').textContent='步骤 1/2：请填写您的基本信息';go('s-new-personal');}
-function startNewNoACC(){G.hasACC=false;document.getElementById('personal-sub').textContent='请填写您的基本信息';go('s-new-personal');}
+function startNewWithACC(){
+  G.hasACC=true;
+  go('s-new-personal');
+  document.getElementById('personal-sub').textContent=T('personal-sub-acc');
+}
+function startNewNoACC(){
+  G.hasACC=false;
+  go('s-new-personal');
+  document.getElementById('personal-sub').textContent=T('personal-sub-noACC');
+}
 
-function personalNext(){
+async function personalNext(){
   hideErr('np-err');
   const fam=document.getElementById('np-fam').value.trim();
   const fir=document.getElementById('np-fir').value.trim();
@@ -915,14 +970,35 @@ function personalNext(){
   const ph=document.getElementById('np-ph').value.trim();
   const addr=document.getElementById('np-addr').value.trim();
   const email=document.getElementById('np-email').value.trim();
-  if(!fam){showErr('np-err','np-err-t','请填写姓（Family Name）');return;}
-  if(!fir){showErr('np-err','np-err-t','请填写名（First Name）');return;}
-  if(!gender){showErr('np-err','np-err-t','请选择性别');return;}
-  if(!validDt(dob)){showErr('np-err','np-err-t','出生日期格式错误，应为 DD/MM/YYYY');return;}
-  if(!ph){showErr('np-err','np-err-t','请填写联系电话');return;}
-  if(email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showErr('np-err','np-err-t','邮箱格式不正确');return;}
+  if(!fam){showErr('np-err','np-err-t',curLang==='zh'?'请填写姓（Family Name）':'Please enter your Family Name');return;}
+  if(!fir){showErr('np-err','np-err-t',curLang==='zh'?'请填写名（First Name）':'Please enter your First Name');return;}
+  if(!gender){showErr('np-err','np-err-t',curLang==='zh'?'请选择性别':'Please select your gender');return;}
+  if(!validDt(dob)){showErr('np-err','np-err-t',curLang==='zh'?'出生日期格式错误，应为 DD/MM/YYYY':'Date of birth must be DD/MM/YYYY');return;}
+  if(!ph){showErr('np-err','np-err-t',curLang==='zh'?'请填写联系电话':'Please enter your phone number');return;}
+  if(email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showErr('np-err','np-err-t',curLang==='zh'?'邮箱格式不正确':'Invalid email format');return;}
+
   G._newPersonal={familyName:fam,firstName:fir,gender,dob,phone:ph,address:addr,email};
-  if(G.hasACC) go('s-new-acc'); else submitNoACC();
+
+  // For no-ACC: check for duplicate before proceeding
+  if(!G.hasACC){
+    if(!DEMO_MODE && db){
+      block(true);
+      try{
+        const docId='NOACCPH_'+ph.replace(/[\s\+\-]/g,'');
+        const snap=await db.collection('patients').doc(docId).get();
+        if(snap.exists){
+          showErr('np-err','np-err-t',curLang==='zh'?'您已经登记过了，请返回上一步':'You have already registered. Please go back.');
+          block(false); return;
+        }
+      }catch(e){
+        // If permission denied, proceed anyway — duplicate check is best-effort
+        console.warn('Duplicate check error:',e.code);
+      }finally{block(false);}
+    }
+    submitNoACC();
+  } else {
+    go('s-new-acc');
+  }
 }
 
 async function submitNoACC(){
@@ -931,18 +1007,25 @@ async function submitNoACC(){
   const data={...p,accNumber:null,hasACC:false,createdAt:new Date().toISOString(),source:'patient_portal'};
   try{
     if(!DEMO_MODE&&db){
-      const docId=p.phone.replace(/[\s\+\-]/g,'');
+      const docId='NOACCPH_'+p.phone.replace(/[\s\+\-]/g,'');
       await Promise.race([
-        db.collection('patients').doc('NOACCPH_'+docId).set(data),
+        db.collection('patients').doc(docId).set(data),
         new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),10000))
       ]);
     }
     G.patient=data;
-    showOK('📋','登记成功！',`欢迎，${p.firstName} ${p.familyName}！您的信息已提交。`,{'姓名':`${p.firstName} ${p.familyName}`,'电话':p.phone});
+    const name=`${p.firstName} ${p.familyName}`;
+    showOK('✅',
+      T('reg-success-title'),
+      T('reg-success-body-prefix')+name+T('reg-success-body-suffix'),
+      {[T('lbl-name')]:name,[T('lbl-phone2')]:p.phone},
+      true  // auto-redirect home after 3s
+    );
   }catch(e){
+    if(e.message==='timeout') showErr('np-err','np-err-t',curLang==='zh'?'提交超时，请检查网络':'Submission timed out. Check your connection.');
+    else if(e.code==='permission-denied') showErr('np-err','np-err-t',curLang==='zh'?'您已经登记过了，请返回上一步':'You have already registered. Please go back.');
+    else showErr('np-err','np-err-t',curLang==='zh'?'提交失败（'+e.code+'）':'Submission failed ('+e.code+')');
     go('s-new-personal');
-    if(e.message==='timeout') showErr('np-err','np-err-t','提交超时，请检查网络后重试');
-    else showErr('np-err','np-err-t','该信息已登记过，如需修改请联系诊所');
   }finally{block(false);}
 }
 
@@ -952,36 +1035,46 @@ async function submitNew(){
   const doa=document.getElementById('na-doa').value.trim();
   const reason=document.getElementById('na-reason').value.trim();
   const read=document.getElementById('na-read').value.trim();
-  if(!validACC(acc)){showErr('na-err','na-err-t','ACC号码格式不正确（应为 AA12345 或 12345AA）');return;}
-  if(!validDt(doa)){showErr('na-err','na-err-t','受伤日期格式错误，请使用 DD/MM/YYYY');return;}
-  if(!reason){showErr('na-err','na-err-t','请填写受伤原因');return;}
-  if(!read){showErr('na-err','na-err-t','请填写 Read Code（例：S572）');return;}
+  if(!validACC(acc)){showErr('na-err','na-err-t',curLang==='zh'?'ACC号码格式不正确（应为 AA12345 或 12345AA）':'Invalid ACC number format (e.g. AA12345)');return;}
+  if(!validDt(doa)){showErr('na-err','na-err-t',curLang==='zh'?'受伤日期格式错误，请使用 DD/MM/YYYY':'Date of accident must be DD/MM/YYYY');return;}
+  if(!reason){showErr('na-err','na-err-t',curLang==='zh'?'请填写受伤原因':'Please enter reason for injury');return;}
+  if(!read){showErr('na-err','na-err-t',curLang==='zh'?'请填写 Read Code（例：S572）':'Please enter Read Code (e.g. S572)');return;}
   const btn=document.getElementById('na-sub-btn');
   btn.disabled=true;block(true);
   const p=G._newPersonal||{};
   const data={...p,accNumber:acc,doa,reason,readCode:read,hasACC:true,createdAt:new Date().toISOString(),source:'patient_portal'};
   try{
     if(!DEMO_MODE&&db){
+      // Check duplicate ACC number first
+      const existing=await db.collection('patients').doc(acc).get();
+      if(existing.exists){
+        showErr('na-err','na-err-t',curLang==='zh'?'该 ACC 号码已登记过，如需修改请联系诊所':'This ACC number is already registered. Contact the clinic to update.');
+        btn.disabled=false;block(false);return;
+      }
       await Promise.race([
         db.collection('patients').doc(acc).set(data),
         new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),10000))
       ]);
     }
     G.patient=data;
-    showOK('📋','登记成功！',`欢迎，${p.firstName} ${p.familyName}！`,{'ACC号码':acc,'姓名':`${p.firstName} ${p.familyName}`,'受伤日期':doa});
+    const name=`${p.firstName} ${p.familyName}`;
+    showOK('✅',
+      T('reg-success-title'),
+      T('reg-success-body-prefix')+name+T('reg-success-body-suffix'),
+      {[T('lbl-acc')]:acc,[T('lbl-name')]:name,[T('lbl-doa2')]:doa},
+      true  // auto-redirect home after 3s
+    );
   }catch(e){
-    if(e.message==='timeout') showErr('na-err','na-err-t','提交超时，请检查网络连接后重试');
-    else if(e.code==='permission-denied') showErr('na-err','na-err-t','该 ACC 号码已登记过，如需修改请联系诊所');
-    else showErr('na-err','na-err-t','该信息已登记过，如需修改请联系诊所');
+    if(e.message==='timeout') showErr('na-err','na-err-t',curLang==='zh'?'提交超时，请检查网络':'Submission timed out.');
+    else if(e.code==='permission-denied') showErr('na-err','na-err-t',curLang==='zh'?'该 ACC 号码已登记过，如需修改请联系诊所':'This ACC number is already registered.');
+    else showErr('na-err','na-err-t',curLang==='zh'?'提交失败（'+e.code+'）':'Submission failed ('+e.code+')');
   }finally{btn.disabled=false;block(false);}
 }
 
 /* ══════════════════════════════════════════════════════════
    BOOKING — PHONE VERIFICATION
-   核心修复：reCAPTCHA 在点击按钮时才初始化，避免提前渲染失败
 ══════════════════════════════════════════════════════════ */
-let _bookConfirmResult = null;
-let _bookCountdownTimer = null;
+let _bookConfirmResult=null, _bookCountdownTimer=null;
 
 function normalizeNZPhone(raw){
   let s=(raw||'').replace(/\s/g,'');
@@ -990,124 +1083,42 @@ function normalizeNZPhone(raw){
   return{ok:false};
 }
 
-async function bookCheckName(){
-  hideErr('book-name-err');
-  const nameRaw = (document.getElementById('book-name').value||'').trim();
-  if(!nameRaw){ showErr('book-name-err','book-name-err-t','请输入您的姓名'); return; }
-
-  // Remove all spaces, lowercase for comparison
-  const normalise = s => s.replace(/\s+/g,'').toLowerCase();
-
-  // Must contain at least one space (two words)
-  const parts = nameRaw.trim().split(/\s+/);
-  if(parts.length < 2){
-    showErr('book-name-err','book-name-err-t','请同时输入名和姓，例如："San Zhang"');
-    return;
-  }
-
-  // DOB validation
-  const y = (document.getElementById('book-dob-y').value||'').trim();
-  const m = (document.getElementById('book-dob-m').value||'').trim();
-  const d = (document.getElementById('book-dob-d').value||'').trim();
-  if(!y||!m||!d||y.length!==4||m.length<1||d.length<1){
-    showErr('book-name-err','book-name-err-t','请完整填写出生年月日');
-    return;
-  }
-  const dobFormatted = String(d).padStart(2,'0')+'/'+String(m).padStart(2,'0')+'/'+y;
-
-  const btn = document.getElementById('book-next-btn');
-  btn.disabled = true; block(true);
-
-  try {
-    if(!DEMO_MODE && db){
-      // Fetch all patients matching the DOB, then do fuzzy name match client-side
-      const snap = await db.collection('patients')
-        .where('dob','==', dobFormatted)
-        .get();
-      if(snap.empty){
-        showErr('book-name-err','book-name-err-t','未检测到您登记了个人信息');
-        btn.disabled=false; block(false); return;
-      }
-      // Fuzzy name: strip spaces + lowercase, compare input vs "firstName familyName"
-      const inputNorm = normalise(nameRaw);
-      const found = snap.docs.some(doc => {
-        const d = doc.data();
-        const dbNorm = normalise((d.firstName||'') + (d.familyName||''));
-        return inputNorm === dbNorm;
-      });
-      if(!found){
-        showErr('book-name-err','book-name-err-t','未检测到您登记了个人信息');
-        btn.disabled=false; block(false); return;
-      }
-    }
-    // Found — show phone input
-    document.getElementById('book-sub-name').style.display  = 'none';
-    document.getElementById('book-sub-phone').style.display = 'block';
-  } catch(e){
-    console.error('bookCheckName error:', e);
-    showErr('book-name-err','book-name-err-t','查询失败，请检查网络后重试');
-  } finally { btn.disabled=false; block(false); }
-}
-
-
 async function bookSendSMS(){
   hideErr('book-ph-err');
   const raw=(document.getElementById('book-ph').value||'').trim();
   const nz=normalizeNZPhone(raw);
-  if(!nz.ok){showErr('book-ph-err','book-ph-err-t','请输入正确的新西兰手机号（如 021 xxx xxxx）');return;}
-
+  if(!nz.ok){showErr('book-ph-err','book-ph-err-t',curLang==='zh'?'请输入正确的新西兰手机号（如 021 xxx xxxx）':'Please enter a valid NZ mobile number');return;}
   const btn=document.getElementById('book-send-btn');
   btn.disabled=true;block(true);
-
   try{
     if(DEMO_MODE){
-      // 演示模式：跳过真实 SMS
       _bookConfirmResult=null;
       document.getElementById('book-phone-disp').textContent=nz.masked;
       document.getElementById('book-step-phone').style.display='none';
       document.getElementById('book-step-code').style.display='block';
-      bookStartCountdown();
-      block(false);
-      return;
+      bookStartCountdown(); block(false); return;
     }
-
-    // ── 步骤2：发送验证码 ──
-    if(window._bookRecaptcha){
-      try{window._bookRecaptcha.clear();}catch(_){}
-      window._bookRecaptcha=null;
-    }
-    const rcDiv=document.getElementById('recaptcha-book');
-    rcDiv.innerHTML='';
-
+    if(window._bookRecaptcha){try{window._bookRecaptcha.clear();}catch(_){}window._bookRecaptcha=null;}
+    document.getElementById('recaptcha-book').innerHTML='';
     window._bookRecaptcha=new firebase.auth.RecaptchaVerifier('recaptcha-book',{
-      size:'invisible',
-      callback:()=>{},
-      'expired-callback':()=>{
-        if(window._bookRecaptcha){try{window._bookRecaptcha.clear();}catch(_){}}
-        window._bookRecaptcha=null;
-      }
+      size:'invisible',callback:()=>{},
+      'expired-callback':()=>{if(window._bookRecaptcha){try{window._bookRecaptcha.clear();}catch(_){}}window._bookRecaptcha=null;}
     });
-
     await window._bookRecaptcha.render();
     _bookConfirmResult=await auth.signInWithPhoneNumber(nz.e164,window._bookRecaptcha);
-
     document.getElementById('book-phone-disp').textContent=nz.masked;
     document.getElementById('book-step-phone').style.display='none';
     document.getElementById('book-step-code').style.display='block';
     bookStartCountdown();
-
   }catch(e){
-    console.error('bookSendSMS error:',e.code,e.message);
-    // 调试阶段：显示原始错误码，方便排查
-    // 正式上线后可改回友好提示并加次数限制
-    let msg='发送失败（' + (e.code||'未知错误') + '），请重试';
-    if(e.code==='auth/invalid-phone-number') msg='手机号格式不正确，请重新输入';
-    if(e.code==='auth/captcha-check-failed') msg='安全验证失败，请刷新页面后重试';
-    if(e.code==='auth/operation-not-allowed') msg='手机验证未在 Firebase 后台启用，请联系管理员';
+    console.error('bookSendSMS:',e.code,e.message);
+    let msg=curLang==='zh'?'发送失败（'+(e.code||'未知')+'），请重试':'Send failed ('+(e.code||'unknown')+'), please retry';
+    if(e.code==='auth/invalid-phone-number') msg=curLang==='zh'?'手机号格式不正确':'Invalid phone number format';
+    if(e.code==='auth/captcha-check-failed') msg=curLang==='zh'?'安全验证失败，请刷新页面':'Security check failed, please refresh';
+    if(e.code==='auth/operation-not-allowed') msg=curLang==='zh'?'手机验证未启用，请联系管理员':'Phone auth not enabled. Contact admin.';
     showErr('book-ph-err','book-ph-err-t',msg);
     btn.disabled=false;
-    if(window._bookRecaptcha){try{window._bookRecaptcha.clear();}catch(_){}}
-    window._bookRecaptcha=null;
+    if(window._bookRecaptcha){try{window._bookRecaptcha.clear();}catch(_){}}window._bookRecaptcha=null;
   }finally{block(false);}
 }
 
@@ -1116,11 +1127,11 @@ function bookStartCountdown(){
   const resend=document.getElementById('book-resend-btn');
   const txt=document.getElementById('book-countdown');
   resend.disabled=true;let sec=60;
-  txt.textContent=`${sec} 秒后可重新发送`;
+  txt.textContent=`60 ${T('countdown-suffix')}`;
   _bookCountdownTimer=setInterval(()=>{
     sec--;
     if(sec<=0){clearInterval(_bookCountdownTimer);resend.disabled=false;txt.textContent='';}
-    else txt.textContent=`${sec} 秒后可重新发送`;
+    else txt.textContent=`${sec} ${T('countdown-suffix')}`;
   },1000);
 }
 
@@ -1147,13 +1158,13 @@ function bookGetCode(){return[...document.querySelectorAll('#book-code-inputs in
 async function bookVerify(){
   hideErr('book-code-err');
   const code=bookGetCode();
-  if(code.length<6){showErr('book-code-err','book-code-err-t','请输入完整的6位验证码');return;}
+  if(code.length<6){showErr('book-code-err','book-code-err-t',curLang==='zh'?'请输入完整的6位验证码':'Please enter the complete 6-digit code');return;}
   const btn=document.getElementById('book-verify-btn');
   btn.disabled=true;block(true);
   try{
     let patientData=null;
     if(DEMO_MODE){
-      if(code!=='123456'){showErr('book-code-err','book-code-err-t','演示模式验证码为 123456');btn.disabled=false;block(false);return;}
+      if(code!=='123456'){showErr('book-code-err','book-code-err-t','Demo code: 123456');btn.disabled=false;block(false);return;}
     }else{
       const result=await _bookConfirmResult.confirm(code);
       const rawPh=(document.getElementById('book-ph').value||'').trim();
@@ -1165,68 +1176,35 @@ async function bookVerify(){
     document.getElementById('book-step-code').style.display='none';
     document.getElementById('book-step-cal').style.display='block';
     const welcome=document.getElementById('book-welcome-name');
-    welcome.textContent=patientData?`✅ 验证成功 · 欢迎，${patientData.firstName} ${patientData.familyName}`:'✅ 验证成功 · Verified';
+    welcome.textContent=patientData
+      ?T('verified-ok')+` ${patientData.firstName} ${patientData.familyName}`
+      :(curLang==='zh'?'✅ 验证成功':'✅ Verified');
     G._bookPatient=patientData;
     initCal('sa');
   }catch(e){
     console.error('bookVerify:',e);
-    showErr('book-code-err','book-code-err-t','验证码不正确，请重试');
+    showErr('book-code-err','book-code-err-t',curLang==='zh'?'验证码不正确，请重试':'Incorrect code, please try again');
   }finally{btn.disabled=false;block(false);}
 }
 
 /* ══════════════════════════════════════════════════════════
-   GOOGLE CALENDAR SYNC
-   通过 Firestore 中间层读取日历占用情况（由 Apps Script 同步写入）
-   Apps Script 设置见：使用说明.md
+   GOOGLE CALENDAR / FIRESTORE SLOTS
 ══════════════════════════════════════════════════════════ */
-
-// 从 Firestore 读取指定日期的已占用时段（包含日历手动预约 + 系统预约）
-async function fetchTakenSlots(iso) {
-  if(DEMO_MODE || !db) return [];
-  try {
-    const snap = await db.collection('bookedSlots').doc(iso).get();
-    if(snap.exists) {
-      const d = snap.data();
-      return d.times || [];
-    }
+async function fetchTakenSlots(iso){
+  if(DEMO_MODE||!db) return [];
+  try{
+    const snap=await db.collection('bookedSlots').doc(iso).get();
+    if(snap.exists) return snap.data().times||[];
     return [];
-  } catch(e) {
-    console.warn('fetchTakenSlots error:', e);
-    return [];
-  }
-}
-
-// 选择日期后异步加载该日已占用时段
-async function selectDate(key, iso, el) {
-  document.querySelectorAll('#cal-'+key+' .cd').forEach(e=>e.classList.remove('sel'));
-  el.classList.add('sel');
-  G.selected[key].date = iso;
-  G.selected[key].time = null;
-
-  // 显示加载中
-  const slotCard = document.getElementById('slot-card-'+key);
-  const slotGrid = document.getElementById('slot-grid-'+key);
-  const slotHd   = document.getElementById('slot-hd-'+key);
-  slotCard.style.display = 'block';
-  slotHd.textContent = `${iso} 可用时段`;
-  slotGrid.innerHTML = '<div style="text-align:center;padding:16px;color:var(--ink-s);font-size:13px"><div class="spin" style="margin:0 auto 8px"></div>加载中...</div>';
-  document.getElementById('book-btn-'+key).style.display = 'none';
-
-  // 从 Firestore 读取该日已占用时段（含日历同步数据）
-  const taken = await fetchTakenSlots(iso);
-  G.bookedSlots[iso] = taken;
-  renderSlots(key, iso);
+  }catch(e){console.warn('fetchTakenSlots:',e);return [];}
 }
 
 /* ══════════════════════════════════════════════════════════
    CALENDAR
 ══════════════════════════════════════════════════════════ */
 function initCal(key){
-  G.calMonth[key]=new Date();
-  G.selected[key]={date:null,time:null};
-  renderCal(key);
+  G.calMonth[key]=new Date();G.selected[key]={date:null,time:null};renderCal(key);
 }
-
 function calShift(key,dir){
   const m=G.calMonth[key];
   G.calMonth[key]=new Date(m.getFullYear(),m.getMonth()+dir,1);
@@ -1235,11 +1213,11 @@ function calShift(key,dir){
   document.getElementById('book-btn-sa').style.display='none';
   renderCal(key);
 }
-
 function renderCal(key){
   const sched=G.schedule||DEFAULT_SCHEDULE;
   const m=G.calMonth[key];
-  document.getElementById('cal-label-'+key).textContent=`${m.getFullYear()} ${MO_ZH[m.getMonth()]}`;
+  const months=T('months');
+  document.getElementById('cal-label-'+key).textContent=`${m.getFullYear()} ${months[m.getMonth()]}`;
   const today=new Date();today.setHours(0,0,0,0);
   const maxD=new Date(today);maxD.setDate(maxD.getDate()+sched.maxDaysAhead);
   const first=new Date(m.getFullYear(),m.getMonth(),1);
@@ -1250,10 +1228,8 @@ function renderCal(key){
   for(let i=0;i<startDow;i++){const e=document.createElement('div');e.className='cd other';grid.appendChild(e);}
   for(let d=1;d<=last.getDate();d++){
     const dt=new Date(m.getFullYear(),m.getMonth(),d);
-    const el=document.createElement('div');
-    el.textContent=d;
-    const isPast=dt<today, isFuture=dt>maxD;
-    const dow=dt.getDay();
+    const el=document.createElement('div');el.textContent=d;
+    const isPast=dt<today,isFuture=dt>maxD,dow=dt.getDay();
     const isWorkday=sched.weeklySlots.some(s=>s.dayOfWeek===dow);
     if(isPast||isFuture||!isWorkday) el.className='cd past';
     else{
@@ -1265,14 +1241,21 @@ function renderCal(key){
     grid.appendChild(el);
   }
 }
-
-function selectDate(key,iso,el){
+async function selectDate(key,iso,el){
   document.querySelectorAll('#cal-'+key+' .cd').forEach(e=>e.classList.remove('sel'));
   el.classList.add('sel');
   G.selected[key].date=iso;G.selected[key].time=null;
+  const slotCard=document.getElementById('slot-card-'+key);
+  const slotGrid=document.getElementById('slot-grid-'+key);
+  const slotHd=document.getElementById('slot-hd-'+key);
+  slotCard.style.display='block';
+  slotHd.textContent=`${iso}`;
+  slotGrid.innerHTML=`<div style="text-align:center;padding:16px;color:var(--ink-s);font-size:13px"><div class="spin" style="margin:0 auto 8px"></div>${curLang==='zh'?'加载中...':'Loading...'}</div>`;
+  document.getElementById('book-btn-'+key).style.display='none';
+  const taken=await fetchTakenSlots(iso);
+  G.bookedSlots[iso]=taken;
   renderSlots(key,iso);
 }
-
 function renderSlots(key,iso){
   const sched=G.schedule||DEFAULT_SCHEDULE;
   const dt=new Date(iso);const dow=dt.getDay();
@@ -1282,70 +1265,49 @@ function renderSlots(key,iso){
   const slotHd=document.getElementById('slot-hd-'+key);
   const btnRow=document.getElementById('book-btn-'+key);
   slotCard.style.display='block';
-  slotHd.textContent=`${iso} 可用时段`;
+  slotHd.textContent=`${iso} — ${T('slot-hd')}`;
   slotGrid.innerHTML='';btnRow.style.display='none';
-  if(!ws){slotGrid.innerHTML='<div style="color:var(--ink-s);font-size:13px">该日无可用时段</div>';return;}
+  if(!ws){slotGrid.innerHTML=`<div style="color:var(--ink-s);font-size:13px">${T('no-slots')}</div>`;return;}
   const slots=[];
-  for(let h=ws.startHour;h<ws.endHour;h++){
-    slots.push(`${String(h).padStart(2,'0')}:00`);
-    slots.push(`${String(h).padStart(2,'0')}:30`);
-  }
-  // 合并 Firestore 预约 + 日历同步数据
+  for(let h=ws.startHour;h<ws.endHour;h++){slots.push(`${String(h).padStart(2,'0')}:00`);slots.push(`${String(h).padStart(2,'0')}:30`);}
   const taken=G.bookedSlots?.[iso]||[];
   slots.forEach(t=>{
     const el=document.createElement('div');
-    if(taken.includes(t)){el.className='slot taken';el.textContent='已预约';}
+    if(taken.includes(t)){el.className='slot taken';el.textContent=T('slot-taken');}
     else{
       el.className='slot';el.textContent=t;
       el.onclick=()=>{
         document.querySelectorAll('#slot-grid-'+key+' .slot').forEach(s=>s.classList.remove('sel'));
-        el.classList.add('sel');G.selected[key].time=t;
-        btnRow.style.display='block';
+        el.classList.add('sel');G.selected[key].time=t;btnRow.style.display='block';
       };
     }
     slotGrid.appendChild(el);
   });
 }
-
 async function doBook(key){
   hideErr('sa-err');
   const sel=G.selected[key];
-  if(!sel.date||!sel.time){showErr('sa-err','sa-err-t','请选择日期和时段');return;}
+  if(!sel.date||!sel.time){showErr('sa-err','sa-err-t',curLang==='zh'?'请选择日期和时段':'Please select a date and time slot');return;}
   block(true);
-  const patientName=G._bookPatient?`${G._bookPatient.firstName} ${G._bookPatient.familyName}`:'未知';
+  const patientName=G._bookPatient?`${G._bookPatient.firstName} ${G._bookPatient.familyName}`:(curLang==='zh'?'未知':'Unknown');
   const phone=(document.getElementById('book-ph').value||'').trim();
-  const data={
-    date:sel.date, time:sel.time,
-    patientName, phone,
-    source:'patient_portal',
-    syncedToCalendar:false,          // Apps Script 看到此字段后创建日历事件并改为 true
-    createdAt:new Date().toISOString()
-  };
+  const data={date:sel.date,time:sel.time,patientName,phone,source:'patient_portal',syncedToCalendar:false,createdAt:new Date().toISOString()};
   try{
     if(!DEMO_MODE&&db){
-      // 1. 写入 appointments 集合（主记录）
       await db.collection('appointments').add(data);
-
-      // 2. 更新 bookedSlots 集合（供前端读取占用状态，也供日历同步使用）
       const slotRef=db.collection('bookedSlots').doc(sel.date);
       await db.runTransaction(async tx=>{
         const snap=await tx.get(slotRef);
         const existing=snap.exists?(snap.data().times||[]):[];
-        if(!existing.includes(sel.time)){
-          tx.set(slotRef,{times:[...existing,sel.time],lastUpdated:new Date().toISOString()});
-        }
+        if(!existing.includes(sel.time)) tx.set(slotRef,{times:[...existing,sel.time],lastUpdated:new Date().toISOString()});
       });
-
-      // 本地缓存更新
       if(!G.bookedSlots[sel.date]) G.bookedSlots[sel.date]=[];
       G.bookedSlots[sel.date].push(sel.time);
     }
-    showOK('📅','预约成功！','您的预约已确认，诊所会在日历中看到。',{
-      '日期':sel.date,'时间':sel.time,'姓名':patientName
-    });
+    showOK('📅',T('book-success-title'),T('book-success-body'),{[T('lbl-date')]:sel.date,[T('lbl-time')]:sel.time,[T('lbl-name')]:patientName});
   }catch(e){
-    console.error('doBook error:',e);
-    showErr('sa-err','sa-err-t','预约失败，请重试');
+    console.error('doBook:',e);
+    showErr('sa-err','sa-err-t',curLang==='zh'?'预约失败，请重试':'Booking failed, please try again');
   }finally{block(false);}
 }
 
@@ -1358,164 +1320,110 @@ function prTab(idx){
 }
 
 /* ══════════════════════════════════════════════════════════
-   换手机号流程 (s-change-phone)
+   CHANGE PHONE FLOW
 ══════════════════════════════════════════════════════════ */
-let _cpMatchedDocId = null;   // 匹配到的患者文档ID
-let _cpConfirmResult = null;  // Firebase phone auth result
+let _cpMatchedDocId=null, _cpConfirmResult=null;
 
-/* Step A：验证姓名 + 旧手机后四位 */
-async function cpVerifyIdentity() {
+async function cpVerifyIdentity(){
   hideErr('cp-verify-err');
-  const nameInput  = (document.getElementById('cp-name').value||'').trim();
-  const last4      = (document.getElementById('cp-last4').value||'').trim();
-  if(!nameInput)          { showErr('cp-verify-err','cp-verify-err-t','请输入您的姓名'); return; }
-  if(!/^\d{4}$/.test(last4)) { showErr('cp-verify-err','cp-verify-err-t','请输入旧手机号的最后4位数字'); return; }
-
-  const btn = document.getElementById('cp-verify-btn');
-  btn.disabled = true; block(true);
-
-  try {
-    if(DEMO_MODE) {
-      // 演示模式：任意输入均通过
-      _cpMatchedDocId = 'DEMO';
-      document.getElementById('cp-step-verify').style.display   = 'none';
-      document.getElementById('cp-step-newphone').style.display = 'block';
-      block(false); return;
-    }
-
-    // 查询 patients 集合，匹配姓名（firstName 或 familyName + firstName）
-    const snap = await db.collection('patients').get();
-    let matched = null;
-    snap.forEach(doc => {
-      const d = doc.data();
-      // 拼接全名进行比较（忽略大小写和空格）
-      const fullName = ((d.firstName||'') + (d.familyName||'')).replace(/\s/g,'').toLowerCase();
-      const inputName = nameInput.replace(/\s/g,'').toLowerCase();
-      const phoneEnd  = (d.phone||'').replace(/\s/g,'').slice(-4);
-      if((fullName.includes(inputName) || inputName.includes(fullName)) && phoneEnd === last4) {
-        matched = { id: doc.id, data: d };
-      }
+  const nameInput=(document.getElementById('cp-name').value||'').trim();
+  const last4=(document.getElementById('cp-last4').value||'').trim();
+  if(!nameInput){showErr('cp-verify-err','cp-verify-err-t',curLang==='zh'?'请输入您的姓名':'Please enter your name');return;}
+  if(!/^\d{4}$/.test(last4)){showErr('cp-verify-err','cp-verify-err-t',curLang==='zh'?'请输入旧手机号的最后4位数字':'Please enter the last 4 digits of your old number');return;}
+  const btn=document.getElementById('cp-verify-btn');
+  btn.disabled=true;block(true);
+  try{
+    if(DEMO_MODE){_cpMatchedDocId='DEMO';document.getElementById('cp-step-verify').style.display='none';document.getElementById('cp-step-newphone').style.display='block';block(false);return;}
+    const snap=await db.collection('patients').get();
+    let matched=null;
+    snap.forEach(doc=>{
+      const d=doc.data();
+      const fullName=((d.firstName||'')+(d.familyName||'')).replace(/\s/g,'').toLowerCase();
+      const inputName=nameInput.replace(/\s/g,'').toLowerCase();
+      const phoneEnd=(d.phone||'').replace(/\s/g,'').slice(-4);
+      if((fullName.includes(inputName)||inputName.includes(fullName))&&phoneEnd===last4) matched={id:doc.id,data:d};
     });
-
-    if(!matched) {
-      showErr('cp-verify-err','cp-verify-err-t','姓名或手机号后四位不匹配，请检查后重试');
-      btn.disabled = false; block(false); return;
-    }
-
-    _cpMatchedDocId = matched.id;
-    document.getElementById('cp-step-verify').style.display   = 'none';
-    document.getElementById('cp-step-newphone').style.display = 'block';
-
-  } catch(e) {
-    showErr('cp-verify-err','cp-verify-err-t','查询失败，请检查网络后重试');
-    console.error('cpVerifyIdentity:', e);
-  } finally {
-    btn.disabled = false; block(false);
-  }
+    if(!matched){showErr('cp-verify-err','cp-verify-err-t',curLang==='zh'?'姓名或手机号后四位不匹配，请检查后重试':'Name or last 4 digits do not match. Please check and retry.');btn.disabled=false;block(false);return;}
+    _cpMatchedDocId=matched.id;
+    document.getElementById('cp-step-verify').style.display='none';
+    document.getElementById('cp-step-newphone').style.display='block';
+  }catch(e){
+    showErr('cp-verify-err','cp-verify-err-t',curLang==='zh'?'查询失败，请检查网络后重试':'Query failed. Please check your connection.');
+    console.error('cpVerifyIdentity:',e);
+  }finally{btn.disabled=false;block(false);}
 }
 
-/* Step B：发送验证码到新手机号 */
-async function cpSendSMS() {
+async function cpSendSMS(){
   hideErr('cp-newph-err');
-  const raw = (document.getElementById('cp-newph').value||'').trim();
-  const nz  = normalizeNZPhone(raw);
-  if(!nz.ok) { showErr('cp-newph-err','cp-newph-err-t','请输入正确的新西兰手机号'); return; }
-
-  const btn = document.getElementById('cp-send-btn');
-  btn.disabled = true; block(true);
-
-  try {
-    if(DEMO_MODE) {
-      _cpConfirmResult = null;
-      document.getElementById('cp-phone-disp').textContent        = nz.masked;
-      document.getElementById('cp-step-newphone').style.display   = 'none';
-      document.getElementById('cp-step-code').style.display       = 'block';
-      block(false); return;
-    }
-
-    if(window._cpRecaptcha) { try{window._cpRecaptcha.clear();}catch(_){} window._cpRecaptcha = null; }
-    document.getElementById('recaptcha-cp').innerHTML = '';
-    window._cpRecaptcha = new firebase.auth.RecaptchaVerifier('recaptcha-cp', {
-      size: 'invisible', callback: ()=>{},
-      'expired-callback': ()=>{ if(window._cpRecaptcha){try{window._cpRecaptcha.clear();}catch(_){}} window._cpRecaptcha=null; }
-    });
+  const raw=(document.getElementById('cp-newph').value||'').trim();
+  const nz=normalizeNZPhone(raw);
+  if(!nz.ok){showErr('cp-newph-err','cp-newph-err-t',curLang==='zh'?'请输入正确的新西兰手机号':'Please enter a valid NZ mobile number');return;}
+  const btn=document.getElementById('cp-send-btn');
+  btn.disabled=true;block(true);
+  try{
+    if(DEMO_MODE){_cpConfirmResult=null;document.getElementById('cp-phone-disp').textContent=nz.masked;document.getElementById('cp-step-newphone').style.display='none';document.getElementById('cp-step-code').style.display='block';block(false);return;}
+    if(window._cpRecaptcha){try{window._cpRecaptcha.clear();}catch(_){}window._cpRecaptcha=null;}
+    document.getElementById('recaptcha-cp').innerHTML='';
+    window._cpRecaptcha=new firebase.auth.RecaptchaVerifier('recaptcha-cp',{size:'invisible',callback:()=>{},'expired-callback':()=>{if(window._cpRecaptcha){try{window._cpRecaptcha.clear();}catch(_){}}window._cpRecaptcha=null;}});
     await window._cpRecaptcha.render();
-    _cpConfirmResult = await auth.signInWithPhoneNumber(nz.e164, window._cpRecaptcha);
-
-    document.getElementById('cp-phone-disp').textContent        = nz.masked;
-    document.getElementById('cp-step-newphone').style.display   = 'none';
-    document.getElementById('cp-step-code').style.display       = 'block';
-
-  } catch(e) {
-    console.error('cpSendSMS:', e.code, e.message);
-    showErr('cp-newph-err','cp-newph-err-t','发送失败（' + (e.code||'未知') + '），请重试');
-    btn.disabled = false;
-    if(window._cpRecaptcha){try{window._cpRecaptcha.clear();}catch(_){}} window._cpRecaptcha=null;
-  } finally { block(false); }
+    _cpConfirmResult=await auth.signInWithPhoneNumber(nz.e164,window._cpRecaptcha);
+    document.getElementById('cp-phone-disp').textContent=nz.masked;
+    document.getElementById('cp-step-newphone').style.display='none';
+    document.getElementById('cp-step-code').style.display='block';
+  }catch(e){
+    console.error('cpSendSMS:',e.code,e.message);
+    showErr('cp-newph-err','cp-newph-err-t',curLang==='zh'?'发送失败（'+(e.code||'未知')+'），请重试':'Send failed ('+(e.code||'unknown')+')');
+    btn.disabled=false;
+    if(window._cpRecaptcha){try{window._cpRecaptcha.clear();}catch(_){}}window._cpRecaptcha=null;
+  }finally{block(false);}
 }
 
-/* Step C：验证码 input 处理 */
-function cpCodeInput(inp, idx) {
-  inp.value = inp.value.replace(/\D/g,'');
-  if(inp.value && idx < 5) document.querySelectorAll('#cp-code-inputs input')[idx+1].focus();
+function cpCodeInput(inp,idx){
+  inp.value=inp.value.replace(/\D/g,'');
+  if(inp.value&&idx<5) document.querySelectorAll('#cp-code-inputs input')[idx+1].focus();
   if([...document.querySelectorAll('#cp-code-inputs input')].every(i=>i.value)) cpConfirmCode();
 }
-function cpCodeBk(inp, idx, e) {
-  if(e.key==='Backspace' && !inp.value && idx>0) document.querySelectorAll('#cp-code-inputs input')[idx-1].focus();
-}
+function cpCodeBk(inp,idx,e){if(e.key==='Backspace'&&!inp.value&&idx>0) document.querySelectorAll('#cp-code-inputs input')[idx-1].focus();}
 
-/* Step C：确认验证码 → 更新手机号 → 登录进入预约 */
-async function cpConfirmCode() {
+async function cpConfirmCode(){
   hideErr('cp-code-err');
-  const code = [...document.querySelectorAll('#cp-code-inputs input')].map(i=>i.value).join('');
-  if(code.length < 6) { showErr('cp-code-err','cp-code-err-t','请输入完整的6位验证码'); return; }
-
-  const btn = document.getElementById('cp-confirm-btn');
-  btn.disabled = true; block(true);
-
-  try {
-    const newPhone = (document.getElementById('cp-newph').value||'').trim();
-
-    if(DEMO_MODE) {
-      if(code !== '123456') { showErr('cp-code-err','cp-code-err-t','演示模式验证码为 123456'); btn.disabled=false; block(false); return; }
-    } else {
-      // 验证验证码
+  const code=[...document.querySelectorAll('#cp-code-inputs input')].map(i=>i.value).join('');
+  if(code.length<6){showErr('cp-code-err','cp-code-err-t',curLang==='zh'?'请输入完整的6位验证码':'Please enter the complete 6-digit code');return;}
+  const btn=document.getElementById('cp-confirm-btn');
+  btn.disabled=true;block(true);
+  try{
+    const newPhone=(document.getElementById('cp-newph').value||'').trim();
+    if(DEMO_MODE){
+      if(code!=='123456'){showErr('cp-code-err','cp-code-err-t','Demo code: 123456');btn.disabled=false;block(false);return;}
+    }else{
       await _cpConfirmResult.confirm(code);
-
-      // 更新 Firestore 患者记录中的手机号
-      await db.collection('patients').doc(_cpMatchedDocId).update({ phone: newPhone });
+      await db.collection('patients').doc(_cpMatchedDocId).update({phone:newPhone});
     }
-
-    // 视为登录成功，进入预约日历
-    toast('✅ 手机号已更新，正在进入预约页面...');
-    // 把新手机号填入预约输入框，方便后续流程
-    document.getElementById('book-ph').value = newPhone;
-
-    // 重置换号页面状态
-    document.getElementById('cp-step-verify').style.display   = 'block';
-    document.getElementById('cp-step-newphone').style.display = 'none';
-    document.getElementById('cp-step-code').style.display     = 'none';
-    document.getElementById('cp-name').value  = '';
-    document.getElementById('cp-last4').value = '';
+    toast(T('phone-updated'));
+    document.getElementById('book-ph').value=newPhone;
+    document.getElementById('cp-step-verify').style.display='block';
+    document.getElementById('cp-step-newphone').style.display='none';
+    document.getElementById('cp-step-code').style.display='none';
+    document.getElementById('cp-name').value='';document.getElementById('cp-last4').value='';
     document.querySelectorAll('#cp-code-inputs input').forEach(i=>i.value='');
-    _cpMatchedDocId = null; _cpConfirmResult = null;
-
-    // 直接跳到日历（已验证，无需再发验证码）
-    setTimeout(() => {
-      const welcomeEl = document.getElementById('book-welcome-name');
-      welcomeEl.textContent = '✅ 验证成功 · 手机号已更新';
-      document.getElementById('book-step-phone').style.display = 'none';
-      document.getElementById('book-step-code').style.display  = 'none';
-      document.getElementById('book-step-cal').style.display   = 'block';
-      go('s-book-sa');
-      initCal('sa');
-    }, 800);
-
-  } catch(e) {
-    console.error('cpConfirmCode:', e);
-    showErr('cp-code-err','cp-code-err-t','验证码不正确，请重试');
-  } finally { btn.disabled=false; block(false); }
+    _cpMatchedDocId=null;_cpConfirmResult=null;
+    setTimeout(()=>{
+      document.getElementById('book-welcome-name').textContent=T('ph-updated-welcome');
+      document.getElementById('book-step-phone').style.display='none';
+      document.getElementById('book-step-code').style.display='none';
+      document.getElementById('book-step-cal').style.display='block';
+      go('s-book-sa');initCal('sa');
+    },800);
+  }catch(e){
+    console.error('cpConfirmCode:',e);
+    showErr('cp-code-err','cp-code-err-t',curLang==='zh'?'验证码不正确，请重试':'Incorrect code, please try again');
+  }finally{btn.disabled=false;block(false);}
 }
+
+/* ══════════════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', applyLang);
 </script>
 </body>
 </html>
