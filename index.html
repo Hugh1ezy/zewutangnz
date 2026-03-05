@@ -156,6 +156,36 @@ body{font-family:'DM Sans',-apple-system,'PingFang SC','Microsoft YaHei',sans-se
 .pg-title{text-align:center;margin-bottom:20px}
 .pg-title-main{font-size:24px;font-weight:700;color:var(--gold);letter-spacing:2px;font-family:'Noto Serif SC',serif}
 .pg-title-sub{font-size:12px;color:var(--ink-s);margin-top:4px;letter-spacing:1px}
+
+/* Doctor selection screen */
+.doc-select-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.doc-select-hd h3{font-size:18px;font-weight:700;color:var(--ink)}
+.pricing-link{color:var(--teal);font-size:14px;font-weight:600;text-decoration:underline;cursor:pointer;white-space:nowrap}
+.doc-cards{display:flex;flex-direction:column;gap:12px}
+.doc-card{background:var(--white);border-radius:16px;padding:18px 18px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow);cursor:pointer;border:2px solid transparent;transition:all .2s;}
+.doc-card:hover{border-color:var(--teal);transform:translateY(-1px)}
+.doc-icon{width:52px;height:52px;border-radius:14px;font-size:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.doc-info{flex:1}.doc-info h3{font-size:17px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.doc-info p{font-size:13px;color:var(--ink-s);line-height:1.4}
+/* Calendar full day */
+.cd.full{background:#e74c3c !important;color:#fff !important;cursor:not-allowed !important;font-weight:700}
+.cd.full:hover{background:#c0392b !important}
+.cal-full-legend{font-size:11px;color:var(--ink-s);margin:6px 0 2px;display:flex;align-items:center;gap:6px;display:none}
+.cal-full-legend-dot{width:12px;height:12px;border-radius:3px;background:#e74c3c;flex-shrink:0}
+/* Booking step headers */
+.step-tag{display:inline-block;background:var(--teal);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:12px;letter-spacing:.5px}
+/* Success booking actions */
+.ok-book-actions{margin-top:18px;display:flex;flex-direction:column;gap:10px}
+.btn-gcal{background:#4285f4;color:#fff;border:none;border-radius:12px;padding:13px 20px;font-size:15px;font-weight:700;cursor:pointer;width:100%}
+.btn-gcal:active{background:#3367d6}
+.btn-ics{background:#fff;color:var(--teal);border:2px solid var(--teal);border-radius:12px;padding:11px 20px;font-size:15px;font-weight:700;cursor:pointer;width:100%}
+/* Cancel screen */
+.cancel-card{background:#fff;border-radius:18px;padding:24px 20px;box-shadow:0 2px 16px rgba(0,0,0,.07);margin-top:16px}
+.cancel-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:15px}
+.cancel-row:last-child{border-bottom:none}
+.cancel-row .lbl{color:var(--ink-s);font-size:13px}
+.cancel-row .val{font-weight:600;color:var(--ink)}
+.btn-cancel-confirm{background:#e74c3c;color:#fff;border:none;border-radius:12px;padding:13px 20px;font-size:15px;font-weight:700;cursor:pointer;width:100%;margin-top:6px}
 </style>
 </head>
 <body>
@@ -190,12 +220,12 @@ body{font-family:'DM Sans',-apple-system,'PingFang SC','Microsoft YaHei',sans-se
       <div class="w-card" onclick="go('s-new-choice')">
         <div class="wci" style="background:#e8f5f5">📋</div>
         <div class="wct">
-          <h3 data-i18n="newpt-card-h">首次就诊</h3>
+          <h3 data-i18n="newpt-card-h">首诊登记信息</h3>
           <p data-i18n="newpt-card-p">填写您的个人信息进行登记</p>
         </div>
         <span class="arr">›</span>
       </div>
-      <div class="w-card" onclick="go('s-book-sa')">
+      <div class="w-card" onclick="go('s-book-doctor')">
         <div class="wci" style="background:#fdf3e0">📅</div>
         <div class="wct">
           <h3 data-i18n="book-card-h">预约时间</h3>
@@ -276,7 +306,7 @@ body{font-family:'DM Sans',-apple-system,'PingFang SC','Microsoft YaHei',sans-se
         <textarea id="np-addr" rows="2" data-i18n-ph="ph-addr" placeholder="街道地址, Auckland"></textarea>
       </div>
       <div class="fg">
-        <label data-i18n="lbl-email">邮箱（选填）</label>
+        <label data-i18n="lbl-email">邮箱 *</label>
         <input id="np-email" type="email" placeholder="you@example.com">
       </div>
     </div>
@@ -320,130 +350,256 @@ body{font-family:'DM Sans',-apple-system,'PingFang SC','Microsoft YaHei',sans-se
     </div>
   </div>
 
-  <!-- S-BOOK-SA -->
-  <div class="screen" id="s-book-sa">
+  <!-- S-BOOK-DOCTOR -->
+  <div class="screen" id="s-book-doctor">
     <button class="back" onclick="go('s-welcome')">‹ <span data-i18n="back">返回</span></button>
     <div class="pg-title">
       <div class="pg-title-main" data-i18n="book-title">预约时间</div>
       <div class="pg-title-sub" data-i18n="book-title-en">BOOK APPOINTMENT</div>
     </div>
+    <div class="doc-select-hd">
+      <h3 data-i18n="select-doctor">请选择您想预约的医生</h3>
+      <a class="pricing-link" onclick="go('s-pricing')" data-i18n="view-pricing">查看收费标准</a>
+    </div>
+    <div class="doc-cards">
+      <div class="doc-card" onclick="goBookCS()">
+        <div class="doc-icon" style="background:#e8f5f5">🧑‍⚕️</div>
+        <div class="doc-info">
+          <h3 data-i18n="dr-zhang-cs">张传生医生</h3>
+          <p data-i18n="dr-cs-sub">每周二、五 · 9:00–17:00</p>
+        </div>
+        <span class="arr">›</span>
+      </div>
+      <div class="doc-card" onclick="goBookChao()">
+        <div class="doc-icon" style="background:#e8f5f5">👨‍⚕️</div>
+        <div class="doc-info">
+          <h3 data-i18n="dr-zhang-c">张超医生</h3>
+          <p data-i18n="dr-chao-sub">周一至五 9:00–16:30 · 周六 9:00–11:30</p>
+        </div>
+        <span class="arr">›</span>
+      </div>
+      <div class="doc-card" onclick="goBookYu()">
+        <div class="doc-icon" style="background:#fdf3e0">👩‍⚕️</div>
+        <div class="doc-info">
+          <h3 data-i18n="dr-zhang-y">张宇医生</h3>
+          <p data-i18n="dr-yu-sub">周一至三五 9:00–16:30 · 周四 11:00–18:30 · 周日 9:00–11:30</p>
+        </div>
+        <span class="arr">›</span>
+      </div>
+    </div>
+  </div>
 
-    <!-- Step 1: Name+DOB then Phone -->
-    <div id="book-step-phone">
+  <!-- S-BOOK-CS (张传生: calendar first → name/DOB → phone → code) -->
+  <div class="screen" id="s-book-cs">
+    <button class="back" id="cs-back-btn" onclick="csBack()">‹ <span data-i18n="back">返回</span></button>
+    <div class="pg-title">
+      <div class="pg-title-main" data-i18n="dr-zhang-cs">张传生医生</div>
+      <div class="pg-title-sub" data-i18n="book-title-en">BOOK APPOINTMENT</div>
+    </div>
+
+    <!-- Step 1: Calendar -->
+    <div id="cs-step-cal">
+      <div class="step-tag" data-i18n="step-select-time">第一步：选择时间</div>
+      <div class="card">
+        <div class="cal-nav">
+          <button class="cnb" onclick="calShiftDoctor('cs',-1)">‹</button>
+          <h3 id="cal-label-cs">...</h3>
+          <button class="cnb" onclick="calShiftDoctor('cs',1)">›</button>
+        </div>
+        <div class="cal-heads" id="cal-heads-cs">
+          <div class="ch">日</div><div class="ch">一</div><div class="ch">二</div>
+          <div class="ch">三</div><div class="ch">四</div><div class="ch">五</div><div class="ch">六</div>
+        </div>
+        <div class="cal-full-legend" id="cal-full-legend-cs">
+          <div class="cal-full-legend-dot"></div><span data-i18n="legend-full-day">红色日期表示当天已全部约满</span>
+        </div>
+        <div class="cal-days" id="cal-cs"></div>
+      </div>
+      <div class="card" id="slot-card-cs" style="display:none">
+        <div class="slots-hd" id="slot-hd-cs">选择时段</div>
+        <div class="slot-legend">
+          <div class="slot-legend-item"><div class="slot-legend-dot avail"></div><span data-i18n="legend-avail">可选时段</span></div>
+          <div class="slot-legend-item"><div class="slot-legend-dot taken"></div><span data-i18n="legend-taken">已被占用（不可选）</span></div>
+        </div>
+        <div class="slots" id="slot-grid-cs"></div>
+      </div>
+      <div class="ebox" id="cs-cal-err"><span>⚠️</span><span id="cs-cal-err-t"></span></div>
+    </div>
+
+    <!-- Step 2: Name + DOB -->
+    <div id="cs-step-name" style="display:none">
+      <div class="step-tag" data-i18n="step-verify-id">第二步：身份验证</div>
       <div class="book-notice">
         <p class="bn-zh" data-i18n="book-notice-1">请先确认您已在本系统中登记了您的个人信息。</p>
         <p class="bn-zh" style="margin-top:8px" data-i18n="book-notice-2">请输入您的姓名和出生日期进行验证。</p>
         <p class="bn-zh" style="margin-top:8px"><span data-i18n="book-notice-3">如果您新换了手机号，</span><a href="javascript:void(0)" onclick="go('s-change-phone')" class="bn-link" data-i18n="book-notice-link">请点击此处</a></p>
       </div>
-
-      <!-- Sub-step A: Name + DOB -->
-      <div id="book-sub-name">
-        <div class="card">
-          <div class="fg" style="margin-bottom:14px">
-            <label style="font-size:14px" data-i18n="lbl-your-full-name">您的姓名</label>
-            <input id="book-name" type="text" data-i18n-ph="ph-book-name" placeholder="例：张三 或 San Zhang" style="font-size:15px">
-            <small data-i18n="book-name-hint">例如：张三，请输入 "San Zhang"</small>
-          </div>
-          <div class="fg" style="margin-bottom:0">
-            <label style="font-size:14px" data-i18n="lbl-dob-verify">出生日期</label>
-            <div class="dob-row" style="margin-top:4px">
-              <div class="dob-col">
-                <input id="book-dob-y" type="tel" maxlength="4" placeholder="" oninput="if(this.value.length===4)document.getElementById('book-dob-m').focus()">
-                <span class="dob-lbl" data-i18n="dob-year">年</span>
-              </div>
-              <div class="dob-col">
-                <input id="book-dob-m" type="tel" maxlength="2" placeholder="" oninput="if(this.value.length===2)document.getElementById('book-dob-d').focus()">
-                <span class="dob-lbl" data-i18n="dob-month">月</span>
-              </div>
-              <div class="dob-col">
-                <input id="book-dob-d" type="tel" maxlength="2" placeholder="">
-                <span class="dob-lbl" data-i18n="dob-day">日</span>
-              </div>
+      <div class="card">
+        <div class="fg" style="margin-bottom:14px">
+          <label style="font-size:14px" data-i18n="lbl-your-full-name">您的姓名</label>
+          <input id="cs-name" type="text" data-i18n-ph="ph-book-name" placeholder="例：张三 或 San Zhang" style="font-size:15px">
+          <small data-i18n="book-name-hint">请直接输入您的姓名（中文或英文均可）</small>
+        </div>
+        <div class="fg" style="margin-bottom:0">
+          <label style="font-size:14px" data-i18n="lbl-dob-verify">出生日期</label>
+          <div class="dob-row" style="margin-top:4px">
+            <div class="dob-col">
+              <input id="cs-dob-y" type="tel" maxlength="4" placeholder="" oninput="if(this.value.length===4)document.getElementById('cs-dob-m').focus()">
+              <span class="dob-lbl" data-i18n="dob-year">年</span>
+            </div>
+            <div class="dob-col">
+              <input id="cs-dob-m" type="tel" maxlength="2" placeholder="" oninput="if(this.value.length===2)document.getElementById('cs-dob-d').focus()">
+              <span class="dob-lbl" data-i18n="dob-month">月</span>
+            </div>
+            <div class="dob-col">
+              <input id="cs-dob-d" type="tel" maxlength="2" placeholder="">
+              <span class="dob-lbl" data-i18n="dob-day">日</span>
             </div>
           </div>
         </div>
-        <div class="ebox" id="book-name-err"><span>⚠️</span><span id="book-name-err-t"></span></div>
-        <div class="btn-row">
-          <button class="btn btn-p" id="book-name-btn" onclick="bookCheckName()" data-i18n="btn-next">下一步</button>
-        </div>
       </div>
-
-      <!-- Sub-step B: Phone + SMS -->
-      <div id="book-sub-phone" style="display:none">
-        <div class="card">
-          <div class="fg">
-            <label data-i18n="lbl-mobile">手机号码</label>
-            <input id="book-ph" type="tel" data-i18n-ph="ph-mobile" placeholder="021 xxx xxxx"
-              onkeydown="if(event.key==='Enter')bookSendSMS()">
-            <small data-i18n="mobile-hint">请输入登记时使用的新西兰手机号</small>
-          </div>
-          <div id="recaptcha-book"></div>
-          <div class="ebox" id="book-ph-err"><span>⚠️</span><span id="book-ph-err-t"></span></div>
-        </div>
-        <div class="btn-row">
-          <button class="btn btn-p" id="book-send-btn" onclick="bookSendSMS()" data-i18n="btn-send-code">发送验证码</button>
-        </div>
+      <div class="ebox" id="cs-name-err"><span>⚠️</span><span id="cs-name-err-t"></span></div>
+      <div class="btn-row">
+        <button class="btn btn-p" id="cs-name-btn" onclick="csNameNext()" data-i18n="btn-next">下一步</button>
       </div>
     </div>
 
-    <!-- Step 2: Code -->
-    <div id="book-step-code" style="display:none">
+    <!-- Step 3: Phone -->
+    <div id="cs-step-phone" style="display:none">
+      <div class="step-tag" data-i18n="step-phone">第三步：手机验证</div>
+      <div class="card">
+        <div class="fg">
+          <label data-i18n="lbl-mobile">手机号码</label>
+          <input id="cs-ph" type="tel" data-i18n-ph="ph-mobile" placeholder="021 xxx xxxx">
+          <small data-i18n="mobile-hint">请输入登记时使用的新西兰手机号</small>
+        </div>
+        <div id="recaptcha-cs"></div>
+        <div class="ebox" id="cs-ph-err"><span>⚠️</span><span id="cs-ph-err-t"></span></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-p" id="cs-send-btn" onclick="csSendSMS()" data-i18n="btn-send-code">发送验证码</button>
+      </div>
+    </div>
+
+    <!-- Step 4: Code -->
+    <div id="cs-step-code" style="display:none">
       <div class="phone-wrap"><div class="big-icon">💬</div></div>
       <div class="stitle" style="margin-bottom:6px" data-i18n="verify-title">输入验证码</div>
-      <div class="ssub"><span data-i18n="verify-sub-prefix">验证码已发送至</span> <strong id="book-phone-disp"></strong></div>
+      <div class="ssub"><span data-i18n="verify-sub-prefix">验证码已发送至</span> <strong id="cs-phone-disp"></strong></div>
       <div class="card">
-        <div class="code-inputs" id="book-code-inputs">
-          <input type="tel" maxlength="1" oninput="bookCodeInput(this,0)" onkeydown="bookCodeBk(this,0,event)">
-          <input type="tel" maxlength="1" oninput="bookCodeInput(this,1)" onkeydown="bookCodeBk(this,1,event)">
-          <input type="tel" maxlength="1" oninput="bookCodeInput(this,2)" onkeydown="bookCodeBk(this,2,event)">
-          <input type="tel" maxlength="1" oninput="bookCodeInput(this,3)" onkeydown="bookCodeBk(this,3,event)">
-          <input type="tel" maxlength="1" oninput="bookCodeInput(this,4)" onkeydown="bookCodeBk(this,4,event)">
-          <input type="tel" maxlength="1" oninput="bookCodeInput(this,5)" onkeydown="bookCodeBk(this,5,event)">
+        <div class="code-inputs" id="cs-code-inputs">
+          <input type="tel" maxlength="1" oninput="csCodeInput(this,0)" onkeydown="csCodeBk(this,0,event)">
+          <input type="tel" maxlength="1" oninput="csCodeInput(this,1)" onkeydown="csCodeBk(this,1,event)">
+          <input type="tel" maxlength="1" oninput="csCodeInput(this,2)" onkeydown="csCodeBk(this,2,event)">
+          <input type="tel" maxlength="1" oninput="csCodeInput(this,3)" onkeydown="csCodeBk(this,3,event)">
+          <input type="tel" maxlength="1" oninput="csCodeInput(this,4)" onkeydown="csCodeBk(this,4,event)">
+          <input type="tel" maxlength="1" oninput="csCodeInput(this,5)" onkeydown="csCodeBk(this,5,event)">
         </div>
-        <div class="ebox" id="book-code-err"><span>⚠️</span><span id="book-code-err-t"></span></div>
+        <div class="ebox" id="cs-code-err"><span>⚠️</span><span id="cs-code-err-t"></span></div>
         <div class="resend-row">
-          <button class="resend-btn" id="book-resend-btn" onclick="bookResend()" disabled data-i18n="btn-resend">重新发送</button>
-          <div class="countdown" id="book-countdown"></div>
+          <button class="resend-btn" id="cs-resend-btn" onclick="csResend()" disabled data-i18n="btn-resend">重新发送</button>
+          <div class="countdown" id="cs-countdown"></div>
         </div>
       </div>
       <div class="btn-row">
-        <button class="btn btn-p" id="book-verify-btn" onclick="bookVerify()" data-i18n="btn-verify">验证</button>
+        <button class="btn btn-p" id="cs-verify-btn" onclick="csVerifyAndBook()" data-i18n="btn-verify">验证</button>
       </div>
     </div>
+  </div>
 
-    <!-- Step 3: Calendar -->
-    <div id="book-step-cal" style="display:none">
-      <div class="book-welcome" id="book-welcome-name"></div>
+  <!-- S-BOOK-CHAO (张超: simple calendar, no conflict check, no SMS) -->
+  <div class="screen" id="s-book-chao">
+    <button class="back" id="chao-back-btn" onclick="simpleBack('chao')">‹ <span data-i18n="back">返回</span></button>
+    <div class="pg-title">
+      <div class="pg-title-main" data-i18n="dr-zhang-c">张超医生</div>
+      <div class="pg-title-sub" data-i18n="book-title-en">BOOK APPOINTMENT</div>
+    </div>
+    <div id="chao-step-cal">
       <div class="card">
         <div class="cal-nav">
-          <button class="cnb" onclick="calShift('sa',-1)">‹</button>
-          <h3 id="cal-label-sa">...</h3>
-          <button class="cnb" onclick="calShift('sa',1)">›</button>
+          <button class="cnb" onclick="calShiftDoctor('chao',-1)">‹</button>
+          <h3 id="cal-label-chao">...</h3>
+          <button class="cnb" onclick="calShiftDoctor('chao',1)">›</button>
         </div>
-        <div class="cal-heads" id="cal-heads-sa">
+        <div class="cal-heads" id="cal-heads-chao">
           <div class="ch">日</div><div class="ch">一</div><div class="ch">二</div>
           <div class="ch">三</div><div class="ch">四</div><div class="ch">五</div><div class="ch">六</div>
         </div>
-        <div class="cal-days" id="cal-sa"></div>
+        <div class="cal-days" id="cal-chao"></div>
       </div>
-      <div class="card" id="slot-card-sa" style="display:none">
-        <div class="slots-hd" id="slot-hd-sa" data-i18n="slot-hd">选择时段</div>
-        <div class="slot-legend" id="slot-legend-sa">
-          <div class="slot-legend-item"><div class="slot-legend-dot avail"></div><span data-i18n="legend-avail">可选</span></div>
-          <div class="slot-legend-item"><div class="slot-legend-dot taken"></div><span data-i18n="legend-taken">已被占用</span></div>
+      <div class="card" id="slot-card-chao" style="display:none">
+        <div class="slots-hd" id="slot-hd-chao">选择时段</div>
+        <div class="slots" id="slot-grid-chao"></div>
+      </div>
+      <div class="ebox" id="chao-cal-err"><span>⚠️</span><span id="chao-cal-err-t"></span></div>
+    </div>
+    <div id="chao-step-name" style="display:none">
+      <div class="step-tag" data-i18n="step-info">填写信息</div>
+      <div class="card">
+        <div class="fg">
+          <label data-i18n="lbl-your-full-name">您的姓名</label>
+          <input id="chao-name" type="text" data-i18n-ph="ph-book-name" placeholder="张三 或 San Zhang">
         </div>
-        <div class="slots" id="slot-grid-sa"></div>
+        <div class="fg" style="margin-bottom:0">
+          <label data-i18n="lbl-mobile">手机号码</label>
+          <input id="chao-ph" type="tel" data-i18n-ph="ph-mobile" placeholder="021 xxx xxxx">
+        </div>
       </div>
-      <div class="ebox" id="sa-err"><span>⚠️</span><span id="sa-err-t"></span></div>
-      <div class="btn-row" id="book-btn-sa" style="display:none">
-        <button class="btn btn-p" onclick="doBook('sa')" data-i18n="btn-confirm-book">确认预约</button>
+      <div class="ebox" id="chao-name-err"><span>⚠️</span><span id="chao-name-err-t"></span></div>
+      <div class="btn-row">
+        <button class="btn btn-p" onclick="doBookSimple('chao')" data-i18n="btn-confirm-book">确认预约</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- S-BOOK-YU (张宇: same as chao) -->
+  <div class="screen" id="s-book-yu">
+    <button class="back" id="yu-back-btn" onclick="simpleBack('yu')">‹ <span data-i18n="back">返回</span></button>
+    <div class="pg-title">
+      <div class="pg-title-main" data-i18n="dr-zhang-y">张宇医生</div>
+      <div class="pg-title-sub" data-i18n="book-title-en">BOOK APPOINTMENT</div>
+    </div>
+    <div id="yu-step-cal">
+      <div class="card">
+        <div class="cal-nav">
+          <button class="cnb" onclick="calShiftDoctor('yu',-1)">‹</button>
+          <h3 id="cal-label-yu">...</h3>
+          <button class="cnb" onclick="calShiftDoctor('yu',1)">›</button>
+        </div>
+        <div class="cal-heads" id="cal-heads-yu">
+          <div class="ch">日</div><div class="ch">一</div><div class="ch">二</div>
+          <div class="ch">三</div><div class="ch">四</div><div class="ch">五</div><div class="ch">六</div>
+        </div>
+        <div class="cal-days" id="cal-yu"></div>
+      </div>
+      <div class="card" id="slot-card-yu" style="display:none">
+        <div class="slots-hd" id="slot-hd-yu">选择时段</div>
+        <div class="slots" id="slot-grid-yu"></div>
+      </div>
+      <div class="ebox" id="yu-cal-err"><span>⚠️</span><span id="yu-cal-err-t"></span></div>
+    </div>
+    <div id="yu-step-name" style="display:none">
+      <div class="step-tag" data-i18n="step-info">填写信息</div>
+      <div class="card">
+        <div class="fg">
+          <label data-i18n="lbl-your-full-name">您的姓名</label>
+          <input id="yu-name" type="text" data-i18n-ph="ph-book-name" placeholder="张三 或 San Zhang">
+        </div>
+        <div class="fg" style="margin-bottom:0">
+          <label data-i18n="lbl-mobile">手机号码</label>
+          <input id="yu-ph" type="tel" data-i18n-ph="ph-mobile" placeholder="021 xxx xxxx">
+        </div>
+      </div>
+      <div class="ebox" id="yu-name-err"><span>⚠️</span><span id="yu-name-err-t"></span></div>
+      <div class="btn-row">
+        <button class="btn btn-p" onclick="doBookSimple('yu')" data-i18n="btn-confirm-book">确认预约</button>
       </div>
     </div>
   </div>
 
   <!-- S-CHANGE-PHONE -->
   <div class="screen" id="s-change-phone">
-    <button class="back" onclick="go('s-book-sa')">‹ <span data-i18n="back">返回</span></button>
+    <button class="back" onclick="go('s-book-cs')">‹ <span data-i18n="back">返回</span></button>
     <div class="pg-title">
       <div class="pg-title-main" data-i18n="change-ph-title">更换手机号</div>
       <div class="pg-title-sub" data-i18n="change-ph-title-en">CHANGE MOBILE NUMBER</div>
@@ -511,9 +667,43 @@ body{font-family:'DM Sans',-apple-system,'PingFang SC','Microsoft YaHei',sans-se
       <h2 id="ok-title">提交成功！</h2>
       <p id="ok-msg">您的信息已成功提交。</p>
       <div class="ibox" id="ok-detail" style="display:none"></div>
-      <div class="btn-row" style="margin-top:30px">
+      <div id="ok-book-actions" style="display:none">
+        <div class="ok-book-actions">
+          <button class="btn-gcal" onclick="addToGoogleCalendar()">📅 添加到 Google Calendar</button>
+          <button class="btn-ics" onclick="downloadICS()">📥 下载日历文件（iOS / Outlook）</button>
+        </div>
+      </div>
+      <div class="btn-row" style="margin-top:20px">
         <button class="btn btn-p" onclick="go('s-welcome')" data-i18n="btn-back-home">返回首页</button>
       </div>
+    </div>
+  </div>
+
+  <!-- S-CANCEL -->
+  <div class="screen" id="s-cancel">
+    <div class="pg-title"><div class="pg-title-main">取消预约</div><div class="pg-title-sub">CANCEL APPOINTMENT</div></div>
+    <div id="s-cancel-loading" style="text-align:center;padding:40px 0;color:var(--ink-s)">
+      <div class="spin" style="margin:0 auto 12px"></div>查询预约信息...
+    </div>
+    <div id="s-cancel-found" style="display:none">
+      <div class="cancel-card" id="s-cancel-detail"></div>
+      <div style="margin-top:20px">
+        <button class="btn-cancel-confirm" onclick="confirmCancel()">确认取消此预约</button>
+        <div class="btn-row" style="margin-top:10px">
+          <button class="btn btn-p" onclick="go('s-welcome')" data-i18n="btn-back-home">返回首页</button>
+        </div>
+      </div>
+    </div>
+    <div id="s-cancel-notfound" style="display:none;text-align:center;padding:40px 20px;color:var(--ink-s)">
+      <div style="font-size:40px;margin-bottom:12px">🔍</div>
+      <div>未找到该预约，可能已取消或链接已失效</div>
+      <div class="btn-row" style="margin-top:20px"><button class="btn btn-p" onclick="go('s-welcome')" data-i18n="btn-back-home">返回首页</button></div>
+    </div>
+    <div id="s-cancel-done" style="display:none;text-align:center;padding:30px 20px">
+      <div style="font-size:48px;margin-bottom:12px">✅</div>
+      <div style="font-size:18px;font-weight:700;color:var(--ink);margin-bottom:8px">预约已取消</div>
+      <div style="font-size:14px;color:var(--ink-s)">该时段已重新开放，欢迎重新预约</div>
+      <div class="btn-row" style="margin-top:24px"><button class="btn btn-p" onclick="go('s-welcome')" data-i18n="btn-back-home">返回首页</button></div>
     </div>
   </div>
 
@@ -685,7 +875,7 @@ const STRINGS = {
     'clinic-name':'北京泽五堂中医诊所','self-service':'患者自助服务',
     'welcome-h2':'欢迎','welcome-sub':'请选择您今天需要的服务',
     'pricing-card-h':'查看收费标准','pricing-card-p':'ACC 说明及各医生诊疗费用',
-    'newpt-card-h':'首次就诊','newpt-card-p':'填写您的个人信息进行登记',
+    'newpt-card-h':'首诊登记信息','newpt-card-p':'填写您的个人信息进行登记',
     'book-card-h':'预约时间','book-card-p':'查看可用时段并预约治疗',
     'back':'返回',
     'newpt-title':'首次就诊登记','newpt-title-en':'NEW PATIENT REGISTRATION',
@@ -720,7 +910,7 @@ const STRINGS = {
     'verify-title':'输入验证码','verify-sub-prefix':'验证码已发送至',
     'btn-resend':'重新发送','countdown-suffix':'秒后可重新发送',
     'btn-verify':'验证','slot-hd':'选择时段','btn-confirm-book':'确认预约',
-    'slot-taken':'已占用','no-slots':'该日无可用时段','legend-avail':'可选时段','legend-taken':'已被占用（不可选）',
+    'slot-taken':'已占用','no-slots':'该日无可用时段','legend-avail':'可选时段','legend-taken':'已被占用（不可选）','legend-full-day':'红色日期表示当天已全部约满','full-day-toast':'当天已全部约满','taken-slot-toast':'这个时间已被预约','select-doctor':'请选择您想预约的医生','view-pricing':'查看收费标准','dr-cs-sub':'每周二、五 · 9:00–17:00','dr-chao-sub':'周一至五 9:00–16:30 · 周六 9:00–11:30','dr-yu-sub':'周一至三五 9:00–16:30 · 周四 11:00–18:30 · 周日 9:00–11:30','step-select-time':'第一步：选择时间','step-verify-id':'第二步：身份验证','step-phone':'第三步：手机验证','step-info':'填写信息',
     'verified-ok':'✅ 验证成功，欢迎',
     'change-ph-title':'更换手机号','change-ph-title-en':'CHANGE MOBILE NUMBER',
     'change-ph-sub':'请先验证您的身份，再绑定新手机号',
@@ -758,7 +948,7 @@ const STRINGS = {
     'clinic-name':'Beijing Zewutang TCM Clinic','self-service':'Patient Self-Service',
     'welcome-h2':'Welcome','welcome-sub':'Please choose a service below',
     'pricing-card-h':'Pricing','pricing-card-p':'ACC info & consultation fees',
-    'newpt-card-h':'New Patient','newpt-card-p':'Register your personal information',
+    'newpt-card-h':'New Patient Registration','newpt-card-p':'Register your personal information',
     'book-card-h':'Book Appointment','book-card-p':'View available slots and book a visit',
     'back':'Back',
     'newpt-title':'New Patient Registration','newpt-title-en':'NEW PATIENT REGISTRATION',
@@ -793,7 +983,7 @@ const STRINGS = {
     'verify-title':'Enter Verification Code','verify-sub-prefix':'Code sent to',
     'btn-resend':'Resend','countdown-suffix':'seconds until resend',
     'btn-verify':'Verify','slot-hd':'Select a Time Slot','btn-confirm-book':'Confirm Booking',
-    'slot-taken':'Taken','no-slots':'No available slots on this day','legend-avail':'Available','legend-taken':'Already booked',
+    'slot-taken':'Taken','no-slots':'No available slots on this day','legend-avail':'Available','legend-taken':'Already booked','legend-full-day':'Red dates are fully booked','full-day-toast':'This day is fully booked','taken-slot-toast':'This slot is already booked','select-doctor':'Select your doctor','view-pricing':'View Pricing','dr-cs-sub':'Tue & Fri · 9:00–17:00','dr-chao-sub':'Mon–Fri 9:00–16:30 · Sat 9:00–11:30','dr-yu-sub':'Mon/Tue/Wed/Fri 9:00–16:30 · Thu 11:00–18:30 · Sun 9:00–11:30','step-select-time':'Step 1: Select Time','step-verify-id':'Step 2: Verify Identity','step-phone':'Step 3: Phone Verification','step-info':'Your Details',
     'verified-ok':'✅ Verified — Welcome,',
     'change-ph-title':'Change Mobile Number','change-ph-title-en':'CHANGE MOBILE NUMBER',
     'change-ph-sub':'Please verify your identity before updating your number',
@@ -858,9 +1048,10 @@ function applyLang() {
     if(val !== undefined) el.textContent = val;
   });
   // calendar heads
-  const heads = document.querySelectorAll('#cal-heads-sa .ch');
   const ch = T('cal-heads');
-  if(ch && heads.length) heads.forEach((h,i) => h.textContent = ch[i]);
+  if(ch){['cs','chao','yu'].forEach(key=>{
+    document.querySelectorAll('#cal-heads-'+key+' .ch').forEach((h,i)=>h.textContent=ch[i]);
+  });}
   // html lang attribute
   document.getElementById('html-root').lang = curLang === 'zh' ? 'zh-CN' : 'en';
   // lang button
@@ -871,7 +1062,11 @@ function toggleLang() {
   curLang = curLang === 'zh' ? 'en' : 'zh';
   applyLang();
   // Re-render calendar if visible
-  if(G && G.calMonth && G.calMonth.sa) renderCal('sa');
+  if(G && G.calMonth){
+    if(G.calMonth.cs) renderCalDoctor('cs');
+    if(G.calMonth.chao) renderCalDoctor('chao');
+    if(G.calMonth.yu) renderCalDoctor('yu');
+  }
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -952,10 +1147,13 @@ window.addEventListener('load',()=>{_fbInitAttempted=false;initFirebase();});
 /* ══════════════════════════════════════════════════════════
    GLOBAL STATE
 ══════════════════════════════════════════════════════════ */
+const TOTAL_SLOTS_CS = 17; // 9:00-17:00, 30min slots
 const G={
   patient:null, hasACC:true, schedule:null,
-  calMonth:{sa:new Date()}, selected:{sa:{date:null,time:null}},
-  bookedSlots:{}
+  calMonth:{cs:new Date(),chao:new Date(),yu:new Date()},
+  selected:{cs:{date:null,time:null},chao:{date:null,time:null},yu:{date:null,time:null}},
+  bookedSlots:{}, fullDays:new Set(),
+  lastBooking:null, csPatient:null
 };
 
 /* ══════════════════════════════════════════════════════════
@@ -966,21 +1164,8 @@ function go(id){
   if(id==='s-new-choice'){
     clearRegistrationForms();
   }
-  if(id==='s-book-sa'){
-    document.getElementById('book-step-phone').style.display='block';
-    document.getElementById('book-step-code').style.display='none';
-    document.getElementById('book-step-cal').style.display='none';
-    document.getElementById('book-sub-name').style.display='block';
-    document.getElementById('book-sub-phone').style.display='none';
-    document.getElementById('book-send-btn').disabled=false;
-    const bn=document.getElementById('book-name');if(bn)bn.value='';
-    ['book-dob-y','book-dob-m','book-dob-d'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-    document.getElementById('book-ph').value='';
-    document.querySelectorAll('#book-code-inputs input').forEach(i=>i.value='');
-    hideErr('book-name-err');hideErr('book-ph-err');hideErr('book-code-err');
-    _bookConfirmResult=null;
-    if(window._bookRecaptcha){try{window._bookRecaptcha.clear();}catch(_){}window._bookRecaptcha=null;}
-  }
+  // s-book-cs reset handled by goBookCS()
+  // s-book-chao/yu reset handled by goBookChao/Yu()
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id)?.classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
@@ -1055,7 +1240,8 @@ async function personalNext(){
   if(!gender){showErr('np-err','np-err-t',curLang==='zh'?'请选择性别':'Please select your gender');return;}
   if(!validDt(dob)){showErr('np-err','np-err-t',curLang==='zh'?'出生日期格式错误，应为 DD/MM/YYYY':'Date of birth must be DD/MM/YYYY');return;}
   if(!ph){showErr('np-err','np-err-t',curLang==='zh'?'请填写联系电话':'Please enter your phone number');return;}
-  if(email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showErr('np-err','np-err-t',curLang==='zh'?'邮箱格式不正确':'Invalid email format');return;}
+  if(!email){showErr('np-err','np-err-t',curLang==='zh'?'请填写邮箱（必填）':'Email is required');return;}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showErr('np-err','np-err-t',curLang==='zh'?'邮箱格式不正确':'Invalid email format');return;}
 
   G._newPersonal={familyName:fam,firstName:fir,gender,dob,phone:ph,address:addr,email};
 
@@ -1318,19 +1504,11 @@ async function bookVerify(){
 ══════════════════════════════════════════════════════════ */
 async function fetchTakenSlots(iso){
   if(DEMO_MODE||!db) return [];
-  const taken=new Set();
-  // Source 1: calendar-authoritative slots (updated by Apps Script every 5 min)
   try{
     const snap=await db.collection('bookedSlots').doc(iso).get();
-    if(snap.exists)(snap.data().times||[]).forEach(t=>taken.add(t));
-  }catch(e){console.warn('bookedSlots read:',e);}
-  // Source 2: portal appointments already confirmed by calendar sync
-  // (belt-and-suspenders; user is phone-authenticated at this point)
-  try{
-    const aSnap=await db.collection('appointments').where('date','==',iso).get();
-    aSnap.forEach(doc=>{const d=doc.data();if(d.syncedToCalendar===true&&d.time)taken.add(d.time);});
-  }catch(e){/* may fail if unauthenticated, that's ok */}
-  return [...taken].sort();
+    if(snap.exists) return snap.data().times||[];
+    return [];
+  }catch(e){console.warn('fetchTakenSlots:',e);return [];}
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -1564,7 +1742,7 @@ async function cpConfirmCode(){
       document.getElementById('book-step-phone').style.display='none';
       document.getElementById('book-step-code').style.display='none';
       document.getElementById('book-step-cal').style.display='block';
-      go('s-book-sa');initCal('sa');
+      goBookCS();
     },800);
   }catch(e){
     console.error('cpConfirmCode:',e);
@@ -1576,6 +1754,608 @@ async function cpConfirmCode(){
    INIT
 ══════════════════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', applyLang);
+
+/* ══════════════════════════════════════════════════════════
+   DOCTOR SCHEDULES
+══════════════════════════════════════════════════════════ */
+const DR_SCHEDULES = {
+  cs: {
+    weeklySlots:[
+      {dayOfWeek:2,startHour:9,endHour:17,endMinute:0},
+      {dayOfWeek:5,startHour:9,endHour:17,endMinute:0}
+    ],
+    maxDaysAhead:60, checkConflicts:true, doctorName:'张传生', colorClass:''
+  },
+  chao: {
+    weeklySlots:[
+      {dayOfWeek:1,startHour:9,endHour:16,endMinute:30},
+      {dayOfWeek:2,startHour:9,endHour:16,endMinute:30},
+      {dayOfWeek:3,startHour:9,endHour:16,endMinute:30},
+      {dayOfWeek:4,startHour:9,endHour:16,endMinute:30},
+      {dayOfWeek:5,startHour:9,endHour:16,endMinute:30},
+      {dayOfWeek:6,startHour:9,endHour:11,endMinute:30}
+    ],
+    maxDaysAhead:60, checkConflicts:false, doctorName:'张超', calColor:'GREEN'
+  },
+  yu: {
+    weeklySlots:[
+      {dayOfWeek:0,startHour:9,endHour:11,endMinute:30},
+      {dayOfWeek:1,startHour:9,endHour:16,endMinute:30},
+      {dayOfWeek:2,startHour:9,endHour:16,endMinute:30},
+      {dayOfWeek:3,startHour:9,endHour:16,endMinute:30},
+      {dayOfWeek:4,startHour:11,endHour:18,endMinute:30},
+      {dayOfWeek:5,startHour:9,endHour:16,endMinute:30}
+    ],
+    maxDaysAhead:60, checkConflicts:false, doctorName:'张宇', calColor:'MAUVE'
+  }
+};
+
+function generateSlots(ws){
+  const slots=[];
+  let h=ws.startHour,m=0;
+  const endH=ws.endHour, endM=ws.endMinute!==undefined?ws.endMinute:0;
+  while(h<endH||(h===endH&&m<=endM)){
+    slots.push(String(h).padStart(2,'0')+':'+(m===0?'00':'30'));
+    m+=30; if(m>=60){h++;m=0;}
+  }
+  return slots;
+}
+
+/* ══════════════════════════════════════════════════════════
+   GENERIC DOCTOR CALENDAR RENDERING
+══════════════════════════════════════════════════════════ */
+async function initCalDoctor(key){
+  G.calMonth[key]=new Date();
+  if(key==='cs') await loadMonthFullDays(key);
+  renderCalDoctor(key);
+}
+
+function calShiftDoctor(key,dir){
+  const m=G.calMonth[key];
+  G.calMonth[key]=new Date(m.getFullYear(),m.getMonth()+dir,1);
+  G.selected[key]={date:null,time:null};
+  document.getElementById('slot-card-'+key).style.display='none';
+  renderCalDoctor(key);
+}
+
+function renderCalDoctor(key){
+  const sched=DR_SCHEDULES[key];
+  const m=G.calMonth[key];
+  const months=T('months');
+  document.getElementById('cal-label-'+key).textContent=`${m.getFullYear()} ${months[m.getMonth()]}`;
+  const today=new Date();today.setHours(0,0,0,0);
+  const maxD=new Date(today);maxD.setDate(maxD.getDate()+sched.maxDaysAhead);
+  const first=new Date(m.getFullYear(),m.getMonth(),1);
+  const last=new Date(m.getFullYear(),m.getMonth()+1,0);
+  const grid=document.getElementById('cal-'+key);
+  grid.innerHTML='';
+  const startDow=first.getDay();
+  for(let i=0;i<startDow;i++){const e=document.createElement('div');e.className='cd other';grid.appendChild(e);}
+  for(let d=1;d<=last.getDate();d++){
+    const dt=new Date(m.getFullYear(),m.getMonth(),d);
+    const el=document.createElement('div');el.textContent=d;
+    const isPast=dt<today, isFuture=dt>maxD, dow=dt.getDay();
+    const isWorkday=sched.weeklySlots.some(s=>s.dayOfWeek===dow);
+    if(isPast||isFuture||!isWorkday){el.className='cd past';}
+    else{
+      const iso=isoDate(dt);
+      if(key==='cs'&&G.fullDays.has(iso)){
+        el.className='cd full';
+        el.onclick=()=>showToastMsg(T('full-day-toast'));
+      } else {
+        el.className='cd avail';
+        if(G.selected[key].date===iso) el.classList.add('sel');
+        if(key==='cs') el.onclick=()=>selectDateCS(iso,el);
+        else el.onclick=()=>selectDateSimple(key,iso,el);
+      }
+    }
+    grid.appendChild(el);
+  }
+  // Full-day legend for CS
+  if(key==='cs'){
+    const mo=String(m.getMonth()+1).padStart(2,'0');
+    const hasFullInMonth=[...G.fullDays].some(d=>d.startsWith(m.getFullYear()+'-'+mo));
+    const fleg=document.getElementById('cal-full-legend-cs');
+    if(fleg) fleg.style.display=hasFullInMonth?'flex':'none';
+  }
+}
+
+async function loadMonthFullDays(key){
+  if(DEMO_MODE||!db) return;
+  const m=G.calMonth[key];
+  const yr=m.getFullYear();
+  const moStr=String(m.getMonth()+1).padStart(2,'0');
+  try{
+    const snap=await db.collection('bookedSlots')
+      .where(firebase.firestore.FieldPath.documentId(),'>=',`${yr}-${moStr}-01`)
+      .where(firebase.firestore.FieldPath.documentId(),'<=',`${yr}-${moStr}-31`)
+      .get();
+    snap.forEach(doc=>{
+      if(doc.data().isFull===true) G.fullDays.add(doc.id);
+      else G.fullDays.delete(doc.id);
+    });
+  }catch(e){console.warn('loadMonthFullDays:',e);}
+}
+
+async function fetchTakenSlotsCS(iso){
+  if(DEMO_MODE||!db) return [];
+  const taken=new Set();
+  try{
+    const snap=await db.collection('bookedSlots').doc(iso).get();
+    if(snap.exists)(snap.data().times||[]).forEach(t=>taken.add(t));
+  }catch(e){}
+  try{
+    const aSnap=await db.collection('appointments').where('date','==',iso).where('doctor','==','cs').get();
+    aSnap.forEach(doc=>{const d=doc.data();if(d.syncedToCalendar===true&&d.time)taken.add(d.time);});
+  }catch(e){}
+  return [...taken].sort();
+}
+
+async function selectDateCS(iso,el){
+  document.querySelectorAll('#cal-cs .cd').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+  G.selected.cs={date:iso,time:null};
+  const slotCard=document.getElementById('slot-card-cs');
+  const slotGrid=document.getElementById('slot-grid-cs');
+  slotCard.style.display='block';
+  document.getElementById('slot-hd-cs').textContent=iso+' — '+T('slot-hd');
+  slotGrid.innerHTML=`<div style="text-align:center;padding:16px;color:var(--ink-s);font-size:13px"><div class="spin" style="margin:0 auto 8px"></div>${curLang==='zh'?'加载中...':'Loading...'}</div>`;
+  const taken=await fetchTakenSlotsCS(iso);
+  G.bookedSlots[iso]=taken;
+  // Render slots
+  slotGrid.innerHTML='';
+  const sched=DR_SCHEDULES.cs;
+  const dow=new Date(iso).getDay();
+  const ws=sched.weeklySlots.find(s=>s.dayOfWeek===dow);
+  if(!ws){slotGrid.innerHTML=`<div style="color:var(--ink-s);font-size:13px">${T('no-slots')}</div>`;return;}
+  const slots=generateSlots(ws);
+  slots.forEach(t=>{
+    const el2=document.createElement('div');
+    if(taken.includes(t)){
+      el2.className='slot taken';el2.textContent=T('slot-taken');
+      el2.onclick=()=>showToastMsg(T('taken-slot-toast'));
+    } else {
+      el2.className='slot';el2.textContent=t;
+      el2.onclick=()=>{
+        document.querySelectorAll('#slot-grid-cs .slot').forEach(s=>s.classList.remove('sel'));
+        el2.classList.add('sel');
+        G.selected.cs.time=t;
+        // Move to name/DOB step
+        document.getElementById('cs-step-cal').style.display='none';
+        document.getElementById('cs-step-name').style.display='block';
+        document.getElementById('cs-name').value='';
+        ['cs-dob-y','cs-dob-m','cs-dob-d'].forEach(i=>{const e=document.getElementById(i);if(e)e.value='';});
+        hideErr('cs-name-err');
+        window.scrollTo({top:0,behavior:'smooth'});
+      };
+    }
+    slotGrid.appendChild(el2);
+  });
+}
+
+function selectDateSimple(key,iso,el){
+  document.querySelectorAll('#cal-'+key+' .cd').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+  G.selected[key]={date:iso,time:null};
+  const slotCard=document.getElementById('slot-card-'+key);
+  const slotGrid=document.getElementById('slot-grid-'+key);
+  slotCard.style.display='block';
+  document.getElementById('slot-hd-'+key).textContent=iso+' — '+T('slot-hd');
+  slotGrid.innerHTML='';
+  const sched=DR_SCHEDULES[key];
+  const dow=new Date(iso).getDay();
+  const ws=sched.weeklySlots.find(s=>s.dayOfWeek===dow);
+  if(!ws){slotGrid.innerHTML=`<div style="color:var(--ink-s);font-size:13px">${T('no-slots')}</div>`;return;}
+  const slots=generateSlots(ws);
+  slots.forEach(t=>{
+    const el2=document.createElement('div');
+    el2.className='slot';el2.textContent=t;
+    el2.onclick=()=>{
+      document.querySelectorAll('#slot-grid-'+key+' .slot').forEach(s=>s.classList.remove('sel'));
+      el2.classList.add('sel');
+      G.selected[key].time=t;
+      // Move to name step
+      document.getElementById(key+'-step-cal').style.display='none';
+      document.getElementById(key+'-step-name').style.display='block';
+      document.getElementById(key+'-name').value='';
+      document.getElementById(key+'-ph').value='';
+      hideErr(key+'-name-err');
+      window.scrollTo({top:0,behavior:'smooth'});
+    };
+    slotGrid.appendChild(el2);
+  });
+}
+
+/* ══════════════════════════════════════════════════════════
+   NAVIGATION HELPERS
+══════════════════════════════════════════════════════════ */
+function goBookCS(){
+  G.selected.cs={date:null,time:null};
+  G.csPatient=null;
+  _csConfirmResult=null;
+  if(window._csRecaptcha){try{window._csRecaptcha.clear();}catch(_){}window._csRecaptcha=null;}
+  go('s-book-cs');
+  document.getElementById('cs-step-cal').style.display='block';
+  document.getElementById('cs-step-name').style.display='none';
+  document.getElementById('cs-step-phone').style.display='none';
+  document.getElementById('cs-step-code').style.display='none';
+  document.getElementById('slot-card-cs').style.display='none';
+  hideErr('cs-cal-err');hideErr('cs-name-err');hideErr('cs-ph-err');hideErr('cs-code-err');
+  initCalDoctor('cs');
+}
+function goBookChao(){
+  G.selected.chao={date:null,time:null};
+  go('s-book-chao');
+  document.getElementById('chao-step-cal').style.display='block';
+  document.getElementById('chao-step-name').style.display='none';
+  document.getElementById('slot-card-chao').style.display='none';
+  initCalDoctor('chao');
+}
+function goBookYu(){
+  G.selected.yu={date:null,time:null};
+  go('s-book-yu');
+  document.getElementById('yu-step-cal').style.display='block';
+  document.getElementById('yu-step-name').style.display='none';
+  document.getElementById('slot-card-yu').style.display='none';
+  initCalDoctor('yu');
+}
+function csBack(){
+  const calVis=document.getElementById('cs-step-cal').style.display!=='none';
+  const nameVis=document.getElementById('cs-step-name').style.display!=='none';
+  const phoneVis=document.getElementById('cs-step-phone').style.display!=='none';
+  const codeVis=document.getElementById('cs-step-code').style.display!=='none';
+  if(calVis) go('s-book-doctor');
+  else if(nameVis){
+    document.getElementById('cs-step-name').style.display='none';
+    document.getElementById('cs-step-cal').style.display='block';
+  } else if(phoneVis){
+    document.getElementById('cs-step-phone').style.display='none';
+    document.getElementById('cs-step-name').style.display='block';
+  } else if(codeVis){
+    csResend();
+    document.getElementById('cs-step-code').style.display='none';
+    document.getElementById('cs-step-phone').style.display='block';
+  }
+}
+function simpleBack(key){
+  const calVis=document.getElementById(key+'-step-cal').style.display!=='none';
+  if(calVis) go('s-book-doctor');
+  else {
+    document.getElementById(key+'-step-name').style.display='none';
+    document.getElementById(key+'-step-cal').style.display='block';
+    document.getElementById('slot-card-'+key).style.display='none';
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   CS BOOKING FLOW: name/DOB → phone → SMS → book
+══════════════════════════════════════════════════════════ */
+let _csConfirmResult=null, _csCountdownTimer=null;
+
+async function csNameNext(){
+  hideErr('cs-name-err');
+  const nameRaw=(document.getElementById('cs-name').value||'').trim();
+  const y=(document.getElementById('cs-dob-y').value||'').trim();
+  const mo=(document.getElementById('cs-dob-m').value||'').trim();
+  const d=(document.getElementById('cs-dob-d').value||'').trim();
+  if(nameRaw.length<2){showErr('cs-name-err','cs-name-err-t',curLang==='zh'?'请输入姓名（至少2个字符）':'Please enter your name');return;}
+  if(y.length!==4||!mo||!d){showErr('cs-name-err','cs-name-err-t',curLang==='zh'?'请填写完整的出生日期':'Please enter complete date of birth');return;}
+  const dob=`${d.padStart(2,'0')}/${mo.padStart(2,'0')}/${y}`;
+  const btn=document.getElementById('cs-name-btn');
+  btn.disabled=true;block(true);
+  try{
+    if(DEMO_MODE){
+      document.getElementById('cs-step-name').style.display='none';
+      document.getElementById('cs-step-phone').style.display='block';
+      block(false);btn.disabled=false;return;
+    }
+    const snap=await db.collection('patients').where('dob','==',dob).get();
+    if(snap.empty){showErr('cs-name-err','cs-name-err-t',curLang==='zh'?'您未登记，请返回主页，点击首诊登记信息':'Not registered. Return home and complete New Patient Registration.');btn.disabled=false;block(false);return;}
+    const inputNorm=nameRaw.replace(/\s/g,'').toLowerCase();
+    let matched=false, patientData=null;
+    snap.forEach(doc=>{
+      const d2=doc.data();
+      const n1=((d2.firstName||'')+(d2.familyName||'')).replace(/\s/g,'').toLowerCase();
+      const n2=((d2.familyName||'')+(d2.firstName||'')).replace(/\s/g,'').toLowerCase();
+      if(inputNorm===n1||inputNorm===n2){matched=true;patientData=d2;}
+    });
+    if(!matched){showErr('cs-name-err','cs-name-err-t',curLang==='zh'?'姓名或出生日期不匹配，请检查后重试':'Name or date of birth does not match.');btn.disabled=false;block(false);return;}
+    G.csPatient=patientData;
+    document.getElementById('cs-step-name').style.display='none';
+    document.getElementById('cs-step-phone').style.display='block';
+  }catch(e){
+    showErr('cs-name-err','cs-name-err-t',curLang==='zh'?'查询失败，请重试':'Query failed, please retry');
+  }finally{btn.disabled=false;block(false);}
+}
+
+async function csSendSMS(){
+  hideErr('cs-ph-err');
+  const raw=(document.getElementById('cs-ph').value||'').trim();
+  const nz=normalizeNZPhone(raw);
+  if(!nz.ok){showErr('cs-ph-err','cs-ph-err-t',curLang==='zh'?'请输入正确的新西兰手机号':'Please enter a valid NZ mobile number');return;}
+  const btn=document.getElementById('cs-send-btn');
+  btn.disabled=true;block(true);
+  try{
+    if(DEMO_MODE){
+      _csConfirmResult=null;
+      document.getElementById('cs-phone-disp').textContent=nz.masked;
+      document.getElementById('cs-step-phone').style.display='none';
+      document.getElementById('cs-step-code').style.display='block';
+      csStartCountdown();block(false);return;
+    }
+    if(window._csRecaptcha){try{window._csRecaptcha.clear();}catch(_){}window._csRecaptcha=null;}
+    const rcWrap=document.getElementById('recaptcha-cs');
+    rcWrap.innerHTML='';
+    const rcDiv=document.createElement('div');
+    rcWrap.appendChild(rcDiv);
+    window._csRecaptcha=new firebase.auth.RecaptchaVerifier(rcDiv,{
+      size:'invisible',callback:()=>{},
+      'expired-callback':()=>{if(window._csRecaptcha){try{window._csRecaptcha.clear();}catch(_){}}window._csRecaptcha=null;}
+    });
+    await window._csRecaptcha.render();
+    _csConfirmResult=await auth.signInWithPhoneNumber(nz.e164,window._csRecaptcha);
+    document.getElementById('cs-phone-disp').textContent=nz.masked;
+    document.getElementById('cs-step-phone').style.display='none';
+    document.getElementById('cs-step-code').style.display='block';
+    csStartCountdown();
+  }catch(e){
+    let msg=curLang==='zh'?'发送失败，请重试':'Send failed, please retry';
+    if(e.code==='auth/invalid-phone-number') msg=curLang==='zh'?'手机号格式不正确':'Invalid phone number';
+    showErr('cs-ph-err','cs-ph-err-t',msg);
+    btn.disabled=false;
+    if(window._csRecaptcha){try{window._csRecaptcha.clear();}catch(_){}window._csRecaptcha=null;}
+  }finally{block(false);}
+}
+
+function csStartCountdown(){
+  clearInterval(_csCountdownTimer);
+  const resend=document.getElementById('cs-resend-btn');
+  const txt=document.getElementById('cs-countdown');
+  resend.disabled=true;let sec=60;
+  txt.textContent=`60 ${T('countdown-suffix')}`;
+  _csCountdownTimer=setInterval(()=>{sec--;if(sec<=0){clearInterval(_csCountdownTimer);resend.disabled=false;txt.textContent='';}else txt.textContent=`${sec} ${T('countdown-suffix')}`;},1000);
+}
+
+function csResend(){
+  clearInterval(_csCountdownTimer);
+  document.getElementById('cs-step-code').style.display='none';
+  document.getElementById('cs-step-phone').style.display='block';
+  document.getElementById('cs-send-btn').disabled=false;
+  document.getElementById('cs-ph').value='';
+  hideErr('cs-ph-err');hideErr('cs-code-err');
+  document.querySelectorAll('#cs-code-inputs input').forEach(i=>i.value='');
+  _csConfirmResult=null;
+  if(window._csRecaptcha){try{window._csRecaptcha.clear();}catch(_){}window._csRecaptcha=null;}
+}
+
+function csCodeInput(inp,idx){
+  inp.value=inp.value.replace(/\D/g,'');
+  if(inp.value&&idx<5) document.querySelectorAll('#cs-code-inputs input')[idx+1].focus();
+  if([...document.querySelectorAll('#cs-code-inputs input')].every(i=>i.value)) csVerifyAndBook();
+}
+function csCodeBk(inp,idx,e){if(e.key==='Backspace'&&!inp.value&&idx>0) document.querySelectorAll('#cs-code-inputs input')[idx-1].focus();}
+
+async function csVerifyAndBook(){
+  hideErr('cs-code-err');
+  const code=[...document.querySelectorAll('#cs-code-inputs input')].map(i=>i.value).join('');
+  if(code.length<6){showErr('cs-code-err','cs-code-err-t',curLang==='zh'?'请输入完整的6位验证码':'Please enter the 6-digit code');return;}
+  const btn=document.getElementById('cs-verify-btn');
+  btn.disabled=true;block(true);
+  try{
+    if(!DEMO_MODE){
+      await _csConfirmResult.confirm(code);
+    } else if(code!=='123456'){
+      showErr('cs-code-err','cs-code-err-t','Demo code: 123456');btn.disabled=false;block(false);return;
+    }
+    await doBookCS();
+  }catch(e){
+    showErr('cs-code-err','cs-code-err-t',curLang==='zh'?'验证码不正确，请重试':'Incorrect code, please try again');
+  }finally{btn.disabled=false;block(false);}
+}
+
+async function doBookCS(){
+  const sel=G.selected.cs;
+  if(!sel.date||!sel.time){return;}
+  const p=G.csPatient||{};
+  function buildName(pt){
+    if(!pt||(!pt.firstName&&!pt.familyName)) return curLang==='zh'?'未知':'Unknown';
+    const isChinese=/[\u4e00-\u9fff]/.test(pt.familyName||'');
+    return isChinese?(pt.familyName||'')+(pt.firstName||''):(pt.firstName+' '+pt.familyName).trim();
+  }
+  const patientName=buildName(p);
+  const phone=(document.getElementById('cs-ph').value||'').trim();
+  const patientEmail=p.email||'';
+  const cancelToken=generateToken();
+  const data={
+    date:sel.date, time:sel.time, patientName, phone, patientEmail,
+    doctor:'cs', cancellationToken:cancelToken,
+    source:'patient_portal', syncedToCalendar:false, cancelled:false,
+    emailStatus:patientEmail?'pending':'none',
+    reminderEmailSent:false,
+    createdAt:new Date().toISOString()
+  };
+  try{
+    if(!DEMO_MODE&&db){
+      // conflict check
+      const freshSnap=await db.collection('bookedSlots').doc(sel.date).get();
+      const freshTaken=freshSnap.exists?(freshSnap.data().times||[]):[];
+      if(freshTaken.includes(sel.time)){
+        G.bookedSlots[sel.date]=freshTaken;
+        showToastMsg(curLang==='zh'?'该时段刚被预约，请重新选择':'This slot was just booked. Please choose another.');
+        document.getElementById('cs-step-name').style.display='none';
+        document.getElementById('cs-step-cal').style.display='block';
+        await selectDateCS(sel.date, document.querySelector('#cal-cs .cd.sel')||document.createElement('div'));
+        return;
+      }
+      await db.collection('appointments').add(data);
+      const slotRef=db.collection('bookedSlots').doc(sel.date);
+      await db.runTransaction(async tx=>{
+        const snap=await tx.get(slotRef);
+        const existing=snap.exists?(snap.data().times||[]):[];
+        if(!existing.includes(sel.time)){
+          const newTimes=[...existing,sel.time].sort();
+          tx.set(slotRef,{times:newTimes,isFull:newTimes.length>=TOTAL_SLOTS_CS,lastUpdated:new Date().toISOString()},{merge:true});
+        }
+      });
+      if(!G.bookedSlots[sel.date]) G.bookedSlots[sel.date]=[];
+      G.bookedSlots[sel.date].push(sel.time);
+    }
+    G.lastBooking={date:sel.date,time:sel.time,patientName,patientEmail,cancelToken,doctor:'cs'};
+    document.getElementById('ok-book-actions').style.display='block';
+    showOK('📅',T('book-success-title'),T('book-success-body'),{[T('lbl-date')]:sel.date,[T('lbl-time')]:sel.time,[T('lbl-name')]:patientName});
+  }catch(e){
+    console.error('doBookCS:',e);
+    showToastMsg(curLang==='zh'?'预约失败，请重试':'Booking failed, please retry');
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   SIMPLE BOOKING (张超/张宇)
+══════════════════════════════════════════════════════════ */
+async function doBookSimple(key){
+  hideErr(key+'-name-err');
+  const name=(document.getElementById(key+'-name').value||'').trim();
+  const phone=(document.getElementById(key+'-ph').value||'').trim();
+  const sel=G.selected[key];
+  if(!name){showErr(key+'-name-err',key+'-name-err-t',curLang==='zh'?'请输入姓名':'Please enter your name');return;}
+  if(!sel.date||!sel.time){showErr(key+'-name-err',key+'-name-err-t',curLang==='zh'?'请先选择时间':'Please select a time first');return;}
+  const sched=DR_SCHEDULES[key];
+  const data={
+    date:sel.date, time:sel.time, patientName:name, phone,
+    doctor:key, source:'patient_portal',
+    syncedToCalendar:false, cancelled:false,
+    createdAt:new Date().toISOString()
+  };
+  block(true);
+  try{
+    if(!DEMO_MODE&&db) await db.collection('appointments').add(data);
+    G.lastBooking={date:sel.date,time:sel.time,patientName:name,doctor:key};
+    document.getElementById('ok-book-actions').style.display='block';
+    showOK('📅',T('book-success-title'),T('book-success-body'),{[T('lbl-date')]:sel.date,[T('lbl-time')]:sel.time,[T('lbl-name')]:name});
+  }catch(e){
+    console.error('doBookSimple:',e);
+    showErr(key+'-name-err',key+'-name-err-t',curLang==='zh'?'预约失败，请重试':'Booking failed, please retry');
+  }finally{block(false);}
+}
+
+/* ══════════════════════════════════════════════════════════
+   UTILITY: TOKEN, TOAST
+══════════════════════════════════════════════════════════ */
+function generateToken(){return Date.now().toString(36)+Math.random().toString(36).substr(2,8);}
+
+function showToastMsg(msg,ms=3000){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.classList.add('on');
+  clearTimeout(el._tid);
+  el._tid=setTimeout(()=>el.classList.remove('on'),ms);
+  const once=()=>{el.classList.remove('on');document.removeEventListener('touchstart',once);document.removeEventListener('click',once);};
+  setTimeout(()=>{document.addEventListener('touchstart',once,{once:true});document.addEventListener('click',once,{once:true});},100);
+}
+
+/* ══════════════════════════════════════════════════════════
+   CALENDAR SAVE & ICS DOWNLOAD
+══════════════════════════════════════════════════════════ */
+function addToGoogleCalendar(){
+  const b=G.lastBooking; if(!b) return;
+  const [yr,mo,dy]=b.date.split('-');
+  const [hh,mm]=b.time.split(':');
+  const startD=new Date(+yr,+mo-1,+dy,+hh,+mm);
+  const endD=new Date(startD.getTime()+30*60000);
+  const fmt=d=>`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}T${String(d.getHours()).padStart(2,'0')}${String(d.getMinutes()).padStart(2,'0')}00`;
+  const drNames={cs:'张传生',chao:'张超',yu:'张宇'};
+  const drName=drNames[b.doctor]||'';
+  const title=`已预约泽五堂 ${drName}医生`;
+  const params=new URLSearchParams({
+    action:'TEMPLATE',
+    text:title,
+    dates:`${fmt(startD)}/${fmt(endD)}`,
+    details:`诊所：北京泽五堂中医诊所\n患者：${b.patientName}\n时间：${b.date} ${b.time}`,
+    ctz:'Pacific/Auckland'
+  });
+  window.open('https://calendar.google.com/calendar/render?'+params.toString(),'_blank');
+}
+
+function downloadICS(){
+  const b=G.lastBooking; if(!b) return;
+  const [yr,mo,dy]=b.date.split('-');
+  const [hh,mm]=b.time.split(':');
+  const startD=new Date(+yr,+mo-1,+dy,+hh,+mm);
+  const endD=new Date(startD.getTime()+30*60000);
+  const fmtUtc=d=>d.toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
+  const drNames={cs:'张传生',chao:'张超',yu:'张宇'};
+  const drName=drNames[b.doctor]||'';
+  const ics=[
+    'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//泽五堂//Patient Portal//ZH',
+    'BEGIN:VEVENT',
+    `UID:${b.date}T${b.time.replace(':','')}@wutangnz`,
+    `DTSTART:${fmtUtc(startD)}`,`DTEND:${fmtUtc(endD)}`,
+    `SUMMARY:已预约泽五堂 ${drName}医生`,
+    `DESCRIPTION:诊所：北京泽五堂中医诊所\\n患者：${b.patientName}\\n时间：${b.date} ${b.time}`,
+    'END:VEVENT','END:VCALENDAR'
+  ].join('\r\n');
+  const blob=new Blob([ics],{type:'text/calendar;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=`预约_${b.date}_${b.time.replace(':','')}.ics`;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+}
+
+/* ══════════════════════════════════════════════════════════
+   CANCEL APPOINTMENT (via ?cancel=TOKEN)
+══════════════════════════════════════════════════════════ */
+let _cancelDocId=null;
+async function initCancelFlow(token){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const sc=document.getElementById('s-cancel');if(sc)sc.classList.add('active');
+  if(DEMO_MODE||!db){
+    document.getElementById('s-cancel-loading').style.display='none';
+    document.getElementById('s-cancel-notfound').style.display='block';
+    return;
+  }
+  try{
+    const snap=await db.collection('appointments').where('cancellationToken','==',token).limit(1).get();
+    document.getElementById('s-cancel-loading').style.display='none';
+    if(snap.empty||snap.docs[0].data().cancelled===true){
+      document.getElementById('s-cancel-notfound').style.display='block';return;
+    }
+    const doc=snap.docs[0];_cancelDocId=doc.id;
+    const d=doc.data();
+    document.getElementById('s-cancel-detail').innerHTML=
+      `<div class="cancel-row"><span class="lbl">患者姓名</span><span class="val">${d.patientName||''}</span></div>`+
+      `<div class="cancel-row"><span class="lbl">预约日期</span><span class="val">${d.date||''}</span></div>`+
+      `<div class="cancel-row"><span class="lbl">预约时间</span><span class="val">${d.time||''}</span></div>`;
+    document.getElementById('s-cancel-found').style.display='block';
+  }catch(e){
+    document.getElementById('s-cancel-loading').style.display='none';
+    document.getElementById('s-cancel-notfound').style.display='block';
+  }
+}
+async function confirmCancel(){
+  if(!_cancelDocId||!db) return;
+  block(true);
+  try{
+    const docRef=db.collection('appointments').doc(_cancelDocId);
+    const docSnap=await docRef.get();
+    const d=docSnap.data();
+    await docRef.update({cancelled:true,cancelledAt:new Date().toISOString()});
+    if(d.date&&d.time&&d.doctor==='cs'){
+      const slotRef=db.collection('bookedSlots').doc(d.date);
+      await db.runTransaction(async tx=>{
+        const snap=await tx.get(slotRef);
+        if(snap.exists){
+          const times=(snap.data().times||[]).filter(t=>t!==d.time);
+          tx.update(slotRef,{times,isFull:false,lastUpdated:new Date().toISOString()});
+        }
+      });
+    }
+    document.getElementById('s-cancel-found').style.display='none';
+    document.getElementById('s-cancel-done').style.display='block';
+  }catch(e){alert(curLang==='zh'?'取消失败，请联系诊所':'Cancellation failed. Contact the clinic.');}
+  finally{block(false);}
+}
+(function(){
+  const token=new URLSearchParams(window.location.search).get('cancel');
+  if(token) window.addEventListener('load',()=>initCancelFlow(token));
+})();
 </script>
 </body>
 </html>
