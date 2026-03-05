@@ -1092,7 +1092,14 @@ const FB_CFG = {
 
 const DEFAULT_SCHEDULE = {
   weeklySlots: [{dayOfWeek:2,startHour:9,endHour:17},{dayOfWeek:5,startHour:9,endHour:17}],  /* endHour=17 → slots 9:00-17:00 */
-  blockedRanges: [], slotMinutes: 30, maxDaysAhead: 60
+  // 张传生医生出行期间不在奥克兰，该期间所有日期显示为"不可预约"
+  blockedRanges: [
+    {from:'2026-03-07', to:'2026-03-15', label:'医生出行'},  // 3月7日离开，3月15日返回
+    {from:'2026-04-04', to:'2026-04-13', label:'医生出行'},  // 4月4日离开，4月13日返回
+    {from:'2026-04-14', to:'2026-04-23', label:'医生出行'},  // 4月14日离开，4月23日返回
+    {from:'2026-05-16', to:'2026-05-23', label:'医生出行'},  // 5月16日离开，5月23日返回
+  ],
+  slotMinutes: 30, maxDaysAhead: 60
 };
 
 /* ══════════════════════════════════════════════════════════
@@ -1838,6 +1845,11 @@ function renderCalDoctor(key){
   const last=new Date(m.getFullYear(),m.getMonth()+1,0);
   const grid=document.getElementById('cal-'+key);
   grid.innerHTML='';
+  // 预处理 blockedRanges 为 Date 对象便于比较
+  const blockedRanges=(sched.blockedRanges||[]).map(r=>({
+    from:new Date(r.from+'T00:00:00'),
+    to:new Date(r.to+'T00:00:00')
+  }));
   const startDow=first.getDay();
   for(let i=0;i<startDow;i++){const e=document.createElement('div');e.className='cd other';grid.appendChild(e);}
   for(let d=1;d<=last.getDate();d++){
@@ -1845,7 +1857,9 @@ function renderCalDoctor(key){
     const el=document.createElement('div');el.textContent=d;
     const isPast=dt<today, isFuture=dt>maxD, dow=dt.getDay();
     const isWorkday=sched.weeklySlots.some(s=>s.dayOfWeek===dow);
-    if(isPast||isFuture||!isWorkday){el.className='cd past';}
+    // 检查是否在医生出行封锁期内
+    const isBlocked=blockedRanges.some(r=>dt>=r.from&&dt<=r.to);
+    if(isPast||isFuture||!isWorkday||isBlocked){el.className='cd past';}
     else{
       const iso=isoDate(dt);
       if(key==='cs'&&G.fullDays.has(iso)){
