@@ -81,6 +81,10 @@ body{font-family:'DM Sans',-apple-system,'PingFang SC','Microsoft YaHei',sans-se
 .slot{padding:9px 4px;text-align:center;border:2px solid var(--border);border-radius:8px;background:var(--white);font:600 13px 'DM Sans',sans-serif;color:var(--ink);cursor:pointer;transition:all .15s;}
 .slot:hover{border-color:var(--teal);color:var(--teal)}
 .slot.taken{background:#fdecea;color:#c0392b;cursor:not-allowed;border-color:#f5c6c6;font-size:12px;font-weight:600}
+.slot.busy{background:#fff8e1;color:#7a5c00;border-color:#f0c040;}
+.slot.weekend-taken{background:#fdecea;color:#c0392b;cursor:not-allowed;border-color:#f5c6c6;font-size:12px;font-weight:600}
+.slot-legend-dot.busy{background:#fff8e1;border:2px solid #f0c040;}
+.slot-legend-dot.weekend-taken{background:#fdecea;border:2px solid #f5c6c6;}
 .slot-legend{display:flex;gap:14px;align-items:center;margin-bottom:12px;flex-wrap:wrap;}
 .slot-legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-m);}
 .slot-legend-dot{width:16px;height:16px;border-radius:4px;flex-shrink:0;}
@@ -363,7 +367,6 @@ body{font-family:'DM Sans',-apple-system,'PingFang SC','Microsoft YaHei',sans-se
     </div>
     <div class="doc-cards">
       <div class="doc-card" onclick="goBookCS()">
-        <div class="doc-icon" style="background:#e8f5f5">🧑‍⚕️</div>
         <div class="doc-info">
           <h3 data-i18n="dr-zhang-cs">张传生医生</h3>
           <p data-i18n="dr-cs-sub">每周二、五 · 9:00–17:00</p>
@@ -371,7 +374,6 @@ body{font-family:'DM Sans',-apple-system,'PingFang SC','Microsoft YaHei',sans-se
         <span class="arr">›</span>
       </div>
       <div class="doc-card" onclick="goBookChao()">
-        <div class="doc-icon" style="background:#e8f5f5">👨‍⚕️</div>
         <div class="doc-info">
           <h3 data-i18n="dr-zhang-c">张超医生</h3>
           <p data-i18n="dr-chao-sub">周一至五 9:00–16:30 · 周六 9:00–11:30</p>
@@ -379,7 +381,6 @@ body{font-family:'DM Sans',-apple-system,'PingFang SC','Microsoft YaHei',sans-se
         <span class="arr">›</span>
       </div>
       <div class="doc-card" onclick="goBookYu()">
-        <div class="doc-icon" style="background:#fdf3e0">👩‍⚕️</div>
         <div class="doc-info">
           <h3 data-i18n="dr-zhang-y">张宇医生</h3>
           <p data-i18n="dr-yu-sub">周一至三五 9:00–16:30 · 周四 11:00–18:30 · 周日 9:00–11:30</p>
@@ -529,6 +530,10 @@ body{font-family:'DM Sans',-apple-system,'PingFang SC','Microsoft YaHei',sans-se
       </div>
       <div class="card" id="slot-card-chao" style="display:none">
         <div class="slots-hd" id="slot-hd-chao">选择时段</div>
+        <div class="slot-legend" id="slot-legend-chao" style="display:none">
+          <div class="slot-legend-item" id="legend-wt-chao" style="display:none"><div class="slot-legend-dot weekend-taken"></div><span data-i18n="legend-wt">已占用（不可选）</span></div>
+          <div class="slot-legend-item" id="legend-busy-chao" style="display:none"><div class="slot-legend-dot busy"></div><span data-i18n="legend-busy">预约人数较多，仍可预约</span></div>
+        </div>
         <div class="slots" id="slot-grid-chao"></div>
       </div>
       <div class="ebox" id="chao-cal-err"><span>⚠️</span><span id="chao-cal-err-t"></span></div>
@@ -574,6 +579,10 @@ body{font-family:'DM Sans',-apple-system,'PingFang SC','Microsoft YaHei',sans-se
       </div>
       <div class="card" id="slot-card-yu" style="display:none">
         <div class="slots-hd" id="slot-hd-yu">选择时段</div>
+        <div class="slot-legend" id="slot-legend-yu" style="display:none">
+          <div class="slot-legend-item" id="legend-wt-yu" style="display:none"><div class="slot-legend-dot weekend-taken"></div><span data-i18n="legend-wt">已占用（不可选）</span></div>
+          <div class="slot-legend-item" id="legend-busy-yu" style="display:none"><div class="slot-legend-dot busy"></div><span data-i18n="legend-busy">预约人数较多，仍可预约</span></div>
+        </div>
         <div class="slots" id="slot-grid-yu"></div>
       </div>
       <div class="ebox" id="yu-cal-err"><span>⚠️</span><span id="yu-cal-err-t"></span></div>
@@ -910,7 +919,7 @@ const STRINGS = {
     'verify-title':'输入验证码','verify-sub-prefix':'验证码已发送至',
     'btn-resend':'重新发送','countdown-suffix':'秒后可重新发送',
     'btn-verify':'验证','slot-hd':'选择时段','btn-confirm-book':'确认预约',
-    'slot-taken':'已占用','no-slots':'该日无可用时段','legend-avail':'可选时段','legend-taken':'已被占用（不可选）','legend-full-day':'红色日期表示当天已全部约满','full-day-toast':'当天已全部约满','taken-slot-toast':'这个时间已被预约','select-doctor':'请选择您想预约的医生','view-pricing':'查看收费标准','dr-cs-sub':'每周二、五 · 9:00–17:00','dr-chao-sub':'周一至五 9:00–16:30 · 周六 9:00–11:30','dr-yu-sub':'周一至三五 9:00–16:30 · 周四 11:00–18:30 · 周日 9:00–11:30','step-select-time':'第一步：选择时间','step-verify-id':'第二步：身份验证','step-phone':'第三步：手机验证','step-info':'填写信息',
+    'slot-taken':'已占用','no-slots':'该日无可用时段','legend-avail':'可选时段','legend-taken':'已被占用（不可选）','legend-full-day':'红色日期表示当天已全部约满','full-day-toast':'当天已全部约满','taken-slot-toast':'这个时间已被预约','select-doctor':'请选择您想预约的医生','view-pricing':'查看收费标准','dr-cs-sub':'每周二、五 · 9:00–17:00','dr-chao-sub':'周一至五 9:00–16:30 · 周六 9:00–11:30','dr-yu-sub':'周一至三五 9:00–16:30 · 周四 11:00–18:30 · 周日 9:00–11:30','legend-wt':'已占用（不可选）','legend-busy':'黄色：预约人数较多，但仍可预约','step-select-time':'第一步：选择时间','step-verify-id':'第二步：身份验证','step-phone':'第三步：手机验证','step-info':'填写信息',
     'verified-ok':'✅ 验证成功，欢迎',
     'change-ph-title':'更换手机号','change-ph-title-en':'CHANGE MOBILE NUMBER',
     'change-ph-sub':'请先验证您的身份，再绑定新手机号',
@@ -983,7 +992,7 @@ const STRINGS = {
     'verify-title':'Enter Verification Code','verify-sub-prefix':'Code sent to',
     'btn-resend':'Resend','countdown-suffix':'seconds until resend',
     'btn-verify':'Verify','slot-hd':'Select a Time Slot','btn-confirm-book':'Confirm Booking',
-    'slot-taken':'Taken','no-slots':'No available slots on this day','legend-avail':'Available','legend-taken':'Already booked','legend-full-day':'Red dates are fully booked','full-day-toast':'This day is fully booked','taken-slot-toast':'This slot is already booked','select-doctor':'Select your doctor','view-pricing':'View Pricing','dr-cs-sub':'Tue & Fri · 9:00–17:00','dr-chao-sub':'Mon–Fri 9:00–16:30 · Sat 9:00–11:30','dr-yu-sub':'Mon/Tue/Wed/Fri 9:00–16:30 · Thu 11:00–18:30 · Sun 9:00–11:30','step-select-time':'Step 1: Select Time','step-verify-id':'Step 2: Verify Identity','step-phone':'Step 3: Phone Verification','step-info':'Your Details',
+    'slot-taken':'Taken','no-slots':'No available slots on this day','legend-avail':'Available','legend-taken':'Already booked','legend-full-day':'Red dates are fully booked','full-day-toast':'This day is fully booked','taken-slot-toast':'This slot is already booked','select-doctor':'Select your doctor','view-pricing':'View Pricing','dr-cs-sub':'Tue & Fri · 9:00–17:00','dr-chao-sub':'Mon–Fri 9:00–16:30 · Sat 9:00–11:30','dr-yu-sub':'Mon/Tue/Wed/Fri 9:00–16:30 · Thu 11:00–18:30 · Sun 9:00–11:30','legend-wt':'Taken (unavailable)','legend-busy':'Yellow: High demand, but still bookable','step-select-time':'Step 1: Select Time','step-verify-id':'Step 2: Verify Identity','step-phone':'Step 3: Phone Verification','step-info':'Your Details',
     'verified-ok':'✅ Verified — Welcome,',
     'change-ph-title':'Change Mobile Number','change-ph-title-en':'CHANGE MOBILE NUMBER',
     'change-ph-sub':'Please verify your identity before updating your number',
@@ -1933,7 +1942,12 @@ async function selectDateCS(iso,el){
   });
 }
 
-function selectDateSimple(key,iso,el){
+// Weekend-sole-doctor rules:
+// Saturday(6) → only chao works → any calendar event blocks slot
+// Sunday(0)   → only yu works   → any calendar event blocks slot
+const WEEKEND_SOLE = { chao:6, yu:0 }; // dayOfWeek when that doctor is sole
+
+async function selectDateSimple(key,iso,el){
   document.querySelectorAll('#cal-'+key+' .cd').forEach(e=>e.classList.remove('sel'));
   el.classList.add('sel');
   G.selected[key]={date:iso,time:null};
@@ -1941,29 +1955,86 @@ function selectDateSimple(key,iso,el){
   const slotGrid=document.getElementById('slot-grid-'+key);
   slotCard.style.display='block';
   document.getElementById('slot-hd-'+key).textContent=iso+' — '+T('slot-hd');
+  slotGrid.innerHTML=`<div style="text-align:center;padding:16px;color:var(--ink-s);font-size:13px"><div class="spin" style="margin:0 auto 8px"></div>${curLang==='zh'?'加载中...':'Loading...'}</div>`;
+
+  const dow=new Date(iso).getDay();
+  const isSoleDayForDoctor=(WEEKEND_SOLE[key]===dow);
+
+  // Parallel fetch: booking counts + calendar taken (if sole day)
+  const [counts, calendarTaken]=await Promise.all([
+    fetchSlotCounts(key,iso),
+    isSoleDayForDoctor ? fetchWeekendTaken(key,iso) : Promise.resolve(new Set())
+  ]);
+
   slotGrid.innerHTML='';
   const sched=DR_SCHEDULES[key];
-  const dow=new Date(iso).getDay();
   const ws=sched.weeklySlots.find(s=>s.dayOfWeek===dow);
   if(!ws){slotGrid.innerHTML=`<div style="color:var(--ink-s);font-size:13px">${T('no-slots')}</div>`;return;}
   const slots=generateSlots(ws);
+  let hasBusy=false, hasWT=false;
   slots.forEach(t=>{
     const el2=document.createElement('div');
-    el2.className='slot';el2.textContent=t;
-    el2.onclick=()=>{
-      document.querySelectorAll('#slot-grid-'+key+' .slot').forEach(s=>s.classList.remove('sel'));
-      el2.classList.add('sel');
-      G.selected[key].time=t;
-      // Move to name step
-      document.getElementById(key+'-step-cal').style.display='none';
-      document.getElementById(key+'-step-name').style.display='block';
-      document.getElementById(key+'-name').value='';
-      document.getElementById(key+'-ph').value='';
-      hideErr(key+'-name-err');
-      window.scrollTo({top:0,behavior:'smooth'});
-    };
+    el2.textContent=t;
+    if(calendarTaken.has(t)){
+      // Blocked by calendar event (sole-doctor weekend)
+      el2.className='slot weekend-taken';
+      el2.onclick=()=>showToastMsg(T('taken-slot-toast'));
+      hasWT=true;
+    } else {
+      const cnt=counts[t]||0;
+      if(cnt>=3){ el2.className='slot busy'; hasBusy=true; }
+      else { el2.className='slot'; }
+      el2.onclick=()=>{
+        document.querySelectorAll('#slot-grid-'+key+' .slot').forEach(s=>s.classList.remove('sel'));
+        el2.classList.add('sel');
+        G.selected[key].time=t;
+        document.getElementById(key+'-step-cal').style.display='none';
+        document.getElementById(key+'-step-name').style.display='block';
+        document.getElementById(key+'-name').value='';
+        document.getElementById(key+'-ph').value='';
+        hideErr(key+'-name-err');
+        window.scrollTo({top:0,behavior:'smooth'});
+      };
+    }
     slotGrid.appendChild(el2);
   });
+  // Show/hide legends
+  const legend=document.getElementById('slot-legend-'+key);
+  if(legend) legend.style.display=(hasBusy||hasWT)?'flex':'none';
+  const wtLeg=document.getElementById('legend-wt-'+key);
+  const busyLeg=document.getElementById('legend-busy-'+key);
+  if(wtLeg) wtLeg.style.display=hasWT?'flex':'none';
+  if(busyLeg) busyLeg.style.display=hasBusy?'flex':'none';
+}
+
+async function fetchWeekendTaken(key,iso){
+  // Read from docSlots/{key}_{iso} written by Apps Script
+  const taken=new Set();
+  if(DEMO_MODE||!db) return taken;
+  try{
+    const snap=await db.collection('docSlots').doc(key+'_'+iso).get();
+    if(snap.exists)(snap.data().times||[]).forEach(t=>taken.add(t));
+  }catch(e){console.warn('fetchWeekendTaken:',e);}
+  return taken;
+}
+
+async function fetchSlotCounts(key,iso){
+  // Returns {time: count} map for this doctor+date
+  const counts={};
+  if(DEMO_MODE||!db) return counts;
+  try{
+    const snap=await db.collection('appointments')
+      .where('doctor','==',key)
+      .where('date','==',iso)
+      .get();
+    snap.forEach(doc=>{
+      const d=doc.data();
+      if(d.cancelled===true) return; // skip cancelled
+      const t=d.time;
+      if(t) counts[t]=(counts[t]||0)+1;
+    });
+  }catch(e){console.warn('fetchSlotCounts:',e);}
+  return counts;
 }
 
 /* ══════════════════════════════════════════════════════════
