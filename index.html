@@ -1090,6 +1090,10 @@ const FB_CFG = {
   appId:             "1:618994948679:web:08ad2805a3691b1ad82f62"
 };
 
+// ★ Google Apps Script Web App URL（患者取消预约时用于删除日历事件）
+// 部署后请将此处替换为实际的 /exec URL
+const GAS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbziVaMVFnD55RoAhgk1Az-xBmwc8yqXJ6wX2QkGvOKpxOPibzTo4Rwmcx1ribbRbCVI/exec';
+
 const DEFAULT_SCHEDULE = {
   weeklySlots: [{dayOfWeek:2,startHour:9,endHour:17},{dayOfWeek:5,startHour:9,endHour:17}],  /* endHour=17 → slots 9:00-17:00 */
   // 张传生医生出行期间不在奥克兰，该期间所有日期显示为"不可预约"
@@ -2421,7 +2425,28 @@ async function confirmCancel(){
     const docRef=db.collection('appointments').doc(_cancelDocId);
     const docSnap=await docRef.get();
     const d=docSnap.data();
+    const token = d.cancellationToken || '';
+
+    // 1. 通过 GAS Web App 删除 Google Calendar 事件（同时在服务端标记取消）
+    const gasUrl = (typeof GAS_WEBAPP_URL !== 'undefined') ? GAS_WEBAPP_URL : '';
+    const gasConfigured = gasUrl && !gasUrl.includes('PLACEHOLDER');
+    let gasSuccess = false;
+
+    if(gasConfigured && token) {
+      try {
+        const gasResp = await fetch(gasUrl + '?action=cancelByToken&token=' + encodeURIComponent(token));
+        const gasData = await gasResp.json();
+        gasSuccess = gasData.ok === true;
+        console.log('GAS cancel result:', gasData);
+      } catch(gasErr) {
+        console.warn('GAS cancel failed (fallback to Firebase-only):', gasErr.message);
+      }
+    }
+
+    // 2. 无论 GAS 是否成功，都在 Firebase 标记取消（确保一致性）
     await docRef.update({cancelled:true,cancelledAt:new Date().toISOString()});
+
+    // 3. 更新 bookedSlots（移除该时间段）
     if(d.date&&d.time&&d.doctor==='cs'){
       const slotRef=db.collection('bookedSlots').doc(d.date);
       await db.runTransaction(async tx=>{
@@ -2432,6 +2457,7 @@ async function confirmCancel(){
         }
       });
     }
+
     document.getElementById('s-cancel-found').style.display='none';
     document.getElementById('s-cancel-done').style.display='block';
   }catch(e){alert(curLang==='zh'?'取消失败，请联系诊所':'Cancellation failed. Contact the clinic.');}
