@@ -217,15 +217,23 @@ body{font-family:'DM Sans',-apple-system,'PingFang SC','Microsoft YaHei',sans-se
         <div class="wci" style="background:#fdf3e0">💴</div>
         <div class="wct">
           <h3 data-i18n="pricing-card-h">查看收费标准</h3>
-          <p data-i18n="pricing-card-p">ACC 说明及各医生诊疗费用</p>
+          <p data-i18n="pricing-card-p">各医生诊疗费用</p>
         </div>
         <span class="arr">›</span>
       </div>
-      <div class="w-card" onclick="go('s-new-choice')">
+      <div class="w-card" onclick="startRegisterOnly()">
         <div class="wci" style="background:#e8f5f5">📋</div>
         <div class="wct">
-          <h3 data-i18n="newpt-card-h">首诊登记信息</h3>
+          <h3 data-i18n="newpt-card-h">首诊登记</h3>
           <p data-i18n="newpt-card-p">填写您的个人信息进行登记</p>
+        </div>
+        <span class="arr">›</span>
+      </div>
+      <div class="w-card" onclick="go('s-acc-intro')">
+        <div class="wci" style="background:#fff9ed">📄</div>
+        <div class="wct">
+          <h3 data-i18n="acc-card-h">录入 ACC</h3>
+          <p data-i18n="acc-card-p">填写您的 ACC 保单信息</p>
         </div>
         <span class="arr">›</span>
       </div>
@@ -237,10 +245,18 @@ body{font-family:'DM Sans',-apple-system,'PingFang SC','Microsoft YaHei',sans-se
         </div>
         <span class="arr">›</span>
       </div>
+      <div class="w-card" onclick="go('s-cancel')">
+        <div class="wci" style="background:#fdf0f0">🚫</div>
+        <div class="wct">
+          <h3 data-i18n="cancel-card-h">取消预约</h3>
+          <p data-i18n="cancel-card-p">取消您已有的预约</p>
+        </div>
+        <span class="arr">›</span>
+      </div>
     </div>
   </div>
 
-  <!-- S-NEW-CHOICE -->
+  <!-- S-NEW-CHOICE (保留，供内部使用) -->
   <div class="screen" id="s-new-choice">
     <button class="back" onclick="go('s-welcome')">‹ <span data-i18n="back">返回</span></button>
     <div class="pg-title">
@@ -265,6 +281,38 @@ body{font-family:'DM Sans',-apple-system,'PingFang SC','Microsoft YaHei',sans-se
         </div>
         <span class="arr">›</span>
       </div>
+    </div>
+  </div>
+
+  <!-- S-ACC-INTRO (录入ACC入口：先显示ACC说明，再进入填写) -->
+  <div class="screen" id="s-acc-intro">
+    <button class="back" onclick="go('s-welcome')">‹ <span data-i18n="back">返回</span></button>
+    <div class="pg-title">
+      <div class="pg-title-main" data-i18n="acc-intro-title">录入 ACC</div>
+      <div class="pg-title-sub">ACC CLAIM REGISTRATION</div>
+    </div>
+    <div class="pr-notice">
+      <div class="pr-notice-title">
+        <span class="pr-dot"></span><span data-i18n="acc-notice-title">ACC 使用说明</span>
+      </div>
+      <div class="pr-notice-body">
+        <p data-i18n-html="acc-notice-body">本诊所可接受 ACC 保险，但<strong>无法为您开具 ACC</strong>，需您先向<strong>家庭医生</strong>申请。</p>
+        <div class="pr-pills">
+          <div class="pr-pill">
+            <div class="pr-pill-num">12</div>
+            <div class="pr-pill-label" data-i18n="weeks-valid">周内有效</div>
+          </div>
+          <div class="pr-pill">
+            <div class="pr-pill-num">≤12</div>
+            <div class="pr-pill-label" data-i18n="max-treatments">最多可用次数</div>
+          </div>
+        </div>
+        <p style="font-size:12px;color:var(--ink-s);margin-top:8px;line-height:1.6" data-i18n="acc-severity">次数多少和受伤部位及受伤程度相关。</p>
+      </div>
+    </div>
+    <div class="ssub" style="margin-bottom:16px" data-i18n="acc-intro-sub">请确认您已有 ACC 号码后，点击下方按钮填写信息。</div>
+    <div class="btn-row">
+      <button class="btn btn-p" onclick="startAccEntry()" data-i18n="btn-enter-acc">填写 ACC 信息</button>
     </div>
   </div>
 
@@ -322,7 +370,7 @@ body{font-family:'DM Sans',-apple-system,'PingFang SC','Microsoft YaHei',sans-se
 
   <!-- S-NEW-ACC -->
   <div class="screen" id="s-new-acc">
-    <button class="back" onclick="go('s-new-personal')">‹ <span data-i18n="back">返回</span></button>
+    <button class="back" id="acc-back-btn" onclick="accGoBack()">‹ <span data-i18n="back">返回</span></button>
     <div class="pg-title">
       <div class="pg-title-main" data-i18n="acc-info-title">ACC 信息</div>
       <div class="pg-title-sub" data-i18n="acc-info-title-en">ACC CLAIM DETAILS</div>
@@ -690,9 +738,21 @@ body{font-family:'DM Sans',-apple-system,'PingFang SC','Microsoft YaHei',sans-se
 
   <!-- S-CANCEL -->
   <div class="screen" id="s-cancel">
+    <button class="back" onclick="go('s-welcome')">‹ <span data-i18n="back">返回</span></button>
     <div class="pg-title"><div class="pg-title-main">取消预约</div><div class="pg-title-sub">CANCEL APPOINTMENT</div></div>
     <div id="s-cancel-loading" style="text-align:center;padding:40px 0;color:var(--ink-s)">
       <div class="spin" style="margin:0 auto 12px"></div>查询预约信息...
+    </div>
+    <div id="s-cancel-manual" style="display:none">
+      <p style="font-size:14px;color:var(--ink-m);margin-bottom:16px;line-height:1.6">请输入您在预约确认邮件中收到的取消码。</p>
+      <div class="fg">
+        <label>取消码 / Cancellation Code</label>
+        <input id="cancel-token-input" type="text" placeholder="粘贴或输入取消码" style="font-size:15px">
+      </div>
+      <div class="ebox" id="cancel-manual-err" style="display:none"><span>⚠️</span><span id="cancel-manual-err-t"></span></div>
+      <div class="btn-row">
+        <button class="btn btn-p" onclick="manualCancelLookup()">查询预约</button>
+      </div>
     </div>
     <div id="s-cancel-found" style="display:none">
       <div class="cancel-card" id="s-cancel-detail"></div>
@@ -722,25 +782,6 @@ body{font-family:'DM Sans',-apple-system,'PingFang SC','Microsoft YaHei',sans-se
     <div class="pg-title">
       <div class="pg-title-main" data-i18n="pricing-title">收费标准</div>
       <div class="pg-title-sub" data-i18n="pricing-title-en">PRICING SCHEDULE</div>
-    </div>
-    <div class="pr-notice">
-      <div class="pr-notice-title">
-        <span class="pr-dot"></span><span data-i18n="acc-notice-title">ACC 使用说明</span>
-      </div>
-      <div class="pr-notice-body">
-        <p data-i18n-html="acc-notice-body">本诊所可接受 ACC 保险，但<strong>无法为您开具 ACC</strong>，需您先向<strong>家庭医生</strong>申请。</p>
-        <div class="pr-pills">
-          <div class="pr-pill">
-            <div class="pr-pill-num">12</div>
-            <div class="pr-pill-label" data-i18n="weeks-valid">周内有效</div>
-          </div>
-          <div class="pr-pill">
-            <div class="pr-pill-num">≤12</div>
-            <div class="pr-pill-label" data-i18n="max-treatments">最多可用次数</div>
-          </div>
-        </div>
-        <p style="font-size:12px;color:var(--ink-s);margin-top:8px;line-height:1.6" data-i18n="acc-severity">次数多少和受伤部位及受伤程度相关。</p>
-      </div>
     </div>
     <div class="pr-tabs">
       <div class="pr-tab active" onclick="prTab(0)"><span class="pr-tab-name" data-i18n="dr-zhang-cs">张传生医生</span></div>
@@ -883,8 +924,12 @@ const STRINGS = {
   zh: {
     'clinic-name':'北京泽五堂中医诊所','self-service':'患者自助服务',
     'welcome-h2':'欢迎','welcome-sub':'请选择您今天需要的服务',
-    'pricing-card-h':'查看收费标准','pricing-card-p':'ACC 说明及各医生诊疗费用',
-    'newpt-card-h':'首诊登记信息','newpt-card-p':'填写您的个人信息进行登记',
+    'pricing-card-h':'查看收费标准','pricing-card-p':'各医生诊疗费用',
+    'newpt-card-h':'首诊登记','newpt-card-p':'填写您的个人信息进行登记',
+    'acc-card-h':'录入 ACC','acc-card-p':'填写您的 ACC 保单信息',
+    'cancel-card-h':'取消预约','cancel-card-p':'取消您已有的预约',
+    'acc-intro-title':'录入 ACC','acc-intro-sub':'请确认您已有 ACC 号码后，点击下方按钮填写信息。',
+    'btn-enter-acc':'填写 ACC 信息',
     'book-card-h':'预约时间','book-card-p':'查看可用时段并预约治疗',
     'back':'返回',
     'newpt-title':'首次就诊登记','newpt-title-en':'NEW PATIENT REGISTRATION',
@@ -956,8 +1001,12 @@ const STRINGS = {
   en: {
     'clinic-name':'Beijing Zewutang TCM Clinic','self-service':'Patient Self-Service',
     'welcome-h2':'Welcome','welcome-sub':'Please choose a service below',
-    'pricing-card-h':'Pricing','pricing-card-p':'ACC info & consultation fees',
-    'newpt-card-h':'New Patient Registration','newpt-card-p':'Register your personal information',
+    'pricing-card-h':'Pricing','pricing-card-p':'Consultation fees by doctor',
+    'newpt-card-h':'New Patient','newpt-card-p':'Register your personal information',
+    'acc-card-h':'Enter ACC','acc-card-p':'Submit your ACC claim details',
+    'cancel-card-h':'Cancel Booking','cancel-card-p':'Cancel an existing appointment',
+    'acc-intro-title':'Enter ACC','acc-intro-sub':'Please confirm you have your ACC number ready, then tap below to enter your details.',
+    'btn-enter-acc':'Enter ACC Details',
     'book-card-h':'Book Appointment','book-card-p':'View available slots and book a visit',
     'back':'Back',
     'newpt-title':'New Patient Registration','newpt-title-en':'NEW PATIENT REGISTRATION',
@@ -1109,43 +1158,7 @@ const DEFAULT_SCHEDULE = {
 /* ══════════════════════════════════════════════════════════
    WECHAT DETECTION
 ══════════════════════════════════════════════════════════ */
-(function detectWeChat(){
-  if(!/MicroMessenger/i.test(navigator.userAgent||'')) return;
-  document.addEventListener('DOMContentLoaded',()=>{
-    const overlay=document.createElement('div');
-    overlay.style.cssText='position:fixed;inset:0;background:#fff;z-index:999999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 28px;text-align:center;';
-
-    // 手写风箭头：fixed定位在页面最右上角，指向右上
-    const arrow=document.createElement('svg');
-    arrow.setAttribute('width','90');
-    arrow.setAttribute('height','90');
-    arrow.setAttribute('viewBox','0 0 90 90');
-    arrow.setAttribute('fill','none');
-    arrow.setAttribute('xmlns','http://www.w3.org/2000/svg');
-    arrow.style.cssText='position:fixed;top:6px;right:6px;z-index:1000000;pointer-events:none;';
-    arrow.innerHTML=
-      '<path d="M72 18 C60 28, 38 42, 14 72" stroke="#cc0000" stroke-width="3.5" stroke-linecap="round" fill="none" stroke-dasharray="5 3"/>'
-      +'<path d="M66 10 C68 14, 72 16, 76 14" stroke="#cc0000" stroke-width="3.5" stroke-linecap="round" fill="none"/>'
-      +'<path d="M72 18 C74 12, 76 10, 76 14" stroke="#cc0000" stroke-width="3.5" stroke-linecap="round" fill="none"/>';
-
-    overlay.innerHTML=
-      '<div style="font-size:56px;margin-bottom:24px;">📱</div>'
-      +'<div style="font-size:22px;font-weight:800;color:#111;line-height:1.7;margin-bottom:6px;">'
-      +'请点击右上角 <span style="font-size:26px;color:#cc0000;font-weight:900">···</span> →'
-      +'<br>在浏览器中<span style="color:#cc0000;">打开</span>'
-      +'</div>'
-      +'<div style="font-size:14px;color:#888;margin-bottom:28px;line-height:1.6;">方可正常使用本页面的登录功能</div>'
-      +'<div style="width:48px;height:2px;background:#eee;margin-bottom:24px;border-radius:2px;"></div>'
-      +'<div style="font-size:16px;font-weight:700;color:#333;line-height:1.7;margin-bottom:6px;">'
-      +'Tap <span style="font-size:20px;color:#cc0000;font-weight:900">···</span> in the top-right corner'
-      +'<br>→ <span style="color:#cc0000;">Open in Browser</span>'
-      +'</div>'
-      +'<div style="font-size:13px;color:#aaa;line-height:1.6;">Required to use the login feature on this page</div>';
-
-    document.body.insertBefore(overlay,document.body.firstChild);
-    document.body.insertBefore(arrow,document.body.firstChild);
-  });
-})();
+const IS_WECHAT=/MicroMessenger/i.test(navigator.userAgent||'');
 
 /* ══════════════════════════════════════════════════════════
    FIREBASE INIT
@@ -1183,6 +1196,23 @@ function go(id){
   // Clear registration forms whenever entering new patient flow
   if(id==='s-new-choice'){
     clearRegistrationForms();
+  }
+  // 导航到取消预约页时，显示手动输入框
+  if(id==='s-cancel'){
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.getElementById('s-cancel').classList.add('active');
+    document.getElementById('s-cancel-loading').style.display='none';
+    document.getElementById('s-cancel-manual').style.display='block';
+    document.getElementById('s-cancel-found').style.display='none';
+    document.getElementById('s-cancel-notfound').style.display='none';
+    document.getElementById('s-cancel-done').style.display='none';
+    const inp=document.getElementById('cancel-token-input');
+    if(inp) inp.value='';
+    document.getElementById('cancel-manual-err').style.display='none';
+    const retryBtn=document.getElementById('cancel-retry-btn');
+    if(retryBtn) retryBtn.remove();
+    window.scrollTo({top:0,behavior:'smooth'});
+    return;
   }
   // s-book-cs reset handled by goBookCS()
   // s-book-chao/yu reset handled by goBookChao/Yu()
@@ -1235,6 +1265,7 @@ function showOK(icon,title,msg,details,autoHome){
 ══════════════════════════════════════════════════════════ */
 function startNewWithACC(){
   G.hasACC=true;
+  _accBackTarget='s-new-personal';
   clearRegistrationForms();
   go('s-new-personal');
   document.getElementById('personal-sub').textContent=T('personal-sub-acc');
@@ -1283,6 +1314,9 @@ async function personalNext(){
     }
     submitNoACC();
   } else {
+    // _accBackTarget 已由入口函数（startNewWithACC 或 startAccEntry）预先设置
+    // 如果未设置，默认返回 s-new-personal
+    if(typeof _accBackTarget==='undefined') _accBackTarget='s-new-personal';
     go('s-new-acc');
   }
 }
@@ -2395,6 +2429,12 @@ let _cancelDocId=null;
 async function initCancelFlow(token){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   const sc=document.getElementById('s-cancel');if(sc)sc.classList.add('active');
+  // 隐藏手动输入框，显示loading
+  document.getElementById('s-cancel-manual').style.display='none';
+  document.getElementById('s-cancel-loading').style.display='block';
+  document.getElementById('s-cancel-found').style.display='none';
+  document.getElementById('s-cancel-notfound').style.display='none';
+  document.getElementById('s-cancel-done').style.display='none';
   if(DEMO_MODE||!db){
     document.getElementById('s-cancel-loading').style.display='none';
     document.getElementById('s-cancel-notfound').style.display='block';
@@ -2463,9 +2503,109 @@ async function confirmCancel(){
   }catch(e){alert(curLang==='zh'?'取消失败，请联系诊所':'Cancellation failed. Contact the clinic.');}
   finally{block(false);}
 }
+
+/* ══════════════════════════════════════════════════════════
+   NEW FUNCTIONS: 首诊登记 / 录入ACC / 取消预约（手动）
+══════════════════════════════════════════════════════════ */
+
+// 首页"首诊登记"：直接进入个人信息页（无ACC）
+function startRegisterOnly(){
+  G.hasACC=false;
+  clearRegistrationForms();
+  document.getElementById('personal-back-btn').onclick=()=>go('s-welcome');
+  document.getElementById('personal-sub').setAttribute('data-i18n','personal-sub-noACC');
+  document.getElementById('personal-sub').textContent=T('personal-sub-noACC');
+  go('s-new-personal');
+}
+
+// 首页"录入ACC"：进入ACC说明页
+function startAccEntry(){
+  // 从s-acc-intro进入：需要先有个人信息
+  // 若G._newPersonal已存在，直接去ACC表单；否则先填个人信息
+  if(G._newPersonal && G._newPersonal.familyName){
+    G.hasACC=true;
+    _accBackTarget='s-acc-intro';
+    go('s-new-acc');
+  } else {
+    G.hasACC=true;
+    _accBackTarget='s-acc-intro'; // 个人信息填完后进入ACC表单，返回目标为s-acc-intro
+    clearRegistrationForms();
+    document.getElementById('personal-back-btn').onclick=()=>go('s-acc-intro');
+    document.getElementById('personal-sub').setAttribute('data-i18n','personal-sub-acc');
+    document.getElementById('personal-sub').textContent=T('personal-sub-acc');
+    go('s-new-personal');
+  }
+}
+
+// s-new-acc 的返回函数（根据全局_accBackTarget决定目标）
+let _accBackTarget='s-new-personal';
+function accGoBack(){ go(_accBackTarget); }
+
+// 从取消预约页手动查询取消码
+async function manualCancelLookup(){
+  const token=(document.getElementById('cancel-token-input').value||'').trim();
+  const errBox=document.getElementById('cancel-manual-err');
+  const errTxt=document.getElementById('cancel-manual-err-t');
+  errBox.style.display='none';
+  if(!token){errTxt.textContent='请输入取消码';errBox.style.display='flex';return;}
+  document.getElementById('s-cancel-manual').style.display='none';
+  document.getElementById('s-cancel-loading').style.display='block';
+  await initCancelFlow(token);
+  // 如果initCancelFlow显示了notfound，给用户返回手动输入的机会
+  const notfound=document.getElementById('s-cancel-notfound');
+  if(notfound.style.display!=='none'){
+    document.getElementById('s-cancel-loading').style.display='none';
+    // 在notfound下方追加重试按钮（如尚未添加）
+    if(!document.getElementById('cancel-retry-btn')){
+      const retryBtn=document.createElement('button');
+      retryBtn.id='cancel-retry-btn';
+      retryBtn.className='btn btn-p';
+      retryBtn.style.marginTop='12px';
+      retryBtn.textContent='重新输入取消码';
+      retryBtn.onclick=()=>{
+        notfound.style.display='none';
+        document.getElementById('cancel-token-input').value='';
+        errBox.style.display='none';
+        document.getElementById('s-cancel-manual').style.display='block';
+      };
+      notfound.appendChild(retryBtn);
+    }
+  }
+}
+
 (function(){
-  const token=new URLSearchParams(window.location.search).get('cancel');
-  if(token) window.addEventListener('load',()=>initCancelFlow(token));
+  const params=new URLSearchParams(window.location.search);
+  const cancelToken=params.get('cancel');
+  const page=params.get('page');
+
+  function doPageNav(){
+    if(cancelToken){
+      initCancelFlow(cancelToken);
+      return;
+    }
+    if(!page) return;
+    if(page==='register'){
+      startRegisterOnly();
+    } else if(page==='acc'){
+      go('s-acc-intro');
+    } else if(page==='cancel'){
+      document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+      document.getElementById('s-cancel').classList.add('active');
+      document.getElementById('s-cancel-loading').style.display='none';
+      document.getElementById('s-cancel-manual').style.display='block';
+    } else if(page==='pricing'){
+      go('s-pricing');
+    } else if(page==='book'){
+      go('s-book-doctor');
+    }
+  }
+
+  // DOMContentLoaded 确保 DOM 就绪，setTimeout 0 确保所有同步脚本执行完毕
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',()=>setTimeout(doPageNav,0));
+  } else {
+    setTimeout(doPageNav,0);
+  }
 })();
 </script>
 </body>
